@@ -1,4 +1,4 @@
-Battery 电性能测试
+# Battery 电性能测试
 
     Battery产品支持PD、QC3.0、QC2.0、SCP、PPS、FCP、AFC、SUPERVOOC等快充协议，Battery模式可给3C类数码电子产品供电，Charger模式可进行容量存储。
 
@@ -11,6 +11,12 @@ Battery 电性能测试
 输入电流
 
  	测试目的：Charger模式下，评测电流值是否满足各种协议下的规定电流值大小。
+        
+![image](https://github.com/user-attachments/assets/dfd4ef57-9e69-4543-9215-bdea6eb28e41)
+![image](https://github.com/user-attachments/assets/539e408f-3519-4d99-97f5-51cd5f71de39)
+![image](https://github.com/user-attachments/assets/c270150e-d8ee-457c-971a-b824baba928f)
+![image](https://github.com/user-attachments/assets/5c828e79-d04c-4ecf-a0f7-fd97a08dbb21)
+![image](https://github.com/user-attachments/assets/ba3eb3b1-b85a-4e83-b90d-682fefa2af78)
 
 
 测试方法：多种适配器进行协议诱骗至不同档位，用直流电源替换供电，记录模拟电池上的输入电流值大小。
@@ -97,6 +103,7 @@ Battery 电性能测试
 
   如
 
+![image](https://github.com/user-attachments/assets/e688da5a-deab-4516-9658-9325da4c837e)
 
 
 输出压降补偿
@@ -111,7 +118,8 @@ Battery 电性能测试
 
   - 测试方法：在空载/半载/满载三个档位下，使用去掉接地的电压探头并入一个0.1uF陶瓷电容和10uF电解电容，监测输出端。
 
-  
+ ![image](https://github.com/user-attachments/assets/72e0e239-bb9e-4e38-ab80-7bed111b8e9c)
+
 
   PS： 负载设置为CR模式。示波器带宽设置20M，衰减多少就放大多少。纹波采样时间为每格10ms。一般输出纹波 <= 200mV
 
@@ -122,6 +130,8 @@ Battery 电性能测试
   - 测试方法：负载设置动态带载，转变斜率设置为0.15A/us，动态占空比50%，动态频率设置为100Hz，动态负载量的上限，下限按照10%~90%设置。
 
  
+![image](https://github.com/user-attachments/assets/0296cd6e-3883-4822-a6c4-9810c4ac20a1)
+
 
 输出恒流
 
@@ -130,6 +140,8 @@ Battery 电性能测试
   - 测试方法：负载设置CV恒压带载模式，电压设置空载-0.1V，打开输出后0.1V步进下调。
 
  
+![image](https://github.com/user-attachments/assets/951192a1-714c-4d7b-856c-f60a709dc898)
+
 
 输出降额
 
