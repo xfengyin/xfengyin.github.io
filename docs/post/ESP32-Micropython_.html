@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <link rel="icon" href="https://file.moyublog.com/d/file/2019-08-17/723f835159529825324742cdc94c8a49.jpg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# ESP32嵌入式
+
+## ESP32 + OLED（SSD1309）
+
+### SSD1309使用 I2C 进行通信，使用 pin 脚为 SCL： Pin22 ， SDA：Pin21
+
+![image](https://github.com/user-attachments/assets/8b35b30d-a6da-4c4a-9fa2-30b9063f229a)
+
+```python
+from machine import Pin, I2C
+import ssd1306
+
+# ESP32 Pin assignment 
+i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+
+oled_width = 128
+oled_height = 64
+oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
+
+oled.text('Hello, Wokwi!', 10, 10)   
+oled.show()
+```
+
+## ESP32 + Ring Rainbow
+
+###  Neopixels 使用 neopixels 单线通信，使用 pin 脚为 DIN： Pin15 ， DOUT：NC
+
+![image](https://github.com/user-attachments/assets/e8a2524e-1665-46e2-bf8c-9978f1007cb5)
+
+```python
+# NeoPixels Rainbow on MicroPython
+# Wokwi Example https://wokwi.com/arduino/projects/305569065545499202
+
+from machine import Pin
+from neopixel import NeoPixel
+from time import sleep
+
+rainbow = [
+  (126 , 1 , 0),(114 , 13 , 0),(102 , 25 , 0),(90 , 37 , 0),(78 , 49 , 0),(66 , 61 , 0),(54 , 73 , 0),(42 , 85 , 0),
+  (30 , 97 , 0),(18 , 109 , 0),(6 , 121 , 0),(0 , 122 , 5),(0 , 110 , 17),(0 , 98 , 29),(0 , 86 , 41),(0 , 74 , 53),
+  (0 , 62 , 65),(0 , 50 , 77),(0 , 38 , 89),(0 , 26 , 101),(0 , 14 , 113),(0 , 2 , 125),(9 , 0 , 118),(21 , 0 , 106),
+  (33 , 0 , 94),(45 , 0 , 82),(57 , 0 , 70),(69 , 0 , 58),(81 , 0 , 46),(93 , 0 , 34),(105 , 0 , 22),(117 , 0 , 10)]
+
+pixels = NeoPixel(Pin(15), 16)
+while True:
+  rainbow = rainbow[-1:] + rainbow[:-1]
+  for i in range(16):
+    pixels[i] = rainbow[i]
+  pixels.write()
+  sleep(0.05)
+```
+
+## ESP32 + RGB LED
+
+###  RGB LED，使用 pin 脚为 R： Pin16 ，G： Pin18，B： Pin20
+
+![image](https://github.com/user-attachments/assets/0850eea5-0377-40d3-a866-30e97caa41f4)
+
+```python
+from machine  import Pin
+import utime
+
+red = Pin(16, Pin.OUT)
+green = Pin(18, Pin.OUT)
+blue = Pin(20, Pin.OUT)
+
+while True:
+  red.value(0)
+  green.value(1)
+  blue.value(1)
+  utime.sleep(1)
+  red.value(1)
+  green.value(0)
+  blue.value(1)
+  utime.sleep(1)
+  red.value(1)
+  green.value(1)
+  blue.value(0)
+  utime.sleep(1)
+```。">
+<meta property="og:title" content="ESP32-Micropython_">
+<meta property="og:description" content="# ESP32嵌入式
+
+## ESP32 + OLED（SSD1309）
+
+### SSD1309使用 I2C 进行通信，使用 pin 脚为 SCL： Pin22 ， SDA：Pin21
+
+![image](https://github.com/user-attachments/assets/8b35b30d-a6da-4c4a-9fa2-30b9063f229a)
+
+```python
+from machine import Pin, I2C
+import ssd1306
+
+# ESP32 Pin assignment 
+i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+
+oled_width = 128
+oled_height = 64
+oled = ssd1306.SSD1306_I2C(oled_width, oled_height, i2c)
+
+oled.text('Hello, Wokwi!', 10, 10)   
+oled.show()
+```
+
+## ESP32 + Ring Rainbow
+
+###  Neopixels 使用 neopixels 单线通信，使用 pin 脚为 DIN： Pin15 ， DOUT：NC
+
+![image](https://github.com/user-attachments/assets/e8a2524e-1665-46e2-bf8c-9978f1007cb5)
+
+```python
+# NeoPixels Rainbow on MicroPython
+# Wokwi Example https://wokwi.com/arduino/projects/305569065545499202
+
+from machine import Pin
+from neopixel import NeoPixel
+from time import sleep
+
+rainbow = [
+  (126 , 1 , 0),(114 , 13 , 0),(102 , 25 , 0),(90 , 37 , 0),(78 , 49 , 0),(66 , 61 , 0),(54 , 73 , 0),(42 , 85 , 0),
+  (30 , 97 , 0),(18 , 109 , 0),(6 , 121 , 0),(0 , 122 , 5),(0 , 110 , 17),(0 , 98 , 29),(0 , 86 , 41),(0 , 74 , 53),
+  (0 , 62 , 65),(0 , 50 , 77),(0 , 38 , 89),(0 , 26 , 101),(0 , 14 , 113),(0 , 2 , 125),(9 , 0 , 118),(21 , 0 , 106),
+  (33 , 0 , 94),(45 , 0 , 82),(57 , 0 , 70),(69 , 0 , 58),(81 , 0 , 46),(93 , 0 , 34),(105 , 0 , 22),(117 , 0 , 10)]
+
+pixels = NeoPixel(Pin(15), 16)
+while True:
+  rainbow = rainbow[-1:] + rainbow[:-1]
+  for i in range(16):
+    pixels[i] = rainbow[i]
+  pixels.write()
+  sleep(0.05)
+```
+
+## ESP32 + RGB LED
+
+###  RGB LED，使用 pin 脚为 R： Pin16 ，G： Pin18，B： Pin20
+
+![image](https://github.com/user-attachments/assets/0850eea5-0377-40d3-a866-30e97caa41f4)
+
+```python
+from machine  import Pin
+import utime
+
+red = Pin(16, Pin.OUT)
+green = Pin(18, Pin.OUT)
+blue = Pin(20, Pin.OUT)
+
+while True:
+  red.value(0)
+  green.value(1)
+  blue.value(1)
+  utime.sleep(1)
+  red.value(1)
+  green.value(0)
+  blue.value(1)
+  utime.sleep(1)
+  red.value(1)
+  green.value(1)
+  blue.value(0)
+  utime.sleep(1)
+```。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://xfengyin.github.io/post/ESP32-Micropython_.html">
+<meta property="og:image" content="https://file.moyublog.com/d/file/2019-08-17/723f835159529825324742cdc94c8a49.jpg">
+<title>ESP32-Micropython_</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">ESP32-Micropython_</h1>
+<div class="title-right">
+    <a href="https://xfengyin.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/xfengyin/xfengyin.github.io/issues/4" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>ESP32嵌入式</h1>
+<h2>ESP32 + OLED（SSD1309）</h2>
+<h3>SSD1309使用 I2C 进行通信，使用 pin 脚为 SCL： Pin22 ， SDA：Pin21</h3>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8b35b30d-a6da-4c4a-9fa2-30b9063f229a"><img src="https://github.com/user-attachments/assets/8b35b30d-a6da-4c4a-9fa2-30b9063f229a" alt="image" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">from</span> <span class="pl-s1">machine</span> <span class="pl-k">import</span> <span class="pl-v">Pin</span>, <span class="pl-v">I2C</span>
+<span class="pl-k">import</span> <span class="pl-s1">ssd1306</span>
+
+<span class="pl-c"># ESP32 Pin assignment </span>
+<span class="pl-s1">i2c</span> <span class="pl-c1">=</span> <span class="pl-v">I2C</span>(<span class="pl-c1">0</span>, <span class="pl-s1">scl</span><span class="pl-c1">=</span><span class="pl-v">Pin</span>(<span class="pl-c1">22</span>), <span class="pl-s1">sda</span><span class="pl-c1">=</span><span class="pl-v">Pin</span>(<span class="pl-c1">21</span>))
+
+<span class="pl-s1">oled_width</span> <span class="pl-c1">=</span> <span class="pl-c1">128</span>
+<span class="pl-s1">oled_height</span> <span class="pl-c1">=</span> <span class="pl-c1">64</span>
+<span class="pl-s1">oled</span> <span class="pl-c1">=</span> <span class="pl-s1">ssd1306</span>.<span class="pl-v">SSD1306_I2C</span>(<span class="pl-s1">oled_width</span>, <span class="pl-s1">oled_height</span>, <span class="pl-s1">i2c</span>)
+
+<span class="pl-s1">oled</span>.<span class="pl-en">text</span>(<span class="pl-s">'Hello, Wokwi!'</span>, <span class="pl-c1">10</span>, <span class="pl-c1">10</span>)   
+<span class="pl-s1">oled</span>.<span class="pl-en">show</span>()</pre></div>
+<h2>ESP32 + Ring Rainbow</h2>
+<h3>Neopixels 使用 neopixels 单线通信，使用 pin 脚为 DIN： Pin15 ， DOUT：NC</h3>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e8a2524e-1665-46e2-bf8c-9978f1007cb5"><img src="https://github.com/user-attachments/assets/e8a2524e-1665-46e2-bf8c-9978f1007cb5" alt="image" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-c"># NeoPixels Rainbow on MicroPython</span>
+<span class="pl-c"># Wokwi Example https://wokwi.com/arduino/projects/305569065545499202</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">machine</span> <span class="pl-k">import</span> <span class="pl-v">Pin</span>
+<span class="pl-k">from</span> <span class="pl-s1">neopixel</span> <span class="pl-k">import</span> <span class="pl-v">NeoPixel</span>
+<span class="pl-k">from</span> <span class="pl-s1">time</span> <span class="pl-k">import</span> <span class="pl-s1">sleep</span>
+
+<span class="pl-s1">rainbow</span> <span class="pl-c1">=</span> [
+  (<span class="pl-c1">126</span> , <span class="pl-c1">1</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">114</span> , <span class="pl-c1">13</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">102</span> , <span class="pl-c1">25</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">90</span> , <span class="pl-c1">37</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">78</span> , <span class="pl-c1">49</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">66</span> , <span class="pl-c1">61</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">54</span> , <span class="pl-c1">73</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">42</span> , <span class="pl-c1">85</span> , <span class="pl-c1">0</span>),
+  (<span class="pl-c1">30</span> , <span class="pl-c1">97</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">18</span> , <span class="pl-c1">109</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">6</span> , <span class="pl-c1">121</span> , <span class="pl-c1">0</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">122</span> , <span class="pl-c1">5</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">110</span> , <span class="pl-c1">17</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">98</span> , <span class="pl-c1">29</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">86</span> , <span class="pl-c1">41</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">74</span> , <span class="pl-c1">53</span>),
+  (<span class="pl-c1">0</span> , <span class="pl-c1">62</span> , <span class="pl-c1">65</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">50</span> , <span class="pl-c1">77</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">38</span> , <span class="pl-c1">89</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">26</span> , <span class="pl-c1">101</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">14</span> , <span class="pl-c1">113</span>),(<span class="pl-c1">0</span> , <span class="pl-c1">2</span> , <span class="pl-c1">125</span>),(<span class="pl-c1">9</span> , <span class="pl-c1">0</span> , <span class="pl-c1">118</span>),(<span class="pl-c1">21</span> , <span class="pl-c1">0</span> , <span class="pl-c1">106</span>),
+  (<span class="pl-c1">33</span> , <span class="pl-c1">0</span> , <span class="pl-c1">94</span>),(<span class="pl-c1">45</span> , <span class="pl-c1">0</span> , <span class="pl-c1">82</span>),(<span class="pl-c1">57</span> , <span class="pl-c1">0</span> , <span class="pl-c1">70</span>),(<span class="pl-c1">69</span> , <span class="pl-c1">0</span> , <span class="pl-c1">58</span>),(<span class="pl-c1">81</span> , <span class="pl-c1">0</span> , <span class="pl-c1">46</span>),(<span class="pl-c1">93</span> , <span class="pl-c1">0</span> , <span class="pl-c1">34</span>),(<span class="pl-c1">105</span> , <span class="pl-c1">0</span> , <span class="pl-c1">22</span>),(<span class="pl-c1">117</span> , <span class="pl-c1">0</span> , <span class="pl-c1">10</span>)]
+
+<span class="pl-s1">pixels</span> <span class="pl-c1">=</span> <span class="pl-v">NeoPixel</span>(<span class="pl-v">Pin</span>(<span class="pl-c1">15</span>), <span class="pl-c1">16</span>)
+<span class="pl-k">while</span> <span class="pl-c1">True</span>:
+  <span class="pl-s1">rainbow</span> <span class="pl-c1">=</span> <span class="pl-s1">rainbow</span>[<span class="pl-c1">-</span><span class="pl-c1">1</span>:] <span class="pl-c1">+</span> <span class="pl-s1">rainbow</span>[:<span class="pl-c1">-</span><span class="pl-c1">1</span>]
+  <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">16</span>):
+    <span class="pl-s1">pixels</span>[<span class="pl-s1">i</span>] <span class="pl-c1">=</span> <span class="pl-s1">rainbow</span>[<span class="pl-s1">i</span>]
+  <span class="pl-s1">pixels</span>.<span class="pl-en">write</span>()
+  <span class="pl-en">sleep</span>(<span class="pl-c1">0.05</span>)</pre></div>
+<h2>ESP32 + RGB LED</h2>
+<h3>RGB LED，使用 pin 脚为 R： Pin16 ，G： Pin18，B： Pin20</h3>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/0850eea5-0377-40d3-a866-30e97caa41f4"><img src="https://github.com/user-attachments/assets/0850eea5-0377-40d3-a866-30e97caa41f4" alt="image" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-python"><pre class="notranslate"><span class="pl-k">from</span> <span class="pl-s1">machine</span>  <span class="pl-k">import</span> <span class="pl-v">Pin</span>
+<span class="pl-k">import</span> <span class="pl-s1">utime</span>
+
+<span class="pl-s1">red</span> <span class="pl-c1">=</span> <span class="pl-v">Pin</span>(<span class="pl-c1">16</span>, <span class="pl-v">Pin</span>.<span class="pl-v">OUT</span>)
+<span class="pl-s1">green</span> <span class="pl-c1">=</span> <span class="pl-v">Pin</span>(<span class="pl-c1">18</span>, <span class="pl-v">Pin</span>.<span class="pl-v">OUT</span>)
+<span class="pl-s1">blue</span> <span class="pl-c1">=</span> <span class="pl-v">Pin</span>(<span class="pl-c1">20</span>, <span class="pl-v">Pin</span>.<span class="pl-v">OUT</span>)
+
+<span class="pl-k">while</span> <span class="pl-c1">True</span>:
+  <span class="pl-s1">red</span>.<span class="pl-en">value</span>(<span class="pl-c1">0</span>)
+  <span class="pl-s1">green</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">blue</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">utime</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">red</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">green</span>.<span class="pl-en">value</span>(<span class="pl-c1">0</span>)
+  <span class="pl-s1">blue</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">utime</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">red</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">green</span>.<span class="pl-en">value</span>(<span class="pl-c1">1</span>)
+  <span class="pl-s1">blue</span>.<span class="pl-en">value</span>(<span class="pl-c1">0</span>)
+  <span class="pl-s1">utime</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">1</span>)</pre></div></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer">Copyright © <span id="year"></span><a href="https://xfengyin.github.io"> Joker 硬件分享 </a>
+<p>
+<span id="runday"></span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a>
+</p>
+
+<script>
+if(""!=""){
+    var now=new Date();
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("year").innerHTML=now.getFullYear();
+    if(""!=""){document.getElementById("runday").innerHTML=" • "+"网站运行"+diffDay+"天"+" • ";}
+    else{document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";}
+}
+</script>
+</div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n\n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","xfengyin/xfengyin.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+</script>
+
+
+</html>
