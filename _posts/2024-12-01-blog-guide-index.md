@@ -109,19 +109,19 @@ pin: true
 
 ## ⚡ 电路设计系列（3篇）
 
-### 1. 功率电子
-**《MOS管栅极电阻原理解析》**
+### 1. 功率电子（原理图详解）
+**《为什么MOS管的栅极要串接电阻？》**
 - 📅 2024-07-17
 - 🏷️ MOS管、栅极驱动、电路设计
 - 📋 内容：栅极驱动原理、电阻计算、开关损耗、EMI抑制、选型指南
-- 🔗 [阅读文章](/posts/mos-gate-resistor/)
+- 🔗 [阅读文章](https://xfengyin.github.io/posts/mos-gate-resistor/)
 
-### 2. 行业应用
+### 2. 行业应用（eBike技术）
 **《电动两轮车技术解析》**
 - 📅 2024-07-17
 - 🏷️ 电动车、BMS、动力系统
 - 📋 内容：系统架构、BMS设计、电机控制、充电系统、安全设计
-- 🔗 [阅读文章](/posts/electric-bike/)
+- 🔗 [阅读文章](https://xfengyin.github.io/posts/electric-bike/)
 
 ### 3. UI设计
 **《赛博朋克UI设计实现》**
