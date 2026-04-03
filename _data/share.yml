@@ -1,35 +1,26 @@
-# Sharing options
-# Sharing behavior can be customized to meet your needs.
-#
-# The order of sharing options follows the order in this file.
-# Uncomment the following lines to enable sharing options.
-
 platforms:
-  # -
-  #   type: Twitter
-  #   icon: "fab fa-twitter"
-  #   link: "https://twitter.com/intent/tweet?text=TITLE&url=URL"
-  # -
-  #   type: Facebook
-  #   icon: "fab fa-facebook-square"
-  #   link: "https://www.facebook.com/sharer/sharer.php?title=TITLE&u=URL"
-  # -
-  #   type: Telegram
-  #   icon: "fab fa-telegram"
-  #   link: "https://t.me/share/url?url=URL&text=TITLE"
-  -
-    type: Linkedin
+  - type: Twitter
+    icon: "fab fa-twitter"
+    link: "https://twitter.com/intent/tweet?text=TITLE&url=URL"
+  - type: Facebook
+    icon: "fab fa-facebook-square"
+    link: "https://www.facebook.com/sharer/sharer.php?title=TITLE&u=URL"
+  - type: Telegram
+    icon: "fab fa-telegram"
+    link: "https://t.me/share/url?url=URL&text=TITLE"
+  - type: LinkedIn
     icon: "fab fa-linkedin"
     link: "https://www.linkedin.com/sharing/share-offsite/?url=URL"
-  # -
-  #   type: Weibo
-  #   icon: "fab fa-weibo"
-  #   link: "http://service.weibo.com/share/share.php?title=TITLE&url=URL"
-  # -
-  #   type: Mastodon
-  #   icon: "fab fa-mastodon"
-    # See: https://github.com/justinribeiro/share-to-mastodon#properties
-  #   link: "https://sharetomastodon.github.io/?title=TITLE&url=URL"
+  - type: Weibo
+    icon: "fab fa-weibo"
+    link: "http://service.weibo.com/share/share.php?title=TITLE&url=URL"
+  - type: 微信
+    icon: "fab fa-weixin"
+    link: "#"
+    onclick: "alert('请复制链接到微信分享')"
 
-reveal: true # Show a button to reveal the sharing options
-touch: true # Show the sharing options on touch screens
+rewards:
+  - type: 微信
+    img: 
+  - type: 支付宝
+    img:

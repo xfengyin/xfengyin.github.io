@@ -1,94 +1,87 @@
 # xFeng's Tech Blog
 
-基于 Jekyll + Chirpy 主题的个人技术博客。
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-success?logo=github)](https://xfengyin.github.io)
+[![Jekyll](https://img.shields.io/badge/Jekyll-4.3-blue?logo=jekyll)](https://jekyllrb.com/)
+[![Chirpy](https://img.shields.io/badge/Theme-Chirpy-ff69b4)](https://github.com/cotes2020/jekyll-theme-chirpy)
 
-## 网站地址
+> 硬件工程师 | 全栈开发者 | 开源爱好者
 
-🔗 **https://xfengyin.github.io**
+这是我的个人技术博客，分享硬件设计、嵌入式开发、跨平台应用开发经验。
 
-## 技术栈
+## 🌐 在线访问
 
-- **生成器**: Jekyll
-- **主题**: [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy)
-- **语言**: 中文/English
-- **部署**: GitHub Pages
+**[https://xfengyin.github.io](https://xfengyin.github.io)**
 
-## 本地开发
+## 📝 博客内容
 
-### 环境要求
+### 技术领域
 
-- Ruby 3.0+
-- Bundler
+- **硬件开发**: 电路设计、信号完整性、硬件测试
+- **嵌入式系统**: ESP32、STM32、MicroPython
+- **跨平台开发**: Rust + Tauri + React
+- **后端架构**: Go 微服务、gRPC、Etcd
+- **Python生态**: 框架设计、AI Agent、自动化
 
-### 安装依赖
+### 文章分类
+
+| 分类 | 文章数 | 描述 |
+|------|--------|------|
+| 技术实践 | 4 | 项目开发经验分享 |
+| 后端开发 | 1 | 微服务架构设计 |
+| 前端开发 | 1 | UI设计与实现 |
+| Python | 1 | 框架与工具 |
+| 嵌入式 | 1 | ESP32开发 |
+| 硬件测试 | 3 | 测试方法与案例 |
+
+## 🚀 开源项目
+
+### [XingJu 星聚](https://github.com/xfengyin/XingJu)
+跨平台聚合应用，支持音乐/视频/小说/漫画多源搜索
+- **技术栈**: Rust + Tauri v2 + React + TypeScript
+- **特色**: 赛博朋克UI设计、性能优化、测试驱动
+
+### [Kongming 孔明](https://github.com/xfengyin/kongming)
+Go语言微服务架构框架
+- **技术栈**: Go + Gin + gRPC + Etcd
+- **特色**: 服务发现、负载均衡、配置中心
+
+### [Zen](https://github.com/xfengyin/zen)
+Python模块化执行框架
+- **技术栈**: Python 3.10+
+- **特色**: 依赖图、并行执行、AI Agent
+
+## 🛠️ 技术栈
+
+![Rust](https://img.shields.io/badge/Rust-000000?logo=rust)
+![Go](https://img.shields.io/badge/Go-00ADD8?logo=go)
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript)
+![React](https://img.shields.io/badge/React-61DAFB?logo=react)
+![Tauri](https://img.shields.io/badge/Tauri-FFC131?logo=tauri)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss)
+
+## 📦 本地开发
 
 ```bash
-gem install bundler
+# 克隆仓库
+git clone https://github.com/xfengyin/xfengyin.github.io.git
+cd xfengyin.github.io
+
+# 安装依赖
 bundle install
+
+# 本地预览
+bundle exec jekyll serve
+
+# 访问 http://localhost:4000
 ```
 
-### 启动开发服务器
+## 📄 许可
 
-```bash
-bundle exec jekyll s
-```
+本博客内容采用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可协议。
 
-访问 http://localhost:4000
-
-## 目录结构
-
-```
-.
-├── _posts/          # 博客文章
-├── _tabs/           # 独立页面
-├── assets/          # 静态资源
-├── _config.yml      # 站点配置
-└── Gemfile          # 依赖管理
-```
-
-## 写作规范
-
-### 文章头部格式
-
-```yaml
----
-title: "文章标题"
-date: 2026-04-03 09:00:00 +0800
-categories: [分类1, 分类2]
-tags: [标签1, 标签2, 标签3]
----
-```
-
-### 分类建议
-
-- 技术实践
-- 硬件测试
-- 嵌入式开发
-- 行业应用
-- 开发工具
-
-### 标签建议
-
-- Rust, Go, Python
-- Tauri, React
-- 硬件测试
-- 嵌入式
-- 开源项目
-
-## 部署
-
-推送到 GitHub 后自动部署：
-
-```bash
-git add .
-git commit -m "添加新文章"
-git push origin main
-```
-
-## 许可证
-
-本博客内容采用 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 许可协议。
+主题采用 [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) MIT 许可。
 
 ---
 
-作者: xFeng | GitHub: [@xfengyin](https://github.com/xfengyin)
+*Maintained by [xFeng](https://github.com/xfengyin)*

@@ -1,16 +1,8 @@
-# 联系信息
--
-  type: github
-  icon: 'fab fa-github'
-  url: 'https://github.com/xfengyin'
--
-  type: email
-  icon: 'fas fa-envelope'
-  url: 'mailto:xfeng@example.com'
-# -
-#   type: twitter
-#   icon: 'fab fa-twitter'
-# -
-#   type: rss
-#   icon: 'fas fa-rss'
-#   url: '/feed.xml'
+- type: github
+  icon: "fab fa-github"
+- type: email
+  icon: "fas fa-envelope"
+  noblank: true
+- type: rss
+  icon: "fas fa-rss"
+  noblank: true
