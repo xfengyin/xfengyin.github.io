@@ -55,7 +55,7 @@ google_analytics:
 goatcounter:
   id:
 
-theme_mode: dark  # 默认深色模式 [light | dark]
+theme_mode: light  # 默认浅色模式 [light | dark]
 
 img_cdn:
 

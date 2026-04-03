@@ -4,87 +4,125 @@
 @import 'main';
 
 /* ==========================================
-   赛博朋克主题定制 - xFeng Tech Blog
+   POETIZE风格主题 - 简洁现代卡片设计
    ========================================== */
 
-/* 全局变量覆盖 */
+/* 全局变量覆盖 - 简洁现代配色 */
 :root {
-  /* 赛博朋克配色 */
-  --cyber-dark: #0a0a0f;
-  --cyber-darker: #050508;
-  --cyber-panel: #12121a;
-  --cyber-border: #2a2a3e;
+  /* 主色调 */
+  --primary-color: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
   
-  --neon-cyan: #00f0ff;
-  --neon-magenta: #ff00ff;
-  --neon-purple: #9d00ff;
-  --neon-yellow: #ffff00;
+  /* 背景色 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: #ffffff;
+  
+  /* 文字色 */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+  
+  /* 边框和阴影 */
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   
   /* 覆盖Chirpy默认变量 */
-  --sidebar-bg: var(--cyber-dark);
-  --main-bg: var(--cyber-panel);
-  --card-bg: var(--cyber-panel);
-  --text-color: #e0e0e0;
-  --text-muted-color: #8888a0;
-  --heading-color: #ffffff;
-  --link-color: var(--neon-cyan);
-  --link-hover-color: var(--neon-magenta);
-  --border-color: var(--cyber-border);
+  --sidebar-bg: var(--bg-secondary);
+  --main-bg: var(--bg-primary);
+  --card-bg: var(--bg-card);
+  --text-color: var(--text-primary);
+  --text-muted-color: var(--text-secondary);
+  --heading-color: var(--text-primary);
+  --link-color: var(--primary-color);
+  --link-hover-color: var(--primary-dark);
+  --border-color: var(--border-color);
 }
 
-/* 深色模式覆盖 */
+/* 深色模式 */
 html[data-mode="dark"] {
-  --main-bg: var(--cyber-panel);
-  --card-bg: var(--cyber-panel);
-  --sidebar-bg: var(--cyber-dark);
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: #1e293b;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-color: #334155;
+  --border-light: #1e293b;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
 }
 
 /* ==========================================
-   侧边栏样式
+   侧边栏样式 - 简洁设计
    ========================================== */
 
 #sidebar {
-  background: linear-gradient(180deg, var(--cyber-dark) 0%, var(--cyber-darker) 100%);
-  border-right: 1px solid var(--cyber-border);
-  box-shadow: inset -1px 0 0 rgba(0, 240, 255, 0.1);
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
 }
 
 #sidebar .site-title {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-  font-family: 'Courier New', monospace;
-  letter-spacing: 2px;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
 }
 
 #sidebar .site-subtitle {
-  color: var(--text-muted-color);
-  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 
 #sidebar .nav-link {
-  color: var(--text-color);
-  border-left: 2px solid transparent;
-  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  border-radius: 0.5rem;
+  margin: 0.25rem 0;
+  padding: 0.625rem 1rem;
+  transition: all 0.2s ease;
 }
 
 #sidebar .nav-link:hover,
 #sidebar .nav-link.active {
-  color: var(--neon-cyan);
-  border-left-color: var(--neon-cyan);
-  background: linear-gradient(90deg, rgba(0, 240, 255, 0.1) 0%, transparent 100%);
-  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  color: var(--primary-color);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-sm);
 }
 
-/* 侧边栏头像发光效果 */
+#sidebar .nav-link i {
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+
+#sidebar .nav-link:hover i,
+#sidebar .nav-link.active i {
+  color: var(--primary-color);
+}
+
+/* 侧边栏头像 */
 #sidebar .profile-wrapper img {
-  border: 2px solid var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  border: 3px solid var(--bg-primary);
+  box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
 }
 
 #sidebar .profile-wrapper img:hover {
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
   transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
 }
 
 /* ==========================================
@@ -92,82 +130,97 @@ html[data-mode="dark"] {
    ========================================== */
 
 #main-wrapper {
-  background: var(--cyber-panel);
+  background: var(--bg-primary);
 }
 
 #core-wrapper {
-  background: var(--cyber-panel);
+  background: var(--bg-primary);
 }
 
-/* 文章卡片 */
+/* ==========================================
+   文章卡片 - POETIZE风格
+   ========================================== */
+
 .post-preview {
-  background: var(--cyber-dark);
-  border: 1px solid var(--cyber-border);
-  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.post-preview::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--neon-cyan) 50%, 
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  box-shadow: var(--shadow);
 }
 
 .post-preview:hover {
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
-}
-
-.post-preview:hover::before {
-  opacity: 1;
+  border-color: var(--primary-light);
 }
 
 .post-preview .post-title {
-  color: #ffffff;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
 }
 
 .post-preview .post-title:hover {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+  color: var(--primary-color);
 }
 
 .post-preview .post-meta {
-  color: var(--text-muted-color);
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.post-preview .post-meta i {
+  margin-right: 0.25rem;
 }
 
 .post-preview .post-content {
-  color: var(--text-color);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
 }
 
-/* 分类标签 */
+/* 文章统计信息 - 热度、评论 */
+.post-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.post-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.post-stats i {
+  font-size: 0.875rem;
+}
+
+/* 分类标签 - 胶囊样式 */
 .post-tag {
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  color: var(--neon-cyan);
+  background: var(--bg-tertiary);
+  border: none;
+  color: var(--text-secondary);
   font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
 }
 
 .post-tag:hover {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  background: var(--primary-color);
+  color: white;
 }
 
 /* ==========================================
@@ -175,88 +228,110 @@ html[data-mode="dark"] {
    ========================================== */
 
 .post {
-  background: var(--cyber-dark);
-  border: 1px solid var(--cyber-border);
-  border-radius: 8px;
-  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: var(--shadow);
 }
 
 .post h1 {
-  color: #ffffff;
-  border-bottom: 2px solid var(--neon-cyan);
-  padding-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 800;
+  font-size: 2rem;
   margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .post h2 {
-  color: var(--neon-cyan);
-  border-left: 4px solid var(--neon-cyan);
-  padding-left: 1rem;
-  margin-top: 2rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .post h3 {
-  color: var(--neon-magenta);
-  margin-top: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
 }
 
 .post a {
-  color: var(--neon-cyan);
+  color: var(--primary-color);
   text-decoration: none;
-  border-bottom: 1px dotted var(--neon-cyan);
-  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .post a:hover {
-  color: var(--neon-magenta);
-  border-bottom-color: var(--neon-magenta);
-  text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary-color);
 }
 
 .post code {
-  background: rgba(0, 240, 255, 0.1);
-  color: var(--neon-cyan);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  background: var(--bg-tertiary);
+  color: var(--primary-dark);
   border-radius: 4px;
   padding: 0.2rem 0.4rem;
+  font-size: 0.875em;
 }
 
 .post pre {
-  background: var(--cyber-darker);
-  border: 1px solid var(--cyber-border);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  position: relative;
+  padding: 1rem;
+  overflow-x: auto;
 }
 
-.post pre::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+.post pre code {
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0;
 }
 
 .post blockquote {
-  border-left: 4px solid var(--neon-purple);
-  background: rgba(157, 0, 255, 0.05);
+  border-left: 4px solid var(--primary-color);
+  background: var(--bg-secondary);
   padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
   border-radius: 0 8px 8px 0;
 }
 
+.post blockquote p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
 .post table {
-  border: 1px solid var(--cyber-border);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  margin: 1.5rem 0;
 }
 
 .post th {
-  background: rgba(0, 240, 255, 0.1);
-  color: var(--neon-cyan);
-  border-bottom: 2px solid var(--neon-cyan);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-align: left;
 }
 
 .post td {
-  border-bottom: 1px solid var(--cyber-border);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.post tr:last-child td {
+  border-bottom: none;
 }
 
 /* ==========================================
@@ -264,17 +339,19 @@ html[data-mode="dark"] {
    ========================================== */
 
 .btn-outline-primary {
-  color: var(--neon-cyan);
-  border-color: var(--neon-cyan);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
   background: transparent;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .btn-outline-primary:hover {
-  background: rgba(0, 240, 255, 0.1);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-  color: var(--neon-cyan);
+  background: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
 /* ==========================================
@@ -286,24 +363,26 @@ html[data-mode="dark"] {
 }
 
 .pagination .page-link {
-  background: var(--cyber-dark);
-  border: 1px solid var(--cyber-border);
-  color: var(--text-color);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .pagination .page-link:hover {
-  background: rgba(0, 240, 255, 0.1);
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
+  background: var(--bg-tertiary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .pagination .page-item.active .page-link {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
 /* ==========================================
@@ -311,16 +390,22 @@ html[data-mode="dark"] {
    ========================================== */
 
 #search-input {
-  background: var(--cyber-dark);
-  border: 1px solid var(--cyber-border);
-  color: var(--text-color);
-  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
 }
 
 #search-input:focus {
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   outline: none;
+}
+
+#search-input::placeholder {
+  color: var(--text-muted);
 }
 
 /* ==========================================
@@ -328,17 +413,21 @@ html[data-mode="dark"] {
    ========================================== */
 
 #back-to-top {
-  background: var(--cyber-dark);
-  border: 1px solid var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
 }
 
 #back-to-top:hover {
-  background: rgba(0, 240, 255, 0.1);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-  transform: translateY(-2px);
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 /* ==========================================
@@ -346,33 +435,19 @@ html[data-mode="dark"] {
    ========================================== */
 
 .copy-btn {
-  background: rgba(0, 240, 255, 0.1);
-  border: 1px solid var(--neon-cyan);
-  color: var(--neon-cyan);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
 }
 
 .copy-btn:hover {
-  background: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
-}
-
-/* ==========================================
-   脚注
-   ========================================== */
-
-.footnotes {
-  border-top: 1px solid var(--cyber-border);
-  margin-top: 2rem;
-  padding-top: 1rem;
-}
-
-.footnotes::before {
-  content: '---';
-  display: block;
-  color: var(--neon-cyan);
-  margin-bottom: 1rem;
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
 }
 
 /* ==========================================
@@ -380,18 +455,23 @@ html[data-mode="dark"] {
    ========================================== */
 
 .tag-cloud a {
-  background: rgba(0, 240, 255, 0.05);
-  border: 1px solid var(--cyber-border);
-  color: var(--text-color);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin: 0.25rem;
 }
 
 .tag-cloud a:hover {
-  background: rgba(0, 240, 255, 0.1);
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
 }
 
 /* ==========================================
@@ -399,17 +479,42 @@ html[data-mode="dark"] {
    ========================================== */
 
 #archives .year {
-  color: var(--neon-cyan);
+  color: var(--text-primary);
   font-size: 1.5rem;
-  font-weight: bold;
-  border-bottom: 2px solid var(--neon-cyan);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+#archives ul li {
   margin-bottom: 1rem;
 }
 
 #archives ul li::before {
-  background: var(--neon-cyan);
-  box-shadow: 0 0 8px var(--neon-cyan);
+  background: var(--primary-color);
+}
+
+/* ==========================================
+   分类列表
+   ========================================== */
+
+.category-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.category-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.category-item:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
 }
 
 /* ==========================================
@@ -419,11 +524,15 @@ html[data-mode="dark"] {
 @media (max-width: 849px) {
   #sidebar {
     border-right: none;
-    border-bottom: 1px solid var(--cyber-border);
+    border-bottom: 1px solid var(--border-color);
   }
   
   .post {
     padding: 1.5rem;
+  }
+  
+  .post-preview {
+    padding: 1.25rem;
   }
 }
 
@@ -431,17 +540,19 @@ html[data-mode="dark"] {
    动画效果
    ========================================== */
 
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  50% {
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.post-preview:hover .post-title {
-  animation: glow 2s ease-in-out infinite;
+.post-preview {
+  animation: fadeIn 0.5s ease forwards;
 }
 
 /* ==========================================
@@ -449,13 +560,13 @@ html[data-mode="dark"] {
    ========================================== */
 
 ::selection {
-  background: rgba(0, 240, 255, 0.3);
-  color: #ffffff;
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--text-primary);
 }
 
 ::-moz-selection {
-  background: rgba(0, 240, 255, 0.3);
-  color: #ffffff;
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--text-primary);
 }
 
 /* ==========================================
@@ -468,16 +579,16 @@ html[data-mode="dark"] {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--cyber-dark);
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--cyber-border);
+  background: var(--border-color);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--neon-cyan);
+  background: var(--text-muted);
 }
 
 /* ==========================================
@@ -485,6 +596,93 @@ html[data-mode="dark"] {
    ========================================== */
 
 .reading-progress-bar {
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  background: var(--primary-color);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* ==========================================
+   面包屑导航
+   ========================================== */
+
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item a {
+  color: var(--text-tertiary);
+}
+
+.breadcrumb-item a:hover {
+  color: var(--primary-color);
+}
+
+.breadcrumb-item.active {
+  color: var(--text-secondary);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   目录样式
+   ========================================== */
+
+#toc-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+#toc-wrapper .toc-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+#toc li a {
+  color: var(--text-secondary);
+  padding: 0.375rem 0;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#toc li a:hover {
+  color: var(--primary-color);
+  background: var(--bg-secondary);
+  padding-left: 0.5rem;
+}
+
+#toc li.active a {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* ==========================================
+   社交分享按钮
+   ========================================== */
+
+.share-wrapper .share-icons .fa-fw {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.share-wrapper .share-icons .fa-fw:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
 }
