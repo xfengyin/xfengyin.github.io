@@ -1247,17 +1247,51 @@ footer a {
 }
 
 /* ==========================================
-   响应式优化
+   响应式优化 - 全面移动端适配
    ========================================== */
 
-@media (max-width: 849px) {
+/* 平板适配 (max-width: 1199px) */
+@media (max-width: 1199px) {
+  .post {
+    padding: 2.5rem;
+  }
+}
+
+/* 小平板/大手机 (max-width: 991px) */
+@media (max-width: 991px) {
   #sidebar {
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 1050;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  
+  #sidebar .profile-wrapper {
+    padding: 1.5rem 0;
+  }
+  
+  #sidebar .profile-wrapper img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  #sidebar .site-title {
+    font-size: 1.5rem;
   }
   
   .hero-section {
     padding: 2.5rem 1.5rem;
+    margin: 0 -0.75rem 2rem;
+    border-radius: 0;
   }
   
   .hero-section h1 {
@@ -1274,37 +1308,349 @@ footer a {
   
   .post {
     padding: 2rem;
+    border-radius: var(--radius);
   }
   
   .post h1 {
-    font-size: 1.875rem;
+    font-size: 1.75rem;
   }
   
   .post h2 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+    margin-top: 2.5rem;
+  }
+  
+  .post h3 {
+    font-size: 1.25rem;
   }
   
   .featured-grid {
     grid-template-columns: 1fr;
   }
   
+  .featured-card {
+    padding: 1.25rem;
+  }
+  
+  .featured-card .card-image {
+    width: 80px;
+    height: 64px;
+  }
+  
   .post-thumbnail {
-    height: 200px;
+    height: 180px;
+  }
+  
+  /* 遮罩层 */
+  #sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  #sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* 汉堡菜单按钮 */
+  #sidebar-trigger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--bg-1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1060;
+    box-shadow: var(--shadow);
   }
 }
 
-@media (max-width: 576px) {
-  .post {
-    padding: 1.5rem;
+/* 手机适配 (max-width: 767px) */
+@media (max-width: 767px) {
+  body {
+    font-size: 15px;
+  }
+  
+  #core-wrapper {
+    padding: 0 0.75rem;
+  }
+  
+  .hero-section {
+    padding: 2rem 1rem;
   }
   
   .hero-section h1 {
     font-size: 1.625rem;
+    letter-spacing: -0.5px;
+  }
+  
+  .hero-section .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero-stats {
+    flex-direction: row;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .hero-stat {
+    flex: 1;
+  }
+  
+  .hero-stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .hero-stat-label {
+    font-size: 0.75rem;
+  }
+  
+  .post-preview {
+    border-radius: var(--radius);
+  }
+  
+  .post-thumbnail {
+    height: 160px;
+  }
+  
+  .post-content-wrapper {
+    padding: 1.25rem;
+  }
+  
+  .post-preview .post-title {
+    font-size: 1.125rem;
+  }
+  
+  .post-preview .post-excerpt {
+    font-size: 0.875rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .post-meta {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .post-meta-left {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .post-stats {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .post {
+    padding: 1.5rem;
+    border-radius: var(--radius);
+  }
+  
+  .post h1 {
+    font-size: 1.5rem;
+  }
+  
+  .post h2 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+  }
+  
+  .post h3 {
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+  }
+  
+  .post h4 {
+    font-size: 1rem;
+  }
+  
+  .post p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+  }
+  
+  .post pre {
+    padding: 1.25rem;
+    margin: 1.5rem -0.5rem;
+    border-radius: 0;
+  }
+  
+  .post blockquote {
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .post blockquote::before {
+    font-size: 3rem;
+  }
+  
+  .post blockquote p {
+    font-size: 1rem;
+  }
+  
+  .post ul, .post ol {
+    padding-left: 1.5rem;
+  }
+  
+  .post table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.875rem;
+  }
+  
+  .post th, .post td {
+    padding: 0.75rem;
+  }
+  
+  .post img {
+    margin: 1.5rem -0.5rem;
+    border-radius: 0;
+    max-width: calc(100% + 1rem);
+  }
+  
+  .featured-card {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .featured-card .card-image {
+    width: 100%;
+    height: 140px;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+  }
+  
+  #toc-wrapper {
+    position: relative;
+    top: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .share-wrapper .share-icons a {
+    width: 44px;
+    height: 44px;
+  }
+  
+  #back-to-top {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+  }
+  
+  .pagination {
+    gap: 0.375rem;
+  }
+  
+  .pagination .page-link {
+    padding: 0.5rem 0.75rem;
+    min-width: 40px;
+    font-size: 0.875rem;
+  }
+  
+  .tag-cloud a {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* 小手机适配 (max-width: 575px) */
+@media (max-width: 575px) {
+  .hero-section h1 {
+    font-size: 1.375rem;
   }
   
   .hero-stats {
     flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .hero-stat-number {
+    font-size: 1.25rem;
+  }
+  
+  .post-preview .post-title {
+    font-size: 1rem;
+  }
+  
+  .post-tags {
+    gap: 0.5rem;
+  }
+  
+  .post-tag {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .post h1 {
+    font-size: 1.375rem;
+  }
+  
+  .post-meta-header {
     gap: 1rem;
+    font-size: 0.8125rem;
+  }
+  
+  footer {
+    padding: 2rem 0;
+  }
+}
+
+/* 横屏手机 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    padding: 1.5rem 1rem;
+  }
+  
+  .hero-stats {
+    flex-direction: row;
+    margin-top: 1rem;
+  }
+}
+
+/* 触摸设备优化 */
+@media (pointer: coarse) {
+  .post-preview:hover {
+    transform: none;
+  }
+  
+  .post-preview:active {
+    transform: scale(0.98);
+  }
+  
+  .btn:hover,
+  .btn-primary:hover,
+  .btn-secondary:hover {
+    transform: none;
+  }
+  
+  .btn:active,
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: scale(0.96);
+  }
+  
+  #back-to-top:hover {
+    transform: none;
+  }
+  
+  #back-to-top:active {
+    transform: scale(0.9);
   }
 }
 
