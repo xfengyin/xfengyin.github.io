@@ -1,0 +1,490 @@
+---
+---
+
+@import 'main';
+
+/* ==========================================
+   赛博朋克主题定制 - xFeng Tech Blog
+   ========================================== */
+
+/* 全局变量覆盖 */
+:root {
+  /* 赛博朋克配色 */
+  --cyber-dark: #0a0a0f;
+  --cyber-darker: #050508;
+  --cyber-panel: #12121a;
+  --cyber-border: #2a2a3e;
+  
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00ff;
+  --neon-purple: #9d00ff;
+  --neon-yellow: #ffff00;
+  
+  /* 覆盖Chirpy默认变量 */
+  --sidebar-bg: var(--cyber-dark);
+  --main-bg: var(--cyber-panel);
+  --card-bg: var(--cyber-panel);
+  --text-color: #e0e0e0;
+  --text-muted-color: #8888a0;
+  --heading-color: #ffffff;
+  --link-color: var(--neon-cyan);
+  --link-hover-color: var(--neon-magenta);
+  --border-color: var(--cyber-border);
+}
+
+/* 深色模式覆盖 */
+html[data-mode="dark"] {
+  --main-bg: var(--cyber-panel);
+  --card-bg: var(--cyber-panel);
+  --sidebar-bg: var(--cyber-dark);
+}
+
+/* ==========================================
+   侧边栏样式
+   ========================================== */
+
+#sidebar {
+  background: linear-gradient(180deg, var(--cyber-dark) 0%, var(--cyber-darker) 100%);
+  border-right: 1px solid var(--cyber-border);
+  box-shadow: inset -1px 0 0 rgba(0, 240, 255, 0.1);
+}
+
+#sidebar .site-title {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+#sidebar .site-subtitle {
+  color: var(--text-muted-color);
+  font-size: 0.85rem;
+}
+
+#sidebar .nav-link {
+  color: var(--text-color);
+  border-left: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+#sidebar .nav-link:hover,
+#sidebar .nav-link.active {
+  color: var(--neon-cyan);
+  border-left-color: var(--neon-cyan);
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.1) 0%, transparent 100%);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+/* 侧边栏头像发光效果 */
+#sidebar .profile-wrapper img {
+  border: 2px solid var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+#sidebar .profile-wrapper img:hover {
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+  transform: scale(1.05);
+}
+
+/* ==========================================
+   主内容区域
+   ========================================== */
+
+#main-wrapper {
+  background: var(--cyber-panel);
+}
+
+#core-wrapper {
+  background: var(--cyber-panel);
+}
+
+/* 文章卡片 */
+.post-preview {
+  background: var(--cyber-dark);
+  border: 1px solid var(--cyber-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.post-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--neon-cyan) 50%, 
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.post-preview:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.post-preview:hover::before {
+  opacity: 1;
+}
+
+.post-preview .post-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.post-preview .post-title:hover {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.post-preview .post-meta {
+  color: var(--text-muted-color);
+}
+
+.post-preview .post-content {
+  color: var(--text-color);
+}
+
+/* 分类标签 */
+.post-tag {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--neon-cyan);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.post-tag:hover {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
+/* ==========================================
+   文章详情页
+   ========================================== */
+
+.post {
+  background: var(--cyber-dark);
+  border: 1px solid var(--cyber-border);
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.post h1 {
+  color: #ffffff;
+  border-bottom: 2px solid var(--neon-cyan);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.post h2 {
+  color: var(--neon-cyan);
+  border-left: 4px solid var(--neon-cyan);
+  padding-left: 1rem;
+  margin-top: 2rem;
+}
+
+.post h3 {
+  color: var(--neon-magenta);
+  margin-top: 1.5rem;
+}
+
+.post a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--neon-cyan);
+  transition: all 0.3s ease;
+}
+
+.post a:hover {
+  color: var(--neon-magenta);
+  border-bottom-color: var(--neon-magenta);
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+}
+
+.post code {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+}
+
+.post pre {
+  background: var(--cyber-darker);
+  border: 1px solid var(--cyber-border);
+  border-radius: 8px;
+  position: relative;
+}
+
+.post pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+}
+
+.post blockquote {
+  border-left: 4px solid var(--neon-purple);
+  background: rgba(157, 0, 255, 0.05);
+  padding: 1rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+}
+
+.post table {
+  border: 1px solid var(--cyber-border);
+}
+
+.post th {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--neon-cyan);
+  border-bottom: 2px solid var(--neon-cyan);
+}
+
+.post td {
+  border-bottom: 1px solid var(--cyber-border);
+}
+
+/* ==========================================
+   按钮样式
+   ========================================== */
+
+.btn-outline-primary {
+  color: var(--neon-cyan);
+  border-color: var(--neon-cyan);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  color: var(--neon-cyan);
+}
+
+/* ==========================================
+   分页样式
+   ========================================== */
+
+.pagination {
+  gap: 0.5rem;
+}
+
+.pagination .page-link {
+  background: var(--cyber-dark);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-color);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.pagination .page-item.active .page-link {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* ==========================================
+   搜索框
+   ========================================== */
+
+#search-input {
+  background: var(--cyber-dark);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-color);
+  border-radius: 4px;
+}
+
+#search-input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  outline: none;
+}
+
+/* ==========================================
+   返回顶部按钮
+   ========================================== */
+
+#back-to-top {
+  background: var(--cyber-dark);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+#back-to-top:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   代码复制按钮
+   ========================================== */
+
+.copy-btn {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+/* ==========================================
+   脚注
+   ========================================== */
+
+.footnotes {
+  border-top: 1px solid var(--cyber-border);
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.footnotes::before {
+  content: '---';
+  display: block;
+  color: var(--neon-cyan);
+  margin-bottom: 1rem;
+}
+
+/* ==========================================
+   标签云
+   ========================================== */
+
+.tag-cloud a {
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid var(--cyber-border);
+  color: var(--text-color);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.tag-cloud a:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+/* ==========================================
+   归档时间线
+   ========================================== */
+
+#archives .year {
+  color: var(--neon-cyan);
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-bottom: 2px solid var(--neon-cyan);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#archives ul li::before {
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* ==========================================
+   响应式调整
+   ========================================== */
+
+@media (max-width: 849px) {
+  #sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--cyber-border);
+  }
+  
+  .post {
+    padding: 1.5rem;
+  }
+}
+
+/* ==========================================
+   动画效果
+   ========================================== */
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  }
+}
+
+.post-preview:hover .post-title {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   选中文字样式
+   ========================================== */
+
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: #ffffff;
+}
+
+/* ==========================================
+   滚动条样式
+   ========================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cyber-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-cyan);
+}
+
+/* ==========================================
+   阅读进度条
+   ========================================== */
+
+.reading-progress-bar {
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
