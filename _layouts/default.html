@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}" data-theme="light">
+{% include head.html %}
+
+<body class="min-h-screen flex flex-col">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader">
+            <div class="loader-spinner"></div>
+            <span class="loader-text">Loading...</span>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="{{ '/' | relative_url }}" class="nav-logo" aria-label="Home">
+                <span class="logo-text">{{ site.title | default: 'Portfolio' }}</span>
+                <span class="logo-dot"></span>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <div class="nav-links">
+                <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="{{ '/about/' | relative_url }}" class="nav-link {% if page.url contains '/about/' %}active{% endif %}">
+                    <i class="fas fa-user"></i>
+                    <span>About</span>
+                </a>
+                <a href="{{ '/projects/' | relative_url }}" class="nav-link {% if page.url contains '/projects/' %}active{% endif %}">
+                    <i class="fas fa-code"></i>
+                    <span>Projects</span>
+                </a>
+                <a href="{{ '/skills/' | relative_url }}" class="nav-link {% if page.url contains '/skills/' %}active{% endif %}">
+                    <i class="fas fa-chart-radar"></i>
+                    <span>Skills</span>
+                </a>
+                <a href="{{ '/blog/' | relative_url }}" class="nav-link {% if page.url contains '/blog/' %}active{% endif %}">
+                    <i class="fas fa-blog"></i>
+                    <span>Blog</span>
+                </a>
+                <a href="{{ '/contact/' | relative_url }}" class="nav-link {% if page.url contains '/contact/' %}active{% endif %}">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </div>
+            
+            <!-- Theme Toggle & Mobile Menu -->
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                    <span class="sr-only">Toggle theme</span>
+                </button>
+                
+                <button class="menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" aria-hidden="true">
+            <a href="{{ '/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="{{ '/about/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-user"></i>
+                <span>About</span>
+            </a>
+            <a href="{{ '/projects/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-code"></i>
+                <span>Projects</span>
+            </a>
+            <a href="{{ '/skills/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-chart-radar"></i>
+                <span>Skills</span>
+            </a>
+            <a href="{{ '/blog/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-blog"></i>
+                <span>Blog</span>
+            </a>
+            <a href="{{ '/contact/' | relative_url }}" class="mobile-link">
+                <i class="fas fa-envelope"></i>
+                <span>Contact</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content flex-grow">
+        {{ content }}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Footer Top -->
+            <div class="footer-top">
+                <div class="footer-section">
+                    <h3 class="footer-title">{{ site.title | default: 'Portfolio' }}</h3>
+                    <p class="footer-description">
+                        {{ site.description | default: 'Full-stack developer passionate about building beautiful and functional web applications.' }}
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ '/about/' | relative_url }}">About</a></li>
+                        <li><a href="{{ '/projects/' | relative_url }}">Projects</a></li>
+                        <li><a href="{{ '/skills/' | relative_url }}">Skills</a></li>
+                        <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+                        <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4 class="footer-subtitle">Connect</h4>
+                    <div class="social-links">
+                        {% if site.github_username %}
+                        <a href="https://github.com/{{ site.github_username }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.twitter_username %}
+                        <a href="https://twitter.com/{{ site.twitter_username }}" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.linkedin_username %}
+                        <a href="https://linkedin.com/in/{{ site.linkedin_username }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.email %}
+                        <a href="mailto:{{ site.email }}" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy; {{ 'now' | date: "%Y" }} {{ site.author | default: 'xfengyin' }}. 
+                    All rights reserved. Built with <i class="fas fa-heart" style="color: #e74c3c;"></i> and Jekyll.
+                </p>
+                <p class="powered-by">
+                    Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener noreferrer">Jekyll</a> 
+                    &bull; Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    
+    <!-- Prism.js for Syntax Highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/code-copy.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/skills-chart.js' | relative_url }}"></script>
+    
+    <!-- Page-specific Scripts -->
+    {% if page.scripts %}
+        {% for script in page.scripts %}
+        <script src="{{ script | relative_url }}"></script>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Inline Scripts -->
+    <script>
+        // Remove loading overlay when page is fully loaded
+        window.addEventListener('load', function() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                setTimeout(() => {
+                    overlay.classList.add('loaded');
+                    setTimeout(() => {
+                        overlay.remove();
+                    }, 500);
+                }, 200);
+            }
+        });
+        
+        // Initialize Prism.js
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAll();
+        }
+        
+        // Console Easter Egg
+        console.log('%c Welcome to {{ site.title | default: "xfengyin\'s Portfolio" }}!', 
+            'background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); color: white; font-size: 20px; padding: 10px 20px; border-radius: 5px;');
+        console.log('%c Built with Jekyll & ❤️', 
+            'color: #667eea; font-size: 14px;');
+        console.log('%c Check out my projects: https://github.com/{{ site.github_username | default: "xfengyin" }}', 
+            'color: #718096; font-size: 12px;');
+    </script>
+    
+    <!-- Analytics & Tracking -->
+    {% if site.google_analytics %}
+    <script>
+        // Google Analytics Event Tracking
+        function trackEvent(category, action, label) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', action, {
+                    'event_category': category,
+                    'event_label': label
+                });
+            }
+        }
+        
+        // Track outbound links
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            link.addEventListener('click', function() {
+                trackEvent('outbound', 'click', this.href);
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,468 @@
+// ==========================================================================
+// Typography
+// ==========================================================================
+
+// Body
+// ==========================================================================
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color-text;
+  background-color: $color-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Headings
+// ==========================================================================
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+  font-family: $font-family-heading;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text;
+}
+
+h1 {
+  @include heading('h1');
+  margin-bottom: $spacing-6;
+  
+  @include respond-to('md') {
+    font-size: $font-size-5xl;
+  }
+}
+
+h2 {
+  @include heading('h2');
+  margin-bottom: $spacing-5;
+  
+  @include respond-to('md') {
+    font-size: $font-size-4xl;
+  }
+}
+
+h3 {
+  @include heading('h3');
+  margin-bottom: $spacing-4;
+  
+  @include respond-to('md') {
+    font-size: $font-size-3xl;
+  }
+}
+
+h4 {
+  @include heading('h4');
+  margin-bottom: $spacing-3;
+}
+
+h5 {
+  @include heading('h5');
+  margin-bottom: $spacing-2;
+}
+
+h6 {
+  @include heading('h6');
+  margin-bottom: $spacing-2;
+  color: $color-text-light;
+}
+
+// Paragraphs
+// ==========================================================================
+p {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Links
+// ==========================================================================
+a {
+  color: $color-primary;
+  text-decoration: none;
+  @include transition(color);
+  
+  &:hover,
+  &:focus {
+    color: darken($color-primary, 15%);
+    text-decoration: underline;
+  }
+  
+  &:active {
+    color: darken($color-primary, 20%);
+  }
+}
+
+// Lists
+// ==========================================================================
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+  padding-left: $spacing-6;
+  
+  ul,
+  ol {
+    margin-bottom: 0;
+  }
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+li {
+  margin-bottom: $spacing-2;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Definition lists
+// ==========================================================================
+dl {
+  margin-top: 0;
+  margin-bottom: $spacing-4;
+}
+
+dt {
+  font-weight: $font-weight-bold;
+  margin-top: $spacing-2;
+  
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+dd {
+  margin-left: $spacing-4;
+  margin-bottom: $spacing-2;
+}
+
+// Blockquotes
+// ==========================================================================
+blockquote {
+  margin: $spacing-6 0;
+  padding: $spacing-4 $spacing-6;
+  border-left: 4px solid $color-primary;
+  background-color: $color-bg-alt;
+  font-style: italic;
+  color: $color-text-light;
+  
+  p:last-child {
+    margin-bottom: 0;
+  }
+  
+  cite {
+    display: block;
+    margin-top: $spacing-2;
+    font-style: normal;
+    font-weight: $font-weight-medium;
+    color: $color-text;
+  }
+}
+
+// Code
+// ==========================================================================
+code,
+kbd,
+pre,
+samp {
+  font-family: $font-family-mono;
+}
+
+code {
+  padding: $spacing-1 $spacing-2;
+  background-color: $color-bg-alt;
+  border-radius: $border-radius-sm;
+  font-size: 0.875em;
+  color: $color-accent;
+}
+
+kbd {
+  padding: $spacing-1 $spacing-2;
+  background-color: $color-gray-900;
+  border-radius: $border-radius-sm;
+  font-size: 0.875em;
+  color: $color-white;
+}
+
+pre {
+  margin: $spacing-6 0;
+  padding: $spacing-4;
+  overflow: auto;
+  background-color: $color-gray-900;
+  border-radius: $border-radius-md;
+  font-size: 0.875em;
+  line-height: $line-height-relaxed;
+  color: $color-gray-200;
+  
+  code {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+}
+
+// Horizontal rules
+// ==========================================================================
+hr {
+  margin: $spacing-8 0;
+  border: 0;
+  border-top: 1px solid $color-border;
+  
+  &.divider {
+    margin: $spacing-12 0;
+  }
+  
+  &.light {
+    border-top-color: $color-border-light;
+  }
+  
+  &.dark {
+    border-top-color: $color-border-dark;
+  }
+}
+
+// Small text
+// ==========================================================================
+small,
+.small {
+  font-size: $font-size-sm;
+  color: $color-text-light;
+}
+
+// Text alignment
+// ==========================================================================
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+// Text transformation
+// ==========================================================================
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+// Font weights
+// ==========================================================================
+.font-light {
+  font-weight: $font-weight-light;
+}
+
+.font-normal {
+  font-weight: $font-weight-normal;
+}
+
+.font-medium {
+  font-weight: $font-weight-medium;
+}
+
+.font-semibold {
+  font-weight: $font-weight-semibold;
+}
+
+.font-bold {
+  font-weight: $font-weight-bold;
+}
+
+.font-black {
+  font-weight: $font-weight-black;
+}
+
+// Text colors
+// ==========================================================================
+.text-primary {
+  color: $color-primary;
+}
+
+.text-secondary {
+  color: $color-secondary;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-success {
+  color: $color-success;
+}
+
+.text-warning {
+  color: $color-warning;
+}
+
+.text-danger {
+  color: $color-danger;
+}
+
+.text-info {
+  color: $color-info;
+}
+
+.text-white {
+  color: $color-white;
+}
+
+.text-black {
+  color: $color-black;
+}
+
+.text-gray-50 {
+  color: $color-gray-50;
+}
+
+.text-gray-100 {
+  color: $color-gray-100;
+}
+
+.text-gray-200 {
+  color: $color-gray-200;
+}
+
+.text-gray-300 {
+  color: $color-gray-300;
+}
+
+.text-gray-400 {
+  color: $color-gray-400;
+}
+
+.text-gray-500 {
+  color: $color-gray-500;
+}
+
+.text-gray-600 {
+  color: $color-gray-600;
+}
+
+.text-gray-700 {
+  color: $color-gray-700;
+}
+
+.text-gray-800 {
+  color: $color-gray-800;
+}
+
+.text-gray-900 {
+  color: $color-gray-900;
+}
+
+// Line heights
+// ==========================================================================
+.leading-none {
+  line-height: $line-height-none;
+}
+
+.leading-tight {
+  line-height: $line-height-tight;
+}
+
+.leading-snug {
+  line-height: $line-height-snug;
+}
+
+.leading-normal {
+  line-height: $line-height-normal;
+}
+
+.leading-relaxed {
+  line-height: $line-height-relaxed;
+}
+
+.leading-loose {
+  line-height: $line-height-loose;
+}
+
+// Letter spacing
+// ==========================================================================
+.tracking-tighter {
+  letter-spacing: $letter-spacing-tighter;
+}
+
+.tracking-tight {
+  letter-spacing: $letter-spacing-tight;
+}
+
+.tracking-normal {
+  letter-spacing: $letter-spacing-normal;
+}
+
+.tracking-wide {
+  letter-spacing: $letter-spacing-wide;
+}
+
+.tracking-wider {
+  letter-spacing: $letter-spacing-wider;
+}
+
+.tracking-widest {
+  letter-spacing: $letter-spacing-widest;
+}
+
+// Text overflow
+// ==========================================================================
+.truncate {
+  @include truncate(1);
+}
+
+.line-clamp-2 {
+  @include truncate(2);
+}
+
+.line-clamp-3 {
+  @include truncate(3);
+}
+
+.line-clamp-4 {
+  @include truncate(4);
+}
+
+.line-clamp-5 {
+  @include truncate(5);
+}
+
+// Selection
+// ==========================================================================
+::selection {
+  background-color: rgba($color-primary, 0.2);
+  color: $color-text;
+}
+
+::-moz-selection {
+  background-color: rgba($color-primary, 0.2);
+  color: $color-text;
+}

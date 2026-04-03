@@ -1,0 +1,395 @@
+# ============================================
+# Jekyll/GitHub Pages 特定忽略规则
+# ============================================
+
+# Jekyll 构建输出
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.jekyll-build.log
+
+# Sass 编译缓存
+.sass-cache/
+
+# Ruby/Bundler
+.bundle/
+vendor/bundle/
+*.gem
+Gemfile.lock
+
+# ============================================
+# Python 项目通用忽略规则 (用于子项目)
+# ============================================
+
+# Python 字节码文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python 包管理
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 虚拟环境
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# 测试相关
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+htmlcov/
+.tox/
+.nox/
+
+# ============================================
+# Node.js 相关
+# ============================================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ============================================
+# 操作系统生成文件
+# ============================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ============================================
+# IDE/编辑器 文件
+# ============================================
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Sublime Text
+*.sublime-*
+sftp-config.json
+
+# Vim
+*.swp
+*.swo
+*~
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*
+.\#*
+.direnv/
+
+# ============================================
+# 日志和数据库文件
+# ============================================
+
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.pid
+*.seed
+*.pid.lock
+
+# ============================================
+# 临时文件
+# ============================================
+
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# ============================================
+# 测试覆盖率
+# ============================================
+
+coverage/
+.nyc_output/
+
+# ============================================
+# 包管理文件
+# ============================================
+
+# Python
+Pipfile.lock
+poetry.lock
+
+# Ruby
+Gemfile.lock
+
+# Node.js
+package-lock.json
+yarn.lock
+
+# ============================================
+# Jekyll 插件
+# ============================================
+
+_plugins/*.rb
+!vendor/plugins/*.rb
+
+# ============================================
+# 环境变量文件
+# ============================================
+
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# ============================================
+# 密钥和配置文件
+# ============================================
+
+secrets.json
+config.json
+credentials.json
+*.key
+*.pem
+*.crt
+*.cert
+*.pfx
+
+# ============================================
+# 文档构建输出
+# ============================================
+
+docs/_build/
+docs/_static/
+docs/_templates/
+site/
+
+# ============================================
+# Jupyter Notebook
+# ============================================
+
+.ipynb_checkpoints
+*.ipynb
+
+# ============================================
+# 类型检查器
+# ============================================
+
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# ============================================
+# 项目特定忽略
+# ============================================
+
+# 上传的文件
+uploads/
+media/
+staticfiles/
+
+# 数据文件
+*.csv
+*.xlsx
+*.xls
+*.pdf
+*.txt
+*.json
+*.yaml
+*.yml
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# 构建产物
+dist/
+build/
+*.whl
+*.tar.gz
+*.zip
+
+# 日志目录
+logs/
+log/
+
+# ============================================
+# 子项目虚拟环境 (针对 project-based-learning-zh 等)
+# ============================================
+
+# 00_Getting_Started 项目
+00_Getting_Started/.env
+00_Getting_Started/.venv
+00_Getting_Started/env/
+00_Getting_Started/venv/
+
+# 01_CLI_Tools 项目
+01_CLI_Tools/.env
+01_CLI_Tools/.venv
+01_CLI_Tools/env/
+01_CLI_Tools/venv/
+
+# 02_Web_Applications 项目
+02_Web_Applications/.env
+02_Web_Applications/.venv
+02_Web_Applications/env/
+02_Web_Applications/venv/
+
+# 03_API_Services 项目
+03_API_Services/.env
+03_API_Services/.venv
+03_API_Services/env/
+03_API_Services/venv/
+
+# 04_Data_Analysis 项目
+04_Data_Analysis/.env
+04_Data_Analysis/.venv
+04_Data_Analysis/env/
+04_Data_Analysis/venv/
+
+# 05_Automation_Tools 项目
+05_Automation_Tools/.env
+05_Automation_Tools/.venv
+05_Automation_Tools/env/
+05_Automation_Tools/venv/
+
+# ============================================
+# 其他通用忽略
+# ============================================
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 系统文件
+.dockerignore
+.gitattributes
+.gitkeep
+
+# 压缩文件
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# 二进制文件
+*.exe
+*.dll
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dylib
+*.class
+*.jar
+*.war
+*.ear
+
+# 图片原始文件
+*.psd
+*.ai
+*.indd
+*.xd
+
+# 字体文件
+*.ttf
+*.otf
+*.woff
+*.woff2
+*.eot
+
+# 音频/视频文件
+*.mp3
+*.mp4
+*.wav
+*.avi
+*.mov
+*.wmv
+
+# 文档文件
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.odt
+*.ods
+*.odp

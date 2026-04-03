@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码复制功能测试</title>
+    <link rel="stylesheet" href="assets/css/code-copy.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
+        }
+        
+        .language-python {
+            color: #3572A5;
+        }
+        
+        .language-javascript {
+            color: #f1e05a;
+        }
+        
+        .language-html {
+            color: #e34c26;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>代码复制功能测试</h1>
+    
+    <p>这个页面演示了代码块一键复制功能。将鼠标悬停在代码块上，右上角会出现复制按钮。</p>
+    
+    <div class="test-section">
+        <h2>Python 代码示例</h2>
+        <pre><code class="language-python">def fibonacci(n):
+    """生成斐波那契数列"""
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+# 使用示例
+for num in fibonacci(10):
+    print(num)</code></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>JavaScript 代码示例</h2>
+        <pre><code class="language-javascript">// 防抖函数实现
+function debounce(func, wait, immediate) {
+    let timeout;
+    return function executedFunction(...args) {
+        const context = this;
+        const later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
+
+// 使用示例
+const handleResize = debounce(() => {
+    console.log('窗口大小改变');
+}, 250);
+
+window.addEventListener('resize', handleResize);</code></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>HTML 代码示例</h2>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;我的网站&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="#home"&gt;首页&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#about"&gt;关于&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="#contact"&gt;联系&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;h1&gt;欢迎来到我的网站&lt;/h1&gt;
+        &lt;p&gt;这是一个示例页面。&lt;/p&gt;
+    &lt;/main&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试说明</h2>
+        <ul>
+            <li>将鼠标悬停在任意代码块上，右上角会出现复制按钮</li>
+            <li>点击按钮可以将代码复制到剪贴板</li>
+            <li>复制成功后按钮会显示"已复制"状态，3秒后恢复</li>
+            <li>支持现代Clipboard API，如果不支持会自动回退到传统方法</li>
+            <li>支持暗色主题（根据系统设置自动切换）</li>
+        </ul>
+    </div>
+    
+    <script src="assets/js/code-copy.js"></script>
+    
+    <script>
+        // 测试动态添加代码块
+        setTimeout(() => {
+            const newSection = document.createElement('div');
+            newSection.className = 'test-section';
+            newSection.innerHTML = `
+                <h2>动态添加的代码块</h2>
+                <pre><code class="language-python"># 动态添加的Python代码
+print("这个代码块是动态加载的")
+print("复制按钮会自动添加")</code></pre>
+            `;
+            document.body.appendChild(newSection);
+            
+            // 调用函数为动态添加的代码块添加复制按钮
+            if (window.addCodeCopyButtons) {
+                window.addCodeCopyButtons();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
