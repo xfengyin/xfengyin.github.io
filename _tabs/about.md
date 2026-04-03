@@ -1,7 +1,7 @@
 ---
-# the default layout is 'page'
+layout: page
 icon: fas fa-info-circle
-order: 4
+order: 5
 ---
 
 # 你好，我是 xFeng
@@ -35,21 +35,18 @@ order: 4
 
 ### [XingJu 星聚](https://github.com/xfengyin/XingJu)
 跨平台聚合应用，支持音乐/视频/小说/漫画多源搜索
-
 - **技术栈**: Rust + Tauri v2 + React + TypeScript
 - **亮点**: 赛博朋克UI设计、性能优化、懒加载、测试框架
 - **GitHub**: [查看源码](https://github.com/xfengyin/XingJu)
 
 ### [Kongming 孔明](https://github.com/xfengyin/kongming)
 微服务架构框架，支持热更新与动态配置
-
 - **技术栈**: Go + Gin + gRPC + Etcd
 - **亮点**: 服务发现、负载均衡、配置中心、监控告警
 - **GitHub**: [查看源码](https://github.com/xfengyin/kongming)
 
 ### [Zen](https://github.com/xfengyin/zen)
 Python模块化执行框架，支持依赖图与隔离执行
-
 - **技术栈**: Python 3.10+
 - **亮点**: 依赖图解析、隔离执行环境、意图解析、LLM集成
 - **GitHub**: [查看源码](https://github.com/xfengyin/zen)
@@ -59,7 +56,6 @@ Python模块化执行框架，支持依赖图与隔离执行
 ## 📝 博客内容
 
 这个博客主要分享：
-
 - **硬件开发经验**: 电路设计、测试方法、供应链管理经验
 - **软件开发实践**: Rust、Go、Python项目实战经验
 - **项目管理心得**: 硬件产品从0到1的全流程管理

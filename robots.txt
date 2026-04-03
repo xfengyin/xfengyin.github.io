@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xfengyin.github.io/sitemap.xml
