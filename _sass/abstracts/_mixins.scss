@@ -1,0 +1,405 @@
+// =============================================================================
+// Mixins
+// =============================================================================
+
+// Media Queries
+// -----------------------------------------------------------------------------
+
+/// Breakpoint mixin for responsive design
+/// @param {String} $breakpoint - Breakpoint name (xs, sm, md, lg, xl, xxl)
+/// @content - Styles to apply at the breakpoint
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @content;
+  } @else if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (min-width: $breakpoint-xxl) {
+      @content;
+    }
+  } @else {
+    @error "Unknown breakpoint: #{$breakpoint}. Available breakpoints: xs, sm, md, lg, xl, xxl";
+  }
+}
+
+/// Mobile-first media query up to a maximum width
+/// @param {String} $max-width - Maximum width
+@mixin respond-to-max($max-width) {
+  @media (max-width: $max-width) {
+    @content;
+  }
+}
+
+/// Media query for a specific range
+/// @param {String} $min-width - Minimum width
+/// @param {String} $max-width - Maximum width
+@mixin respond-to-range($min-width, $max-width) {
+  @media (min-width: $min-width) and (max-width: $max-width) {
+    @content;
+  }
+}
+
+/// Media query for high-resolution displays (Retina)
+@mixin retina {
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+         only screen and (min--moz-device-pixel-ratio: 2),
+         only screen and (-o-min-device-pixel-ratio: 2/1),
+         only screen and (min-device-pixel-ratio: 2),
+         only screen and (min-resolution: 192dpi),
+         only screen and (min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+/// Media query for prefers-reduced-motion
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+/// Media query for dark mode
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
+
+// Typography
+// -----------------------------------------------------------------------------
+
+/// Fluid typography mixin
+/// @param {Number} $min-font-size - Minimum font size
+/// @param {Number} $max-font-size - Maximum font size
+/// @param {Number} $min-viewport - Minimum viewport width
+/// @param {Number} $max-viewport - Maximum viewport width
+@mixin fluid-type($min-font-size, $max-font-size, $min-viewport: $breakpoint-sm, $max-viewport: $breakpoint-xl) {
+  font-size: $min-font-size;
+  
+  @media (min-width: $min-viewport) {
+    font-size: calc(
+      #{$min-font-size} + (#{$max-font-size} - #{$min-font-size}) *
+      ((100vw - #{$min-viewport}) / (#{$max-viewport} - #{$min-viewport}))
+    );
+  }
+  
+  @media (min-width: $max-viewport) {
+    font-size: $max-font-size;
+  }
+}
+
+/// Text truncation with ellipsis
+/// @param {Number} $lines - Number of lines to show (default: 1)
+@mixin text-truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/// Clearfix for floated elements
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// Layout
+// -----------------------------------------------------------------------------
+
+/// Center element horizontally and vertically
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/// Center element horizontally
+@mixin center-horizontal {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/// Center element vertically
+@mixin center-vertical {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/// Flexbox centering
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/// Flexbox centering vertically
+@mixin flex-center-vertical {
+  display: flex;
+  align-items: center;
+}
+
+/// Flexbox centering horizontally
+@mixin flex-center-horizontal {
+  display: flex;
+  justify-content: center;
+}
+
+/// Flexbox column layout
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/// Flexbox row layout
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+/// Grid container with auto-fit columns
+/// @param {String} $min-width - Minimum column width
+/// @param {String} $gap - Grid gap
+@mixin grid-auto-fit($min-width: 250px, $gap: $spacing-4) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+/// Grid container with fixed columns
+/// @param {Number} $columns - Number of columns
+/// @param {String} $gap - Grid gap
+@mixin grid-fixed($columns: 3, $gap: $spacing-4) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+// Visual Effects
+// -----------------------------------------------------------------------------
+
+/// Box shadow with multiple levels
+@mixin shadow($level: 'base') {
+  @if $level == 'sm' {
+    box-shadow: $shadow-sm;
+  } @else if $level == 'base' {
+    box-shadow: $shadow;
+  } @else if $level == 'md' {
+    box-shadow: $shadow-md;
+  } @else if $level == 'lg' {
+    box-shadow: $shadow-lg;
+  } @else if $level == 'xl' {
+    box-shadow: $shadow-xl;
+  } @else if $level == '2xl' {
+    box-shadow: $shadow-2xl;
+  } @else if $level == 'inner' {
+    box-shadow: $shadow-inner;
+  } @else {
+    @error "Unknown shadow level: #{$level}. Available levels: sm, base, md, lg, xl, 2xl, inner";
+  }
+}
+
+/// Border radius with multiple sizes
+@mixin rounded($size: 'base') {
+  @if $size == 'sm' {
+    border-radius: $border-radius-sm;
+  } @else if $size == 'base' {
+    border-radius: $border-radius;
+  } @else if $size == 'lg' {
+    border-radius: $border-radius-lg;
+  } @else if $size == 'xl' {
+    border-radius: $border-radius-xl;
+  } @else if $size == 'pill' {
+    border-radius: $border-radius-pill;
+  } @else if $size == 'circle' {
+    border-radius: $border-radius-circle;
+  } @else if $size == 'none' {
+    border-radius: 0;
+  } @else {
+    @error "Unknown border radius size: #{$size}. Available sizes: sm, base, lg, xl, pill, circle, none";
+  }
+}
+
+/// Transition with customizable properties
+/// @param {String} $properties - CSS properties to transition (default: all)
+/// @param {String} $duration - Transition duration (default: $transition-base)
+/// @param {String} $timing-function - Timing function (default: ease-in-out)
+@mixin transition($properties: all, $duration: 0.2s, $timing-function: ease-in-out) {
+  transition-property: $properties;
+  transition-duration: $duration;
+  transition-timing-function: $timing-function;
+}
+
+/// Hover effect with opacity
+@mixin hover-opacity($opacity: 0.8) {
+  &:hover {
+    opacity: $opacity;
+  }
+}
+
+/// Hover effect with scale
+@mixin hover-scale($scale: 1.05) {
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+/// Focus styles for accessibility
+@mixin focus-ring($color: $color-primary, $offset: 2px) {
+  &:focus {
+    outline: 2px solid $color;
+    outline-offset: $offset;
+  }
+  
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: $offset;
+  }
+}
+
+// Utilities
+// -----------------------------------------------------------------------------
+
+/// Visually hide element but keep it accessible to screen readers
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/// Reset button styles
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+/// Reset list styles
+@mixin list-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/// Reset link styles
+@mixin link-reset {
+  text-decoration: none;
+  color: inherit;
+  
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/// Aspect ratio container
+/// @param {String} $ratio - Aspect ratio (e.g., 16/9, 4/3, 1/1)
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: ($height / $width) * 100%;
+  }
+  
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/// Gradient text
+/// @param {Color} $start-color - Start color
+/// @param {Color} $end-color - End color
+@mixin gradient-text($start-color, $end-color) {
+  background: linear-gradient(to right, $start-color, $end-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Components
+// -----------------------------------------------------------------------------
+
+/// Button base styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $button-padding-y $button-padding-x;
+  font-size: $button-font-size;
+  font-weight: $font-weight-normal;
+  line-height: $button-line-height;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  border-radius: $button-border-radius;
+  transition: $transition-base;
+  
+  &:disabled,
+  &.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+/// Card base styles
+@mixin card-base {
+  background-color: $card-bg;
+  border: $card-border-width solid $card-border-color;
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  padding: $card-padding;
+  transition: $transition-base;
+}

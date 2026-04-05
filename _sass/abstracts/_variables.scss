@@ -1,0 +1,217 @@
+// =============================================================================
+// Variables
+// =============================================================================
+
+// Color Palette
+// -----------------------------------------------------------------------------
+
+// Primary Colors
+$color-primary: #007bff !default;
+$color-primary-light: lighten($color-primary, 10%) !default;
+$color-primary-dark: darken($color-primary, 10%) !default;
+
+// Secondary Colors
+$color-secondary: #6c757d !default;
+$color-secondary-light: lighten($color-secondary, 10%) !default;
+$color-secondary-dark: darken($color-secondary, 10%) !default;
+
+// Success, Warning, Danger, Info
+$color-success: #28a745 !default;
+$color-warning: #ffc107 !default;
+$color-danger: #dc3545 !default;
+$color-info: #17a2b8 !default;
+
+// Neutral Colors
+$color-white: #ffffff !default;
+$color-gray-100: #f8f9fa !default;
+$color-gray-200: #e9ecef !default;
+$color-gray-300: #dee2e6 !default;
+$color-gray-400: #ced4da !default;
+$color-gray-500: #adb5bd !default;
+$color-gray-600: #6c757d !default;
+$color-gray-700: #495057 !default;
+$color-gray-800: #343a40 !default;
+$color-gray-900: #212529 !default;
+$color-black: #000000 !default;
+
+// Text Colors
+$color-text-primary: $color-gray-900 !default;
+$color-text-secondary: $color-gray-600 !default;
+$color-text-muted: $color-gray-500 !default;
+$color-text-light: $color-gray-400 !default;
+
+// Background Colors
+$color-bg-body: $color-white !default;
+$color-bg-alt: $color-gray-100 !default;
+$color-bg-dark: $color-gray-900 !default;
+
+// Border Colors
+$color-border: $color-gray-300 !default;
+$color-border-light: $color-gray-200 !default;
+$color-border-dark: $color-gray-400 !default;
+
+// Link Colors
+$color-link: $color-primary !default;
+$color-link-hover: $color-primary-dark !default;
+$color-link-visited: darken($color-primary, 15%) !default;
+
+// Typography
+// -----------------------------------------------------------------------------
+
+// Font Families
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-family-serif: Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+
+// Font Sizes
+$font-size-base: 1rem !default; // 16px
+$font-size-sm: $font-size-base * 0.875 !default; // 14px
+$font-size-lg: $font-size-base * 1.25 !default; // 20px
+$font-size-xl: $font-size-base * 1.5 !default; // 24px
+$font-size-xxl: $font-size-base * 2 !default; // 32px
+
+// Font Weights
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-medium: 500 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-bold: 700 !default;
+$font-weight-black: 900 !default;
+
+// Line Heights
+$line-height-base: 1.5 !default;
+$line-height-sm: 1.25 !default;
+$line-height-lg: 1.75 !default;
+
+// Letter Spacing
+$letter-spacing-base: 0 !default;
+$letter-spacing-wide: 0.025em !default;
+$letter-spacing-wider: 0.05em !default;
+$letter-spacing-widest: 0.1em !default;
+
+// Breakpoints
+// -----------------------------------------------------------------------------
+
+$breakpoint-xs: 0 !default;
+$breakpoint-sm: 576px !default;
+$breakpoint-md: 768px !default;
+$breakpoint-lg: 992px !default;
+$breakpoint-xl: 1200px !default;
+$breakpoint-xxl: 1400px !default;
+
+// Container Max Widths
+$container-max-width-sm: 540px !default;
+$container-max-width-md: 720px !default;
+$container-max-width-lg: 960px !default;
+$container-max-width-xl: 1140px !default;
+$container-max-width-xxl: 1320px !default;
+
+// Spacing
+// -----------------------------------------------------------------------------
+
+$spacing-unit: 1rem !default; // 16px
+
+// Spacing Scale
+$spacing-0: 0 !default;
+$spacing-1: $spacing-unit * 0.25 !default; // 4px
+$spacing-2: $spacing-unit * 0.5 !default;  // 8px
+$spacing-3: $spacing-unit * 0.75 !default; // 12px
+$spacing-4: $spacing-unit !default;        // 16px
+$spacing-5: $spacing-unit * 1.5 !default;  // 24px
+$spacing-6: $spacing-unit * 2 !default;    // 32px
+$spacing-7: $spacing-unit * 2.5 !default;  // 40px
+$spacing-8: $spacing-unit * 3 !default;    // 48px
+$spacing-9: $spacing-unit * 4 !default;    // 64px
+$spacing-10: $spacing-unit * 5 !default;   // 80px
+
+// Border Radius
+// -----------------------------------------------------------------------------
+
+$border-radius-sm: 0.125rem !default; // 2px
+$border-radius: 0.25rem !default;     // 4px
+$border-radius-lg: 0.5rem !default;   // 8px
+$border-radius-xl: 1rem !default;     // 16px
+$border-radius-pill: 50rem !default;  // For pill-shaped elements
+$border-radius-circle: 50% !default;  // For circular elements
+
+// Shadows
+// -----------------------------------------------------------------------------
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !default;
+$shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !default;
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !default;
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !default;
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !default;
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !default;
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !default;
+
+// Transitions
+// -----------------------------------------------------------------------------
+
+$transition-base: all 0.2s ease-in-out !default;
+$transition-fast: all 0.1s ease-in-out !default;
+$transition-slow: all 0.3s ease-in-out !default;
+
+// Z-index Layers
+// -----------------------------------------------------------------------------
+
+$z-index-dropdown: 1000 !default;
+$z-index-sticky: 1020 !default;
+$z-index-fixed: 1030 !default;
+$z-index-modal-backdrop: 1040 !default;
+$z-index-modal: 1050 !default;
+$z-index-popover: 1060 !default;
+$z-index-tooltip: 1070 !default;
+$z-index-toast: 1080 !default;
+
+// Grid System
+// -----------------------------------------------------------------------------
+
+$grid-columns: 12 !default;
+$grid-gutter-width: $spacing-4 !default; // 16px
+
+// Layout
+// -----------------------------------------------------------------------------
+
+$header-height: 4rem !default; // 64px
+$footer-height: 3rem !default; // 48px
+$sidebar-width: 16rem !default; // 256px
+$sidebar-width-collapsed: 4rem !default; // 64px
+
+// Components
+// -----------------------------------------------------------------------------
+
+// Button
+$button-padding-y: 0.375rem !default;
+$button-padding-x: 0.75rem !default;
+$button-font-size: $font-size-base !default;
+$button-line-height: $line-height-base !default;
+$button-border-radius: $border-radius !default;
+
+// Card
+$card-padding: $spacing-4 !default;
+$card-border-radius: $border-radius-lg !default;
+$card-border-width: 1px !default;
+$card-border-color: $color-border !default;
+$card-bg: $color-white !default;
+$card-shadow: $shadow !default;
+
+// Form Controls
+$input-padding-y: 0.375rem !default;
+$input-padding-x: 0.75rem !default;
+$input-font-size: $font-size-base !default;
+$input-line-height: $line-height-base !default;
+$input-border-radius: $border-radius !default;
+$input-border-width: 1px !default;
+$input-border-color: $color-border !default;
+$input-bg: $color-white !default;
+$input-color: $color-text-primary !default;
+
+// Code
+$code-font-size: $font-size-sm !default;
+$code-font-family: $font-family-monospace !default;
+$code-color: $color-danger !default;
+$code-bg: $color-gray-100 !default;
+$code-padding: 0.2rem 0.4rem !default;
+$code-border-radius: $border-radius-sm !default;

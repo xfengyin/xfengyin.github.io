@@ -1,0 +1,867 @@
+// =============================================================================
+// Footer
+// =============================================================================
+
+// Footer Base
+// -----------------------------------------------------------------------------
+
+.footer {
+  background-color: $color-gray-900;
+  color: $color-gray-300;
+  padding: $spacing-8 0;
+  margin-top: auto;
+  
+  &-light {
+    background-color: $color-gray-100;
+    color: $color-gray-700;
+  }
+  
+  &-dark {
+    background-color: $color-gray-900;
+    color: $color-gray-300;
+  }
+  
+  &-transparent {
+    background-color: transparent;
+    color: $color-text-primary;
+  }
+  
+  &-sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: $z-index-sticky;
+  }
+  
+  &-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: $z-index-fixed;
+  }
+}
+
+// Footer Container
+// -----------------------------------------------------------------------------
+
+.footer-container {
+  max-width: $container-max-width-xl;
+  margin: 0 auto;
+  padding: 0 $spacing-4;
+  
+  @include respond-to(lg) {
+    padding: 0 $spacing-6;
+  }
+}
+
+// Footer Top Section
+// -----------------------------------------------------------------------------
+
+.footer-top {
+  padding-bottom: $spacing-8;
+  border-bottom: 1px solid $color-gray-800;
+  
+  .footer-light & {
+    border-bottom-color: $color-gray-300;
+  }
+  
+  .footer-transparent & {
+    border-bottom-color: $color-border;
+  }
+}
+
+// Footer Main Content
+// -----------------------------------------------------------------------------
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-8;
+  
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include respond-to(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Footer Widgets
+// -----------------------------------------------------------------------------
+
+.footer-widget {
+  &-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    margin-bottom: $spacing-4;
+    
+    .footer-light & {
+      color: $color-gray-900;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-primary;
+    }
+    
+    &-small {
+      font-size: $font-size-base;
+      font-weight: $font-weight-semibold;
+      text-transform: uppercase;
+      letter-spacing: $letter-spacing-wide;
+    }
+  }
+  
+  &-content {
+    font-size: $font-size-sm;
+    line-height: $line-height-lg;
+  }
+}
+
+// Footer Links
+// -----------------------------------------------------------------------------
+
+.footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  &-item {
+    margin-bottom: $spacing-2;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &-link {
+    color: $color-gray-400;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      color: $color-white;
+      padding-left: $spacing-1;
+      
+      .footer-light & {
+        color: $color-gray-900;
+      }
+      
+      .footer-transparent & {
+        color: $color-primary;
+      }
+    }
+    
+    .footer-light & {
+      color: $color-gray-600;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-secondary;
+    }
+  }
+  
+  &-icon {
+    margin-right: $spacing-2;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+  }
+}
+
+// Footer Contact Info
+// -----------------------------------------------------------------------------
+
+.footer-contact {
+  &-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: $spacing-3;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  &-icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: $spacing-3;
+    margin-top: 0.125rem;
+    color: $color-primary;
+    
+    .footer-light & {
+      color: $color-primary;
+    }
+    
+    .footer-transparent & {
+      color: $color-primary;
+    }
+  }
+  
+  &-content {
+    flex: 1;
+  }
+  
+  &-label {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-gray-500;
+    margin-bottom: $spacing-1;
+    
+    .footer-light & {
+      color: $color-gray-500;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-muted;
+    }
+  }
+  
+  &-value {
+    display: block;
+    color: $color-gray-300;
+    text-decoration: none;
+    
+    &:hover {
+      color: $color-white;
+      
+      .footer-light & {
+        color: $color-gray-900;
+      }
+      
+      .footer-transparent & {
+        color: $color-primary;
+      }
+    }
+    
+    .footer-light & {
+      color: $color-gray-700;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-primary;
+    }
+  }
+}
+
+// Footer Social Links
+// -----------------------------------------------------------------------------
+
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-2;
+  margin-top: $spacing-4;
+  
+  &-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: $border-radius-circle;
+    background-color: $color-gray-800;
+    color: $color-gray-300;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: $color-primary;
+      color: $color-white;
+      transform: translateY(-2px);
+    }
+    
+    .footer-light & {
+      background-color: $color-gray-200;
+      color: $color-gray-700;
+      
+      &:hover {
+        background-color: $color-primary;
+        color: $color-white;
+      }
+    }
+    
+    .footer-transparent & {
+      background-color: $color-gray-100;
+      color: $color-gray-700;
+      
+      &:hover {
+        background-color: $color-primary;
+        color: $color-white;
+      }
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+  
+  &-text {
+    display: none;
+    
+    @include respond-to(sm) {
+      display: inline;
+      margin-left: $spacing-2;
+    }
+  }
+  
+  &-with-text {
+    width: auto;
+    padding: $spacing-2 $spacing-3;
+    border-radius: $border-radius;
+    
+    .footer-social-text {
+      display: inline;
+    }
+  }
+}
+
+// Footer Newsletter
+// -----------------------------------------------------------------------------
+
+.footer-newsletter {
+  &-description {
+    font-size: $font-size-sm;
+    line-height: $line-height-lg;
+    margin-bottom: $spacing-4;
+    color: $color-gray-400;
+    
+    .footer-light & {
+      color: $color-gray-600;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-secondary;
+    }
+  }
+  
+  &-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    
+    @include respond-to(sm) {
+      flex-direction: row;
+    }
+  }
+  
+  &-input {
+    flex: 1;
+    padding: $spacing-2 $spacing-3;
+    border: 1px solid $color-gray-700;
+    border-radius: $border-radius;
+    background-color: $color-gray-800;
+    color: $color-gray-300;
+    font-size: $font-size-base;
+    
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.1);
+    }
+    
+    .footer-light & {
+      border-color: $color-gray-400;
+      background-color: $color-white;
+      color: $color-gray-900;
+    }
+    
+    .footer-transparent & {
+      border-color: $color-border;
+      background-color: $color-white;
+      color: $color-text-primary;
+    }
+  }
+  
+  &-button {
+    padding: $spacing-2 $spacing-4;
+    background-color: $color-primary;
+    color: $color-white;
+    border: none;
+    border-radius: $border-radius;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: $color-primary-dark;
+    }
+    
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  }
+  
+  &-success,
+  &-error {
+    padding: $spacing-2;
+    border-radius: $border-radius;
+    font-size: $font-size-sm;
+    margin-top: $spacing-2;
+  }
+  
+  &-success {
+    background-color: rgba($color-success, 0.1);
+    color: $color-success;
+    border: 1px solid rgba($color-success, 0.2);
+  }
+  
+  &-error {
+    background-color: rgba($color-danger, 0.1);
+    color: $color-danger;
+    border: 1px solid rgba($color-danger, 0.2);
+  }
+}
+
+// Footer Bottom Section
+// -----------------------------------------------------------------------------
+
+.footer-bottom {
+  padding-top: $spacing-8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-4;
+  
+  @include respond-to(md) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+// Footer Copyright
+// -----------------------------------------------------------------------------
+
+.footer-copyright {
+  font-size: $font-size-sm;
+  color: $color-gray-500;
+  text-align: center;
+  
+  .footer-light & {
+    color: $color-gray-600;
+  }
+  
+  .footer-transparent & {
+    color: $color-text-muted;
+  }
+  
+  @include respond-to(md) {
+    text-align: left;
+  }
+  
+  &-link {
+    color: $color-gray-400;
+    text-decoration: none;
+    
+    &:hover {
+      color: $color-white;
+      text-decoration: underline;
+      
+      .footer-light & {
+        color: $color-gray-900;
+      }
+      
+      .footer-transparent & {
+        color: $color-primary;
+      }
+    }
+    
+    .footer-light & {
+      color: $color-gray-600;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+// Footer Legal Links
+// -----------------------------------------------------------------------------
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-3;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  @include respond-to(md) {
+    justify-content: flex-end;
+  }
+  
+  &-item {
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '•';
+      color: $color-gray-600;
+      margin-left: $spacing-3;
+      
+      .footer-light & {
+        color: $color-gray-400;
+      }
+      
+      .footer-transparent & {
+        color: $color-border;
+      }
+    }
+  }
+  
+  &-link {
+    font-size: $font-size-sm;
+    color: $color-gray-400;
+    text-decoration: none;
+    
+    &:hover {
+      color: $color-white;
+      text-decoration: underline;
+      
+      .footer-light & {
+        color: $color-gray-900;
+      }
+      
+      .footer-transparent & {
+        color: $color-primary;
+      }
+    }
+    
+    .footer-light & {
+      color: $color-gray-600;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+// Footer Back to Top
+// -----------------------------------------------------------------------------
+
+.footer-back-to-top {
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-4;
+  width: 3rem;
+  height: 3rem;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: $border-radius-circle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: $shadow-lg;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: $z-index-sticky;
+  
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  &:hover {
+    background-color: $color-primary-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-xl;
+  }
+  
+  &-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  @include respond-to(sm) {
+    right: $spacing-6;
+  }
+}
+
+// Footer Payment Methods
+// -----------------------------------------------------------------------------
+
+.footer-payments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-3;
+  margin-top: $spacing-4;
+  
+  @include respond-to(md) {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+  
+  &-title {
+    font-size: $font-size-sm;
+    color: $color-gray-500;
+    margin-bottom: $spacing-2;
+    width: 100%;
+    text-align: center;
+    
+    @include respond-to(md) {
+      text-align: right;
+    }
+  }
+  
+  &-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-2;
+  }
+  
+  &-method {
+    width: 2.5rem;
+    height: 1.5rem;
+    background-color: $color-white;
+    border-radius: $border-radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-1;
+    
+    &-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
+
+// Footer Trust Badges
+// -----------------------------------------------------------------------------
+
+.footer-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $spacing-4;
+  margin-top: $spacing-6;
+  padding-top: $spacing-6;
+  border-top: 1px solid $color-gray-800;
+  
+  .footer-light & {
+    border-top-color: $color-gray-300;
+  }
+  
+  .footer-transparent & {
+    border-top-color: $color-border;
+  }
+  
+  &-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 150px;
+  }
+  
+  &-icon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: $spacing-2;
+    color: $color-primary;
+    
+    .footer-light & {
+      color: $color-primary;
+    }
+    
+    .footer-transparent & {
+      color: $color-primary;
+    }
+  }
+  
+  &-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+    margin-bottom: $spacing-1;
+    
+    .footer-light & {
+      color: $color-gray-900;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-primary;
+    }
+  }
+  
+  &-description {
+    font-size: $font-size-sm * 0.875;
+    color: $color-gray-500;
+    
+    .footer-light & {
+      color: $color-gray-600;
+    }
+    
+    .footer-transparent & {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+// Footer Responsive Adjustments
+// -----------------------------------------------------------------------------
+
+@include respond-to-max($breakpoint-md - 1) {
+  .footer {
+    padding: $spacing-6 0;
+  }
+  
+  .footer-top {
+    padding-bottom: $spacing-6;
+  }
+  
+  .footer-main {
+    gap: $spacing-6;
+  }
+  
+  .footer-widget {
+    &-title {
+      margin-bottom: $spacing-3;
+    }
+  }
+  
+  .footer-bottom {
+    padding-top: $spacing-6;
+  }
+  
+  .footer-newsletter-form {
+    flex-direction: column;
+  }
+  
+  .footer-trust {
+    margin-top: $spacing-4;
+    padding-top: $spacing-4;
+    gap: $spacing-3;
+    
+    &-badge {
+      max-width: 120px;
+    }
+  }
+}
+
+// Footer Utilities
+// -----------------------------------------------------------------------------
+
+.footer-compact {
+  padding: $spacing-4 0;
+  
+  .footer-top {
+    padding-bottom: $spacing-4;
+  }
+  
+  .footer-main {
+    gap: $spacing-4;
+  }
+  
+  .footer-bottom {
+    padding-top: $spacing-4;
+  }
+}
+
+.footer-simple {
+  .footer-top {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .footer-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $spacing-4;
+  }
+  
+  .footer-widget {
+    max-width: 400px;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+  }
+}
+
+.footer-split {
+  .footer-main {
+    @include respond-to(lg) {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .footer-widget:first-child {
+    @include respond-to(lg) {
+      grid-column: span 1;
+    }
+  }
+}
+
+.footer-centered {
+  text-align: center;
+  
+  .footer-main {
+    justify-items: center;
+  }
+  
+  .footer-widget {
+    max-width: 300px;
+  }
+  
+  .footer-links {
+    display: inline-block;
+    text-align: left;
+  }
+  
+  .footer-social {
+    justify-content: center;
+  }
+  
+  .footer-bottom {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .footer-legal {
+    justify-content: center;
+  }
+  
+  .footer-payments {
+    justify-content: center;
+  }
+}
+
+// Footer Animation
+@keyframes footer-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-animated {
+  animation: footer-fade-in 0.5s ease;
+}
+
+// Print styles for footer
+@media print {
+  .footer {
+    display: none;
+  }
+}
