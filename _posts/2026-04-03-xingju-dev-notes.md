@@ -1,8 +1,13 @@
 ---
 title: "Tauri v2 + React 18 跨平台开发实战：XingJu开发手记"
 date: 2026-04-03 09:00:00 +0800
+last_modified_at: 2026-04-03 09:00:00 +0800
 categories: [技术实践, Rust]
 tags: [tauri, rust, react, 桌面开发, 跨平台]
+description: "Rust + Tauri + React 技术栈实战，打造赛博朋克风格的跨平台聚合应用，对比Electron优势分析"
+author: xFeng
+image: /assets/img/posts/xingju-cyberpunk.png
+pin: true
 ---
 
 ## 项目背景

@@ -1,8 +1,14 @@
 ---
 title: "Kongming微服务架构设计：从八卦到云原生"
 date: 2026-04-03 11:00:00 +0800
+last_modified_at: 2026-04-03 11:00:00 +0800
 categories: [后端开发, 微服务]
 tags: [go, microservices, architecture, kongming]
+description: "基于Go语言的微服务框架设计实践，融合东方智慧与现代云原生架构，包含服务注册发现、配置中心、熔断器等完整方案"
+author: xFeng
+image: /assets/img/posts/kongming-architecture.png
+pin: true
+math: false
 ---
 
 ## 前言

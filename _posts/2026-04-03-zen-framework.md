@@ -1,8 +1,14 @@
 ---
 title: "Zen框架：Python模块化执行的禅意之道"
 date: 2026-04-03 12:00:00 +0800
+last_modified_at: 2026-04-03 12:00:00 +0800
 categories: [Python, 架构设计]
 tags: [python, framework, architecture, modular, zen]
+description: "借鉴禅宗思想的Python模块化执行框架，支持声明式任务定义、自动依赖解析和并行执行优化"
+author: xFeng
+image: /assets/img/posts/zen-workflow.png
+pin: true
+math: false
 ---
 
 ## 引言
