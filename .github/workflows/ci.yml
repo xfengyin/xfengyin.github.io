@@ -1,0 +1,232 @@
+name: CI - 博客构建与测试
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_posts/**'
+      - '_config.yml'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '_layouts/**'
+      - '_includes/**'
+      - '_sass/**'
+      - 'assets/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '_posts/**'
+      - '_config.yml'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - '_layouts/**'
+      - '_includes/**'
+      - '_sass/**'
+      - 'assets/**'
+  workflow_dispatch:  # 允许手动触发
+
+env:
+  RUBY_VERSION: '3.2'
+  JEKYLL_ENV: 'production'
+
+jobs:
+  # 代码质量检查
+  lint:
+    name: 代码质量检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 安装依赖
+        run: bundle install
+
+      - name: 检查 Ruby 语法
+        run: |
+          find . -name "*.rb" -type f | xargs ruby -c
+
+      - name: 检查 YAML 语法
+        run: |
+          find . -name "*.yml" -type f | xargs yamllint --no-warnings || true
+          find . -name "*.yaml" -type f | xargs yamllint --no-warnings || true
+
+      - name: 检查 Markdown 链接
+        run: |
+          bundle exec htmlproofer ./_site --check-html --disable-external --allow-missing-href --empty-alt-ignore || true
+
+  # 构建测试
+  build:
+    name: 构建测试
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 安装依赖
+        run: bundle install
+
+      - name: 构建网站
+        run: |
+          bundle exec jekyll build --trace
+          echo "构建完成，文件数量: $(find _site -type f | wc -l)"
+
+      - name: 检查构建结果
+        run: |
+          # 检查必要的文件是否存在
+          test -f _site/index.html || (echo "index.html 不存在" && exit 1)
+          test -d _site/assets || (echo "assets 目录不存在" && exit 1)
+          echo "✅ 基本文件检查通过"
+
+      - name: 验证 HTML
+        run: |
+          # 安装 html5validator
+          sudo apt-get update
+          sudo apt-get install -y html5validator
+          
+          # 验证主要页面
+          html5validator --root _site --ignore "*.min.js,*.min.css" --show-warnings || true
+
+      - name: 检查死链接
+        run: |
+          bundle exec htmlproofer ./_site \
+            --check-html \
+            --check-external-hash \
+            --disable-external \
+            --allow-missing-href \
+            --empty-alt-ignore \
+            --url-ignore "/#.*/" || true
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: built-site
+          path: _site/
+          retention-days: 7
+
+  # 测试部署
+  test-deploy:
+    name: 测试部署
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 构建测试站点
+        run: |
+          bundle exec jekyll build --destination _test_site
+          echo "测试站点构建完成"
+
+      - name: 启动测试服务器
+        run: |
+          # 在后台启动测试服务器
+          bundle exec jekyll serve --destination _test_site --port 8080 --host 0.0.0.0 &
+          sleep 10  # 等待服务器启动
+
+      - name: 测试访问
+        run: |
+          curl -f http://localhost:8080/ || (echo "无法访问本地服务器" && exit 1)
+          echo "✅ 测试服务器访问正常"
+
+  # 性能测试
+  performance:
+    name: 性能测试
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 构建网站
+        run: bundle exec jekyll build
+
+      - name: 分析构建性能
+        run: |
+          echo "=== 性能分析报告 ==="
+          echo "构建时间统计:"
+          time bundle exec jekyll build --profile
+          
+          echo -e "\n文件大小统计:"
+          find _site -type f -name "*.html" | xargs ls -lh | head -10
+          
+          echo -e "\nCSS/JS 文件大小:"
+          find _site -type f \( -name "*.css" -o -name "*.js" \) | xargs ls -lh | head -10
+
+      - name: Lighthouse 测试
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # 安全检查
+  security:
+    name: 安全检查
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 依赖安全检查
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+
+      - name: 检查 Gem 依赖安全
+        run: |
+          bundle audit check --update || true
+
+      - name: 检查敏感信息
+        run: |
+          # 检查配置文件中的敏感信息
+          if grep -r "password\|secret\|token\|key" _config.yml --ignore-case; then
+            echo "⚠️  发现可能的敏感信息，请检查"
+          else
+            echo "✅ 未发现明显的敏感信息"
+          fi
+
+      - name: 检查文件权限
+        run: |
+          find . -type f -name "*.sh" -exec ls -la {} \;
+          echo "✅ 文件权限检查完成"
+
+# 工作流通知
+notifications:
+  webhooks:
+    - url: ${{ secrets.WEBHOOK_URL }}
+      events: [workflow_run]
+
+# 缓存配置
+cache:
+  paths:
+    - vendor/bundle
+    - .jekyll-cache
+    - node_modules

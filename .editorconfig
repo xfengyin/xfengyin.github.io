@@ -1,0 +1,240 @@
+# EditorConfig 配置文件
+# 帮助开发者在不同编辑器和IDE中保持一致的编码风格
+# 详情请访问: https://editorconfig.org
+
+# 根配置文件
+root = true
+
+# 通用设置
+[*]
+charset = utf-8                  # 文件编码
+end_of_line = lf                 # 行尾符 (Linux/macOS 风格)
+insert_final_newline = true      # 文件末尾添加空行
+trim_trailing_whitespace = true  # 删除行尾空格
+indent_style = space             # 使用空格缩进
+indent_size = 2                  # 缩进大小为2个空格
+
+# Markdown 文件
+[*.md]
+max_line_length = 100            # 最大行长度
+trim_trailing_whitespace = false # Markdown 中保留行尾空格（用于换行）
+
+# YAML 配置文件
+[*.yml]
+[*.yaml]
+indent_size = 2                  # YAML 使用2空格缩进
+
+# Ruby 文件
+[*.rb]
+indent_size = 2                  # Ruby 使用2空格缩进
+
+# HTML 文件
+[*.html]
+indent_size = 2                  # HTML 使用2空格缩进
+
+# CSS/SCSS 文件
+[*.css]
+[*.scss]
+[*.sass]
+indent_size = 2                  # CSS 使用2空格缩进
+
+# JavaScript 文件
+[*.js]
+[*.jsx]
+[*.ts]
+[*.tsx]
+indent_size = 2                  # JavaScript 使用2空格缩进
+quote_type = single              # 使用单引号
+
+# JSON 文件
+[*.json]
+indent_size = 2                  # JSON 使用2空格缩进
+
+# XML 文件
+[*.xml]
+indent_size = 2                  # XML 使用2空格缩进
+
+# Shell 脚本
+[*.sh]
+[*.bash]
+indent_size = 2                  # Shell 使用2空格缩进
+
+# Git 相关文件
+[.gitignore]
+[.gitattributes]
+[.gitmodules]
+
+# 配置文件
+[.editorconfig]
+[.babelrc]
+[.eslintrc]
+[.prettierrc]
+[.stylelintrc]
+
+# 构建配置文件
+[Gemfile]
+[Gemfile.lock]
+[Rakefile]
+[package.json]
+[package-lock.json]
+[yarn.lock]
+
+# 文档文件
+[README.md]
+[CONTRIBUTING.md]
+[CHANGELOG.md]
+[CODE_OF_CONDUCT.md]
+[LICENSE]
+
+# Jekyll 特定文件
+[_config.yml]
+[*.liquid]                       # Liquid 模板文件
+
+# 排除文件
+[Makefile]
+indent_style = tab               # Makefile 使用制表符
+indent_size = 8                  # Makefile 标准缩进
+
+# 二进制文件排除
+[*.jpg]
+[*.jpeg]
+[*.png]
+[*.gif]
+[*.ico]
+[*.svg]
+[*.pdf]
+[*.zip]
+[*.tar.gz]
+[*.woff]
+[*.woff2]
+[*.ttf]
+[*.eot]
+trim_trailing_whitespace = false
+insert_final_newline = false
+charset = binary
+
+# 特定目录设置
+[_posts/*.md]
+# 博客文章使用特定设置
+
+[assets/**/*.css]
+[assets/**/*.js]
+# 资源文件
+
+[_layouts/*.html]
+[_includes/*.html]
+# 布局和包含文件
+
+# Tab 宽度设置
+# 对于需要显示制表符宽度的编辑器
+[*]
+tab_width = 2
+
+# 文件编码检测
+# 防止编码问题
+[*.{rb,html,js,css,scss,yml,md}]
+charset = utf-8
+
+# 换行符设置
+# Windows 兼容性
+[*.{rb,html,js,css,scss,yml,md}]
+end_of_line = lf
+
+# 最大行长度例外
+# 对于某些文件类型，允许更长的行
+[*.{html,liquid}]
+max_line_length = off
+
+[*.{json,xml}]
+max_line_length = off
+
+# 缩进例外
+# 对于某些文件，使用不同的缩进
+[*.py]
+indent_size = 4
+
+[*.java]
+indent_size = 4
+
+[*.c]
+[*.cpp]
+[*.h]
+indent_size = 4
+
+# 语言特定设置
+# Ruby
+[*.rb]
+# Ruby 风格指南: https://github.com/rubocop/ruby-style-guide
+
+# JavaScript/TypeScript
+[*.js]
+[*.jsx]
+[*.ts]
+[*.tsx]
+# Airbnb JavaScript 风格指南: https://github.com/airbnb/javascript
+
+# Markdown 写作规范
+[*.md]
+# 中文文案排版规范: https://github.com/sparanoid/chinese-copywriting-guidelines
+
+# 特殊字符处理
+# 防止不可见字符问题
+[*]
+# 禁止使用全角空格
+# 禁止使用零宽空格
+
+# 文件头注释
+# 某些文件类型需要特定格式的文件头
+[*.rb]
+# 编码声明: # encoding: utf-8
+
+[*.py]
+# 编码声明: # -*- coding: utf-8 -*-
+
+# 项目特定覆盖
+# 如果有项目特定的需求，可以在这里添加
+
+# Jekyll 博客特定设置
+[_posts/*.md]
+# 博客文章可能有特殊的格式要求
+# 比如 Front Matter 的格式
+
+[_data/*.yml]
+[_data/*.yaml]
+# 数据文件可能有特殊的结构
+
+# GitHub Actions 工作流文件
+[.github/workflows/*.yml]
+# CI/CD 配置文件
+
+# 测试文件
+[test/**/*.rb]
+[spec/**/*.rb]
+[_test/**/*.js]
+# 测试文件可能有不同的格式要求
+
+# 文档目录
+[docs/**/*.md]
+# 文档文件
+
+# 示例文件
+[examples/**/*]
+# 示例代码文件
+
+# 临时文件和构建产物排除
+[_site/**]
+[.jekyll-cache/**]
+[.sass-cache/**]
+[node_modules/**]
+[vendor/**]
+[dist/**]
+[build/**]
+[coverage/**]
+[*.log]
+[*.tmp]
+[*.temp]
+
+# 最后，确保所有设置都被正确应用
+# 这个部分应该放在最后
+[**]
+# 最终检查: 确保没有遗漏的文件类型
