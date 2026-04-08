@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电动两轮车系统架构 | xfengyin</title>
+    <meta name="description" content="电动两轮车市场概述
+
+电动两轮车作为短途出行的重要工具，在全球范围内拥有庞大的市场。据行业统计，中国电动两轮车保有量已超过3亿辆，年产量超过4000万辆。
+
+核心技术架构
+
+系统框图
+
+``
+┌─────────────────────────────────────────┐
+│         ...">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg: #0f0f1a;
+            --bg-card: #16162a;
+            --bg-code: #0d1117;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+        }
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .article-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .article-content {
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+        .article-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem;
+            color: var(--text);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+        .article-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+        }
+        .article-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+        .article-content p {
+            margin-bottom: 1.25rem;
+            color: var(--text);
+        }
+        .article-content ul, .article-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+        .article-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .article-content strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .article-content code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+        .article-content pre {
+            background: var(--bg-code);
+            padding: 1.25rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+        .article-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .article-content th, .article-content td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-content th {
+            background: var(--bg-card);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .article-content tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .article-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 2rem 0;
+        }
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+        .back-to-home:hover { color: var(--primary); }
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+            color: var(--text-muted);
+        }
+        @media (max-width: 768px) {
+            .article-container { padding: 7rem 1.5rem 3rem; }
+            .article-header h1 { font-size: 1.6rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <nav>
+        <div class="nav-container">
+            <a href="../" class="logo">xfengyin</a>
+            <ul class="nav-links">
+                <li><a href="../#articles">文章</a></li>
+                <li><a href="../#skills">技能</a></li>
+                <li><a href="https://github.com/xfengyin">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    <article class="article-container">
+        <a href="../" class="back-to-home">← 返回首页</a>
+        <header class="article-header">
+            <span class="article-tag">硬件系统</span>
+            <h1>电动两轮车系统架构</h1>
+            <div class="article-meta">📅 2024-07-17 · ⏱️ 阅读时间约 4 分钟</div>
+        </header>
+        <div class="article-content">
+            <h2>电动两轮车市场概述</h2>
+
+<p>电动两轮车作为短途出行的重要工具，在全球范围内拥有庞大的市场。据行业统计，中国电动两轮车保有量已超过3亿辆，年产量超过4000万辆。</p>
+
+<h2>核心技术架构</h2>
+
+<h3>系统框图</h3>
+
+<p>``<code>
+┌─────────────────────────────────────────┐
+│              电动两轮车系统              │
+├─────────────────────────────────────────┤
+│  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐    │
+│  │电池包│  │控制器│  │ 电机 │  │ 仪表 │    │
+│  │ BMS │←→│ MCU │←→│ BLDC│  │ LCD │    │
+│  └──┬──┘  └──┬──┘  └──┬──┘  └──┬──┘    │
+│     │        │        │        │       │
+│     └────────┴────────┴────────┘       │
+│              CAN/UART 总线              │
+└─────────────────────────────────────────┘
+</code>`<code></p>
+
+<h2>1. 电池系统（BMS）</h2>
+
+<h3>1.1 电池类型对比</h3>
+
+<table>
+<tr><th>类型</th><th>能量密度</th><th>循环寿命</th><th>成本</th><th>安全性</th><th>主流应用</th></tr>
+<tr><td>铅酸</td><td>30-50Wh/kg</td><td>300-500次</td><td>低</td><td>高</td><td>低端车型</td></tr>
+<tr><td>三元锂</td><td>150-250Wh/kg</td><td>800-1500次</td><td>中</td><td>中</td><td>中高端</td></tr>
+<tr><td>磷酸铁锂</td><td>90-120Wh/kg</td><td>2000+次</td><td>中</td><td>高</td><td>长寿命车型</td></tr>
+<tr><td>锰酸锂</td><td>100-150Wh/kg</td><td>500-1000次</td><td>低</td><td>中高</td><td>经济车型</td></tr>
+</table>
+
+<h3>1.2 BMS功能架构</h3>
+
+</code>`<code>
+┌────────────────────────────────┐
+│           BMS 主控              │
+├────────┬────────┬──────────────┤
+│  电量计  │  均衡管理 │    保护模块    │
+│  SOC   │ 主动/被动 │ 过充/过放/过流  │
+│  SOH   │        │  过温/短路    │
+└────────┴────────┴──────────────┘
+</code>`<code>
+
+<strong>核心功能</strong>：
+<ul>
+<li><strong>SOC估算</strong>：基于电流积分+电压校正，精度要求±5%</li>
+<li><strong>SOH评估</strong>：监测容量衰减和内阻增长</li>
+<li><strong>主动均衡</strong>：能量转移型，效率>90%</li>
+<li><strong>安全保护</strong>：三级保护（软件→硬件→熔断）</li>
+
+</ul>
+<h3>1.3 电池包设计要点</h3>
+
+<table>
+<tr><th>参数</th><th>48V12Ah</th><th>48V20Ah</th><th>60V20Ah</th><th>72V32Ah</th></tr>
+<tr><td>串并方式</td><td>13S4P</td><td>13S6P</td><td>16S6P</td><td>20S8P</td></tr>
+<tr><td>额定容量</td><td>12Ah</td><td>20Ah</td><td>20Ah</td><td>32Ah</td></tr>
+<tr><td>能量</td><td>576Wh</td><td>960Wh</td><td>1200Wh</td><td>2304Wh</td></tr>
+<tr><td>续航</td><td>30-40km</td><td>50-60km</td><td>60-70km</td><td>100-120km</td></tr>
+</table>
+
+<h2>2. 电机控制系统</h2>
+
+<h3>2.1 电机类型</h3>
+
+<strong>轮毂电机</strong>（市场主流，占比>80%）：
+<ul>
+<li>优点：结构简单、成本低、免维护</li>
+<li>缺点：簧下质量大、散热差</li>
+<li>功率：350W-3000W</li>
+
+</ul>
+<strong>中置电机</strong>（高端车型）：
+<ul>
+<li>优点：重心合理、可配变速器、散热好</li>
+<li>缺点：成本高、结构复杂</li>
+<li>功率：250W-750W</li>
+
+</ul>
+<h3>2.2 控制算法</h3>
+
+<p><strong>FOC矢量控制</strong>（主流方案）：</p>
+
+</code>`<code>c
+// FOC控制简化代码
+void FOC_Control(void) {
+    // 1. 采集相电流
+    Ia = ADC_Get(Ia_Channel);
+    Ib = ADC_Get(Ib_Channel);
+    Ic = -(Ia + Ib);  // Ic = -(Ia+Ib)
+    
+    // 2. Clark变换
+    Ialpha = Ia;
+    Ibeta = (Ia + 2*Ib) / sqrt(3);
+    
+    // 3. Park变换
+    Id =  Ialpha <em> cos(theta) + Ibeta </em> sin(theta);
+    Iq = -Ialpha <em> sin(theta) + Ibeta </em> cos(theta);
+    
+    // 4. PI电流环
+    Vd = PI_D(Id_ref - Id);
+    Vq = PI_Q(Iq_ref - Iq);
+    
+    // 5. 反Park变换
+    Valpha = Vd <em> cos(theta) - Vq </em> sin(theta);
+    Vbeta  = Vd <em> sin(theta) + Vq </em> cos(theta);
+    
+    // 6. SVPWM生成
+    SVPWM_Generate(Valpha, Vbeta);
+}
+</code>`<code>
+
+<strong>控制性能</strong>：
+<ul>
+<li>转速精度：±1%</li>
+<li>转矩响应：< 5ms</li>
+<li>效率：> 88%（全工况平均）</li>
+
+</ul>
+<h3>2.3 控制器硬件</h3>
+
+<table>
+<tr><th>参数</th><th>规格</th></tr>
+<tr><td>MCU</td><td>STM32F103/GD32F103（主流）</td></tr>
+<tr><td>驱动</td><td>IR2103/EG2133</td></tr>
+<tr><td>MOS管</td><td>NCEP60T18A（60V/180A）</td></tr>
+<tr><td>采样电阻</td><td>1mΩ/3W</td></tr>
+<tr><td>PWM频率</td><td>16kHz</td></tr>
+</table>
+
+<h2>3. 充电系统</h2>
+
+<h3>3.1 充电器规格</h3>
+
+<table>
+<tr><th>电池规格</th><th>充电器规格</th><th>充电时间</th></tr>
+<tr><td>48V12Ah</td><td>48V2A</td><td>6-8小时</td></tr>
+<tr><td>48V20Ah</td><td>48V3A</td><td>6-8小时</td></tr>
+<tr><td>60V20Ah</td><td>60V3A</td><td>6-8小时</td></tr>
+<tr><td>72V32Ah</td><td>72V5A</td><td>6-8小时</td></tr>
+</table>
+
+<h3>3.2 充电曲线</h3>
+
+</code>`<code>
+电流
+ 3A ┤    ┌──────────────
+    │   /
+    │  /
+ 0.6A┤ /                ┌──────────
+    │/                 /
+ 0.1A┤                 /
+    │                /
+    └──────────────────────────────
+        CC阶段    CV阶段    涓流
+        (快充)   (慢充)    (补电)
+</code>`<code>
+
+<h3>3.3 安全保护</h3>
+
+<ul>
+<li><strong>过压保护</strong>：110%额定电压</li>
+<li><strong>过流保护</strong>：120%额定电流</li>
+<li><strong>过温保护</strong>：65°C停止充电</li>
+<li><strong>定时保护</strong>：10小时自动断开</li>
+<li><strong>反接保护</strong>：防止正负极接反</li>
+
+</ul>
+<h2>4. 智能化功能</h2>
+
+<h3>4.1 物联网方案</h3>
+
+<p></code>`<code>
+┌─────────┐     4G/NB-IoT     ┌─────────┐
+│ 电动车   │ ←──────────────→ │ 云平台   │
+│ GPS+MCU │                   │ 服务器   │
+└─────────┘                   └────┬────┘
+                                   │
+                    ┌──────────────┼──────────────┐
+                    ↓              ↓              ↓
+               ┌────────┐    ┌────────┐    ┌────────┐
+               │手机APP │    │运营管理│    │大数据分析│
+               └────────┘    └────────┘    └────────┘
+</code>``</p>
+
+<h3>4.2 智能功能列表</h3>
+
+<table>
+<tr><th>功能</th><th>实现方案</th><th>用户体验</th></tr>
+<tr><td>无感解锁</td><td>蓝牙接近检测</td><td>靠近自动解锁</td></tr>
+<tr><td>GPS定位</td><td>北斗/GPS双模</td><td>实时查看位置</td></tr>
+<tr><td>电子围栏</td><td>地理围栏技术</td><td>越界报警推送</td></tr>
+<tr><td>骑行数据</td><td>速度/里程/轨迹</td><td>APP历史记录</td></tr>
+<tr><td>故障诊断</td><td>OBD数据分析</td><td>主动预警</td></tr>
+<tr><td>OTA升级</td><td>远程固件更新</td><td>持续优化</td></tr>
+</table>
+
+<h2>5. 安全标准</h2>
+
+<h3>5.1 国家标准</h3>
+
+<table>
+<tr><th>标准编号</th><th>名称</th><th>要求</th></tr>
+<tr><td>GB 17761</td><td>电动自行车安全技术规范</td><td>限速25km/h，整车质量≤55kg</td></tr>
+<tr><td>GB/T 22199</td><td>电动助力车用阀控式铅酸蓄电池</td><td>电池性能和安全要求</td></tr>
+<tr><td>GB/T 36972</td><td>电动自行车用锂离子电池</td><td>锂电池安全要求</td></tr>
+<tr><td>GB 42295</td><td>电动自行车电气安全要求</td><td>电气系统安全</td></tr>
+</table>
+
+<h3>5.2 关键安全设计</h3>
+
+<strong>新国标要求</strong>（2019年后强制执行）：
+<ul>
+<li>最高车速：≤25km/h</li>
+<li>整车质量：≤55kg</li>
+<li>电机功率：≤400W</li>
+<li>必须具有脚踏骑行功能</li>
+<li>蓄电池电压：≤48V</li>
+
+</ul>
+<h2>6. 发展趋势</h2>
+
+<h3>6.1 技术趋势</h3>
+
+<table>
+<tr><th>方向</th><th>技术</th><th>影响</th></tr>
+<tr><td>电池</td><td>钠离子电池</td><td>成本降低30%</td></tr>
+<tr><td>电池</td><td>固态电池</td><td>能量密度翻倍</td></tr>
+<tr><td>电机</td><td>轮毂电机+变速器</td><td>效率提升15%</td></tr>
+<tr><td>智能</td><td>自动驾驶辅助</td><td>安全提升</td></tr>
+<tr><td>充电</td><td>无线充电</td><td>便利性提升</td></tr>
+<tr><td>换电</td><td>标准化换电</td><td>解决里程焦虑</td></tr>
+</table>
+
+<h3>6.2 市场趋势</h3>
+
+<ul>
+<li><strong>海外拓展</strong>：东南亚、欧洲市场增长迅速</li>
+<li><strong>产品升级</strong>：从代步工具向智能出行终端演进</li>
+<li><strong>生态构建</strong>：车-桩-云一体化服务</li>
+
+</ul>
+<h2>结语</h2>
+
+<p>电动两轮车作为绿色出行的代表，技术正在快速迭代。从传统的简单代步工具，向智能化、网联化、安全化的方向演进。未来，随着电池技术和智能化技术的进步，电动两轮车将提供更好的用户体验。</p>
+
+<hr>
+
+<em>最后更新: 2024-07-17</em>
+        </div>
+    </article>
+    <footer>
+        <p>© 2024-2026 xfengyin. 荣耀存于心，而非留于形。</p>
+    </footer>
+</body>
+</html>

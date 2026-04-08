@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QS03B 硬件及软件逻辑测试 | xfengyin</title>
+    <meta name="description" content="项目概述
+
+QS03B 是一款硬件模块的测试项目，本文记录了该模块的硬件及软件逻辑测试过程和结果。
+
+硬件测试项目
+
+1. 电源测试
+
+1.1 输入电压测试
+
+
+测试项规格要求测试结果状态
+工作电压范围3.3V - 5.5V3.0V - 5.8V✅ 通过
+欠压保护点3.0V2.95V✅ 通过
+过压保...">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg: #0f0f1a;
+            --bg-card: #16162a;
+            --bg-code: #0d1117;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+        }
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .article-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .article-content {
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+        .article-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem;
+            color: var(--text);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+        .article-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+        }
+        .article-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+        .article-content p {
+            margin-bottom: 1.25rem;
+            color: var(--text);
+        }
+        .article-content ul, .article-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+        .article-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .article-content strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .article-content code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+        .article-content pre {
+            background: var(--bg-code);
+            padding: 1.25rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+        .article-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .article-content th, .article-content td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-content th {
+            background: var(--bg-card);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .article-content tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .article-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 2rem 0;
+        }
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+        .back-to-home:hover { color: var(--primary); }
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+            color: var(--text-muted);
+        }
+        @media (max-width: 768px) {
+            .article-container { padding: 7rem 1.5rem 3rem; }
+            .article-header h1 { font-size: 1.6rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <nav>
+        <div class="nav-container">
+            <a href="../" class="logo">xfengyin</a>
+            <ul class="nav-links">
+                <li><a href="../#articles">文章</a></li>
+                <li><a href="../#skills">技能</a></li>
+                <li><a href="https://github.com/xfengyin">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    <article class="article-container">
+        <a href="../" class="back-to-home">← 返回首页</a>
+        <header class="article-header">
+            <span class="article-tag">项目实战</span>
+            <h1>QS03B 硬件及软件逻辑测试</h1>
+            <div class="article-meta">📅 2024-07-17 · ⏱️ 阅读时间约 3 分钟</div>
+        </header>
+        <div class="article-content">
+            <h2>项目概述</h2>
+
+<p>QS03B 是一款硬件模块的测试项目，本文记录了该模块的硬件及软件逻辑测试过程和结果。</p>
+
+<h2>硬件测试项目</h2>
+
+<h3>1. 电源测试</h3>
+
+<h4>1.1 输入电压测试</h4>
+
+<table>
+<tr><th>测试项</th><th>规格要求</th><th>测试结果</th><th>状态</th></tr>
+<tr><td>工作电压范围</td><td>3.3V - 5.5V</td><td>3.0V - 5.8V</td><td>✅ 通过</td></tr>
+<tr><td>欠压保护点</td><td>3.0V</td><td>2.95V</td><td>✅ 通过</td></tr>
+<tr><td>过压保护点</td><td>6.0V</td><td>6.1V</td><td>✅ 通过</td></tr>
+</table>
+
+<h4>1.2 功耗测试</h4>
+
+<table>
+<tr><th>工作模式</th><th>规格要求</th><th>实测值</th><th>状态</th></tr>
+<tr><td>待机模式</td><td>< 10μA</td><td>8.5μA</td><td>✅ 通过</td></tr>
+<tr><td>正常工作</td><td>< 50mA</td><td>42mA</td><td>✅ 通过</td></tr>
+<tr><td>峰值电流</td><td>< 100mA</td><td>89mA</td><td>✅ 通过</td></tr>
+</table>
+
+<h4>1.3 电源纹波测试</h4>
+
+<p>``<code>
+测试条件：满载工作，示波器带宽20MHz
+测试点：VCC引脚</p>
+
+<p>结果：纹波电压 = 45mVpp (< 100mVpp规格要求)
+状态：✅ 通过
+</code>`<code></p>
+
+<h3>2. 信号完整性测试</h3>
+
+<h4>2.1 I2C信号测试</h4>
+
+<strong>SCL时钟信号</strong>：
+<ul>
+<li>频率：100kHz（标准模式）/ 400kHz（快速模式）</li>
+<li>上升时间：120ns（< 300ns规格）✅</li>
+<li>下降时间：15ns（< 300ns规格）✅</li>
+<li>高电平：3.3V ± 0.1V ✅</li>
+<li>低电平：< 0.4V ✅</li>
+
+</ul>
+<strong>SDA数据信号</strong>：
+<ul>
+<li>信号完整性良好，无明显反射</li>
+<li>建立时间：850ns（> 250ns规格）✅</li>
+<li>保持时间：50ns（> 0ns规格）✅</li>
+
+</ul>
+<h4>2.2 GPIO信号测试</h4>
+
+<table>
+<tr><th>测试项目</th><th>规格要求</th><th>测试结果</th><th>状态</th></tr>
+<tr><td>输出高电平</td><td>> 2.4V</td><td>3.28V</td><td>✅</td></tr>
+<tr><td>输出低电平</td><td>< 0.4V</td><td>0.05V</td><td>✅</td></tr>
+<tr><td>输入高阈值</td><td>> 2.0V</td><td>-</td><td>✅</td></tr>
+<tr><td>输入低阈值</td><td>< 0.8V</td><td>-</td><td>✅</td></tr>
+<tr><td>驱动能力</td><td>8mA</td><td>9.2mA</td><td>✅</td></tr>
+<tr><td>上升时间</td><td>< 50ns</td><td>35ns</td><td>✅</td></tr>
+<tr><td>下降时间</td><td>< 50ns</td><td>28ns</td><td>✅</td></tr>
+</table>
+
+<h3>3. 环境测试</h3>
+
+<h4>3.1 温度测试</h4>
+
+<table>
+<tr><th>测试温度</th><th>测试时间</th><th>功能状态</th><th>结果</th></tr>
+<tr><td>-20°C</td><td>2小时</td><td>正常</td><td>✅</td></tr>
+<tr><td>25°C（常温）</td><td>基准</td><td>正常</td><td>✅</td></tr>
+<tr><td>60°C</td><td>2小时</td><td>正常</td><td>✅</td></tr>
+<tr><td>85°C</td><td>2小时</td><td>正常</td><td>✅</td></tr>
+</table>
+
+<h4>3.2 湿度测试</h4>
+
+<ul>
+<li><strong>测试条件</strong>：85% RH，60°C，48小时</li>
+<li><strong>测试结果</strong>：功能正常，无腐蚀现象 ✅</li>
+
+</ul>
+<h4>3.3 ESD测试</h4>
+
+<table>
+<tr><th>测试等级</th><th>测试位置</th><th>结果</th></tr>
+<tr><td>±2kV（接触放电）</td><td>金属外壳</td><td>正常 ✅</td></tr>
+<tr><td>±4kV（接触放电）</td><td>金属外壳</td><td>正常 ✅</td></tr>
+<tr><td>±8kV（空气放电）</td><td>非金属区域</td><td>正常 ✅</td></tr>
+</table>
+
+<h2>软件逻辑测试</h2>
+
+<h3>1. 通信协议测试</h3>
+
+<h4>1.1 I2C通信测试</h4>
+
+<p></code>`<code>python
+<h1>测试代码示例</h1>
+import smbus
+import time</p>
+
+<p>bus = smbus.SMBus(1)
+DEVICE_ADDR = 0x50</p>
+
+<p><h1>测试1：设备地址扫描</h1>
+def scan_i2c():
+    devices = []
+    for addr in range(0x03, 0x78):
+        try:
+            bus.read_byte(addr)
+            devices.append(hex(addr))
+        except:
+            pass
+    return devices</p>
+
+<p>print("发现设备:", scan_i2c())
+<h1>结果：['0x50'] ✅</h1>
+</code>`<code></p>
+
+<strong>测试结果</strong>：
+<ul>
+<li>设备地址识别：✅ 正常</li>
+<li>读写操作：✅ 正常</li>
+<li>时钟拉伸：✅ 支持</li>
+<li>错误处理：✅ 正常</li>
+
+</ul>
+<h4>1.2 寄存器访问测试</h4>
+
+<table>
+<tr><th>寄存器地址</th><th>功能</th><th>读写测试</th><th>默认值检查</th><th>边界值测试</th></tr>
+<tr><td>0x00</td><td>设备ID</td><td>✅</td><td>✅</td><td>-</td></tr>
+<tr><td>0x01</td><td>状态寄存器</td><td>✅</td><td>✅</td><td>-</td></tr>
+<tr><td>0x02</td><td>控制寄存器</td><td>✅</td><td>✅</td><td>✅</td></tr>
+<tr><td>0x03-0x0F</td><td>数据寄存器</td><td>✅</td><td>✅</td><td>✅</td></tr>
+</table>
+
+<h3>2. 功能逻辑测试</h3>
+
+<h4>2.1 初始化流程测试</h4>
+
+<p></code>`<code>
+上电 → 硬件复位 → 加载配置 → 自检 → 就绪</p>
+
+<p>测试项目：
+<ol>
+<li>上电时序：正常 ✅</li>
+<li>复位响应：正常 ✅</li>
+<li>配置加载：正常 ✅</li>
+<li>自检流程：正常 ✅</li>
+<li>就绪时间：125ms（< 200ms规格）✅</li>
+</ol>
+</code>`<code></p>
+
+<h4>2.2 工作模式测试</h4>
+
+<table>
+<tr><th>工作模式</th><th>进入条件</th><th>退出条件</th><th>功耗</th><th>测试结果</th></tr>
+<tr><td>待机模式</td><td>软件命令</td><td>中断/命令</td><td>8.5μA</td><td>✅</td></tr>
+<tr><td>正常模式</td><td>上电默认</td><td>软件命令</td><td>42mA</td><td>✅</td></tr>
+<tr><td>测试模式</td><td>特定命令序列</td><td>复位</td><td>45mA</td><td>✅</td></tr>
+<tr><td>升级模式</td><td>特定命令序列</td><td>复位</td><td>38mA</td><td>✅</td></tr>
+</table>
+
+<h4>2.3 中断处理测试</h4>
+
+<table>
+<tr><th>中断源</th><th>触发条件</th><th>响应时间</th><th>测试结果</th></tr>
+<tr><td>数据就绪</td><td>数据准备好</td><td>< 1ms</td><td>✅</td></tr>
+<tr><td>错误中断</td><td>发生错误</td><td>< 1ms</td><td>✅</td></tr>
+<tr><td>状态变化</td><td>状态改变</td><td>< 1ms</td><td>✅</td></tr>
+</table>
+
+<h3>3. 性能测试</h3>
+
+<h4>3.1 响应时间测试</h4>
+
+<p></code>`<code>python
+import time</p>
+
+<p><h1>测试命令响应时间</h1>
+start = time.time()
+bus.write_byte_data(DEVICE_ADDR, 0x02, 0x01)
+<h1>等待中断或轮询状态</h1>
+while True:
+    status = bus.read_byte_data(DEVICE_ADDR, 0x01)
+    if status & 0x01:
+        break
+end = time.time()</p>
+
+<p>response_time = (end - start) * 1000
+print(f"响应时间: {response_time:.2f}ms")
+<h1>结果：响应时间: 2.35ms（< 5ms规格）✅</h1>
+</code>``</p>
+
+<h4>3.2 数据吞吐量测试</h4>
+
+<table>
+<tr><th>测试项目</th><th>规格要求</th><th>实测值</th><th>结果</th></tr>
+<tr><td>单次读取</td><td>256 bytes</td><td>256 bytes</td><td>✅</td></tr>
+<tr><td>连续读取速度</td><td>> 10KB/s</td><td>15.2KB/s</td><td>✅</td></tr>
+<tr><td>随机访问</td><td>< 5ms</td><td>2.8ms</td><td>✅</td></tr>
+</table>
+
+<h4>3.3 稳定性测试</h4>
+
+<ul>
+<li><strong>长时间运行测试</strong>：连续运行72小时，功能正常 ✅</li>
+<li><strong>压力测试</strong>：10000次读写循环，无错误 ✅</li>
+<li><strong>异常情况测试</strong>：断电恢复、通信干扰，恢复正常 ✅</li>
+
+</ul>
+<h2>测试总结</h2>
+
+<h3>测试统计</h3>
+
+<table>
+<tr><th>测试类别</th><th>测试项</th><th>通过</th><th>失败</th><th>通过率</th></tr>
+<tr><td>硬件测试</td><td>15项</td><td>15</td><td>0</td><td>100%</td></tr>
+<tr><td>软件测试</td><td>20项</td><td>20</td><td>0</td><td>100%</td></tr>
+<tr><td>环境测试</td><td>8项</td><td>8</td><td>0</td><td>100%</td></tr>
+<tr><td><strong>总计</strong></td><td><strong>43项</strong></td><td><strong>43</strong></td><td><strong>0</strong></td><td><strong>100%</strong></td></tr>
+</table>
+
+<h3>结论</h3>
+
+<p>QS03B模块通过了所有测试项目，满足设计规格要求，可以进入量产阶段。</p>
+
+<h3>建议</h3>
+
+<ol>
+<li><strong>生产测试</strong>：建议增加ICT测试和FCT测试点</li>
+<li><strong>质量控制</strong>：建议AQL抽样标准执行</li>
+<li><strong>文档更新</strong>：更新生产测试指导书</li>
+
+</ol>
+<hr>
+
+<em>测试日期: 2024-07-17</em>  
+<em>测试工程师: xFeng</em>  
+<em>审核状态: 已通过</em>
+        </div>
+    </article>
+    <footer>
+        <p>© 2024-2026 xfengyin. 荣耀存于心，而非留于形。</p>
+    </footer>
+</body>
+</html>
