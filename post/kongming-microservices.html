@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孔明微服务架构 | xfengyin</title>
+    <meta name="description" content="前言
+
+"鞠躬尽瘁，死而后已。" —— 诸葛亮
+
+作为一名硬件产品经理，我在管理硬件项目的同时，也需要搭建配套的后端服务。Kongming（孔明）是我基于Go语言开发的微服务框架，命名源自三国时期的智慧化身诸葛亮。本文将分享Kongming的设计理念与架构实现。
+
+
+
+为什么需要Kongming？
+...">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --bg: #0f0f1a;
+            --bg-card: #16162a;
+            --bg-code: #0d1117;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+        }
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .article-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .article-content {
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+        .article-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem;
+            color: var(--text);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+        }
+        .article-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
+        }
+        .article-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+        .article-content p {
+            margin-bottom: 1.25rem;
+            color: var(--text);
+        }
+        .article-content ul, .article-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+        .article-content li {
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .article-content strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .article-content code {
+            background: var(--bg-code);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+        .article-content pre {
+            background: var(--bg-code);
+            padding: 1.25rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text);
+        }
+        .article-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .article-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .article-content th, .article-content td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-content th {
+            background: var(--bg-card);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .article-content tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .article-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 2rem 0;
+        }
+        .back-to-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+        .back-to-home:hover { color: var(--primary); }
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+            color: var(--text-muted);
+        }
+        @media (max-width: 768px) {
+            .article-container { padding: 7rem 1.5rem 3rem; }
+            .article-header h1 { font-size: 1.6rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <nav>
+        <div class="nav-container">
+            <a href="../" class="logo">xfengyin</a>
+            <ul class="nav-links">
+                <li><a href="../#articles">文章</a></li>
+                <li><a href="../#skills">技能</a></li>
+                <li><a href="https://github.com/xfengyin">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    <article class="article-container">
+        <a href="../" class="back-to-home">← 返回首页</a>
+        <header class="article-header">
+            <span class="article-tag">架构设计</span>
+            <h1>孔明微服务架构</h1>
+            <div class="article-meta">📅 2026-04-03 · ⏱️ 阅读时间约 4 分钟</div>
+        </header>
+        <div class="article-content">
+            <h2>前言</h2>
+
+<blockquote>"鞠躬尽瘁，死而后已。" —— 诸葛亮</blockquote>
+
+<p>作为一名硬件产品经理，我在管理硬件项目的同时，也需要搭建配套的后端服务。Kongming（孔明）是我基于Go语言开发的微服务框架，命名源自三国时期的智慧化身诸葛亮。本文将分享Kongming的设计理念与架构实现。</p>
+
+<hr>
+
+<h2>为什么需要Kongming？</h2>
+
+<h3>传统单体架构的痛点</h3>
+
+<p>在开发XingJu（星聚）这样的跨平台应用时，我遇到了以下问题：</p>
+
+<table>
+<tr><th>问题</th><th>影响</th></tr>
+<tr><td>代码耦合严重</td><td>一个模块的改动影响全局</td></tr>
+<tr><td>部署困难</td><td>每次发布都是全量更新</td></tr>
+<tr><td>扩展受限</td><td>无法针对热点服务单独扩容</td></tr>
+<tr><td>技术栈固化</td><td>难以引入新技术</td></tr>
+</table>
+
+<h3>微服务的优势</h3>
+
+<ul>
+<li><strong>独立部署</strong>：每个服务可以独立开发、测试、部署</li>
+<li><strong>技术异构</strong>：不同服务可以选择最适合的技术栈</li>
+<li><strong>弹性伸缩</strong>：根据负载动态调整服务实例</li>
+<li><strong>故障隔离</strong>：单个服务故障不会影响整体系统</li>
+
+</ul>
+<hr>
+
+<h2>Kongming架构设计</h2>
+
+<h3>命名哲学</h3>
+
+<p>Kongming的模块命名借鉴三国文化，体现东方智慧与现代架构的结合：</p>
+
+<p>``<code>
+Kongming（孔明）- 框架核心
+├── 八卦 Bagua - 服务治理中心
+├── 主公 Lord - 配置管理中心
+├── 武将 Generals - 服务实例管理
+├── 虎符 TigerSeal - 认证授权中心
+└── 信使 Courier - 消息队列系统
+</code>`<code></p>
+
+<h3>核心架构图</h3>
+
+</code>`<code>
+┌─────────────────────────────────────────────────────────────┐
+│                      API Gateway                            │
+│                    （Nginx/Kong）                            │
+└───────────────────────┬─────────────────────────────────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+   ┌────▼────┐    ┌────▼────┐    ┌────▼────┐
+   │ Service │    │ Service │    │ Service │
+   │   A     │    │   B     │    │   C     │
+   └────┬────┘    └────┬────┘    └────┬────┘
+        │               │               │
+        └───────────────┼───────────────┘
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+   ┌────▼────┐    ┌────▼────┐    ┌────▼────┐
+   │  Bagua  │    │  Lord   │    │ Courier │
+   │服务治理 │    │配置中心 │    │消息队列 │
+   └─────────┘    └─────────┘    └─────────┘
+</code>`<code>
+
+<hr>
+
+<h2>核心模块详解</h2>
+
+<h3>1. 八卦 Bagua - 服务治理中心</h3>
+
+<p></code>`<code>go
+package bagua</p>
+
+<p>// ServiceRegistry 服务注册中心
+type ServiceRegistry struct {
+    services map[string]*ServiceInstance
+    mu       sync.RWMutex
+}</p>
+
+<p>// ServiceInstance 服务实例
+type ServiceInstance struct {
+    ID       string
+    Name     string
+    Address  string
+    Port     int
+    Weight   int
+    Healthy  bool
+    Metadata map[string]string
+}</p>
+
+<p>// Register 服务注册
+func (r <em>ServiceRegistry) Register(instance </em>ServiceInstance) error {
+    r.mu.Lock()
+    defer r.mu.Unlock()
+    
+    key := fmt.Sprintf("%s:%s", instance.Name, instance.ID)
+    r.services[key] = instance
+    
+    log.Printf("服务注册成功: %s@%s:%d", instance.Name, instance.Address, instance.Port)
+    return nil
+}</p>
+
+<p>// Discover 服务发现
+func (r <em>ServiceRegistry) Discover(serviceName string) ([]</em>ServiceInstance, error) {
+    r.mu.RLock()
+    defer r.mu.RUnlock()
+    
+    var instances []*ServiceInstance
+    for key, instance := range r.services {
+        if strings.HasPrefix(key, serviceName+":") && instance.Healthy {
+            instances = append(instances, instance)
+        }
+    }
+    
+    return instances, nil
+}
+</code>`<code></p>
+
+<h3>2. 主公 Lord - 配置管理中心</h3>
+
+<p></code>`<code>go
+package lord</p>
+
+<p>// ConfigCenter 配置中心
+type ConfigCenter struct {
+    provider ConfigProvider
+    cache    map[string]interface{}
+    watchers map[string][]ConfigWatcher
+}</p>
+
+<p>// ConfigProvider 配置提供者接口
+type ConfigProvider interface {
+    Get(key string) (string, error)
+    Set(key string, value string) error
+    Watch(key string, callback ConfigWatcher) error
+}</p>
+
+<p>// LoadConfig 加载配置
+func (cc <em>ConfigCenter) LoadConfig(appName string, env string) (</em>AppConfig, error) {
+    config := &AppConfig{
+        AppName: appName,
+        Env:     env,
+    }
+    
+    // 从etcd/consul加载配置
+    dbConfigKey := fmt.Sprintf("/config/%s/%s/database", appName, env)
+    dbConfig, err := cc.provider.Get(dbConfigKey)
+    if err != nil {
+        return nil, err
+    }
+    
+    if err := json.Unmarshal([]byte(dbConfig), &config.Database); err != nil {
+        return nil, err
+    }
+    
+    return config, nil
+}</p>
+
+<p>// HotReload 热更新配置
+func (cc *ConfigCenter) HotReload(key string, newValue string) error {
+    cc.mu.Lock()
+    defer cc.mu.Unlock()
+    
+    // 更新缓存
+    cc.cache[key] = newValue
+    
+    // 通知所有观察者
+    if watchers, ok := cc.watchers[key]; ok {
+        for _, watcher := range watchers {
+            go watcher.OnConfigChange(key, newValue)
+        }
+    }
+    
+    return nil
+}
+</code>`<code></p>
+
+<h3>3. 信使 Courier - 消息队列系统</h3>
+
+<p></code>`<code>go
+package courier</p>
+
+<p>// MessageQueue 消息队列接口
+type MessageQueue interface {
+    Publish(topic string, message *Message) error
+    Subscribe(topic string, handler MessageHandler) error
+    Unsubscribe(topic string, handler MessageHandler) error
+}</p>
+
+<p>// Courier 消息总线
+type Courier struct {
+    broker MessageBroker
+    topics map[string][]MessageHandler
+    mu     sync.RWMutex
+}</p>
+
+<p>// Publish 发布消息
+func (c *Courier) Publish(topic string, payload interface{}) error {
+    message := &Message{
+        ID:        uuid.New().String(),
+        Topic:     topic,
+        Payload:   payload,
+        Timestamp: time.Now(),
+    }
+    
+    return c.broker.Publish(topic, message)
+}</p>
+
+<p>// Subscribe 订阅消息
+func (c *Courier) Subscribe(topic string, handler MessageHandler) error {
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    
+    c.topics[topic] = append(c.topics[topic], handler)
+    return c.broker.Subscribe(topic, handler)
+}
+</code>`<code></p>
+
+<hr>
+
+<h2>服务间通信</h2>
+
+<h3>gRPC + Protocol Buffers</h3>
+
+<p></code>`<code>protobuf
+syntax = "proto3";</p>
+
+<p>package kongming;</p>
+
+<p>service UserService {
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}</p>
+
+<p>message GetUserRequest {
+    string user_id = 1;
+}</p>
+
+<p>message GetUserResponse {
+    User user = 1;
+    Error error = 2;
+}</p>
+
+<p>message User {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    int64 created_at = 4;
+}
+</code>`<code></p>
+
+<hr>
+
+<h2>实战案例：XingJu后端服务</h2>
+
+<h3>服务拆分</h3>
+
+</code>`<code>
+xingju-backend/
+├── api-gateway/          # API网关
+├── user-service/         # 用户服务
+├── search-service/       # 搜索服务
+├── content-service/      # 内容服务
+├── notification-service/ # 通知服务
+└── kongming/            # 基础设施
+</code>`<code>
+
+<h3>服务注册与发现</h3>
+
+</code>`<code>go
+func main() {
+    // 初始化Kongming
+    km := kongming.New(
+        kongming.WithEtcdEndpoints([]string{"localhost:2379"}),
+        kongming.WithServiceName("search-service"),
+        kongming.WithPort(8080),
+    )
+    
+    // 注册服务
+    if err := km.Register(); err != nil {
+        log.Fatal(err)
+    }
+    
+    // 启动gRPC服务
+    server := grpc.NewServer()
+    pb.RegisterSearchServiceServer(server, &SearchServiceImpl{})
+    
+    // 优雅关闭
+    km.Shutdown(func() {
+        server.GracefulStop()
+    })
+}
+</code>`<code>
+
+<hr>
+
+<h2>性能优化</h2>
+
+<h3>1. 负载均衡</h3>
+
+<p></code>`<code>go
+// WeightedRoundRobin 加权轮询
+type WeightedRoundRobin struct {
+    instances []*ServiceInstance
+    weights   []int
+    current   int
+}</p>
+
+<p>func (wrr <em>WeightedRoundRobin) Next() </em>ServiceInstance {
+    if len(wrr.instances) == 0 {
+        return nil
+    }
+    
+    instance := wrr.instances[wrr.current]
+    wrr.current = (wrr.current + 1) % len(wrr.instances)
+    return instance
+}
+</code>`<code></p>
+
+<h3>2. 熔断器</h3>
+
+<p></code>`<code>go
+// CircuitBreaker 熔断器
+type CircuitBreaker struct {
+    failureThreshold int
+    successThreshold int
+    timeout          time.Duration
+    
+    failures   int
+    successes  int
+    lastFailure time.Time
+    state      State
+}</p>
+
+<p>type State int</p>
+
+<p>const (
+    StateClosed State = iota    // 关闭 - 正常
+    StateOpen                   // 开启 - 熔断
+    StateHalfOpen               // 半开 - 试探
+)</p>
+
+<p>func (cb *CircuitBreaker) Call(fn func() error) error {
+    if cb.state == StateOpen {
+        if time.Since(cb.lastFailure) < cb.timeout {
+            return ErrCircuitOpen
+        }
+        cb.state = StateHalfOpen
+    }
+    
+    err := fn()
+    
+    if err != nil {
+        cb.recordFailure()
+        return err
+    }
+    
+    cb.recordSuccess()
+    return nil
+}
+</code>`<code></p>
+
+<hr>
+
+<h2>监控与告警</h2>
+
+<h3>Prometheus + Grafana</h3>
+
+<p></code>`<code>go
+package observatory</p>
+
+<p>var (
+    RequestDuration = prometheus.NewHistogramVec(
+        prometheus.HistogramOpts{
+            Name:    "kongming_request_duration_seconds",
+            Help:    "Request duration in seconds",
+            Buckets: prometheus.DefBuckets,
+        },
+        []string{"service", "method"},
+    )
+    
+    RequestCount = prometheus.NewCounterVec(
+        prometheus.CounterOpts{
+            Name: "kongming_request_total",
+            Help: "Total number of requests",
+        },
+        []string{"service", "method", "status"},
+    )
+)</p>
+
+<p>func init() {
+    prometheus.MustRegister(RequestDuration)
+    prometheus.MustRegister(RequestCount)
+}
+</code>``</p>
+
+<hr>
+
+<h2>总结</h2>
+
+<p>Kongming框架的设计理念：</p>
+
+<ol>
+<li><strong>简洁优雅</strong>：Go语言的简洁哲学贯穿始终</li>
+<li><strong>东方智慧</strong>：三国文化命名，易于理解和记忆</li>
+<li><strong>生产就绪</strong>：包含服务治理、监控、告警等完整功能</li>
+<li><strong>易于扩展</strong>：模块化设计，方便二次开发</li>
+
+</ol>
+<h3>下一步计划</h3>
+
+<ul>
+<li>[ ] 支持Kubernetes原生部署</li>
+<li>[ ] 集成Istio服务网格</li>
+<li>[ ] 完善分布式链路追踪</li>
+<li>[ ] 开源发布v1.0版本</li>
+
+</ul>
+<hr>
+
+<h2>相关项目</h2>
+
+<ul>
+<li><a href="https://github.com/xfengyin/XingJu" style="color:var(--primary)">XingJu 星聚</a> - 跨平台聚合应用</li>
+<li><a href="https://github.com/xfengyin/zen" style="color:var(--primary)">Zen</a> - Python模块化执行框架</li>
+
+</ul>
+<hr>
+
+<em>最后更新：2026年4月3日</em>
+        </div>
+    </article>
+    <footer>
+        <p>© 2024-2026 xfengyin. 荣耀存于心，而非留于形。</p>
+    </footer>
+</body>
+</html>
