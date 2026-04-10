@@ -1,77 +1,88 @@
 // ==========================================================================
-// Typography
+// Typography - Apple Design System
 // ==========================================================================
 
-// Body
-// ==========================================================================
+// Body - Apple SF Pro
 body {
-  font-family: $font-family-base;
+  font-family: $font-family-display;
   font-size: $font-size-base;
   font-weight: $font-weight-normal;
-  line-height: $line-height-normal;
-  color: $color-text;
-  background-color: $color-bg;
+  line-height: $line-height-base;
+  color: $color-text-primary;
+  background-color: $color-bg-alt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  letter-spacing: $letter-spacing-base;
 }
 
-// Headings
-// ==========================================================================
+// Headings - Apple Display Style
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: $spacing-4;
-  font-family: $font-family-heading;
-  font-weight: $font-weight-bold;
-  line-height: $line-height-tight;
-  color: $color-text;
+  font-family: $font-family-display;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-heading;
+  color: $color-text-primary;
+  letter-spacing: $letter-spacing-tight;
 }
 
 h1 {
-  @include heading('h1');
+  font-size: $font-size-3xl;     // 56px - Apple Display Hero
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-tight; // 1.07
+  letter-spacing: $letter-spacing-tight;
   margin-bottom: $spacing-6;
   
-  @include respond-to('md') {
-    font-size: $font-size-5xl;
-  }
-}
-
-h2 {
-  @include heading('h2');
-  margin-bottom: $spacing-5;
-  
-  @include respond-to('md') {
-    font-size: $font-size-4xl;
-  }
-}
-
-h3 {
-  @include heading('h3');
-  margin-bottom: $spacing-4;
-  
-  @include respond-to('md') {
+  @include respond-to(md) {
     font-size: $font-size-3xl;
   }
 }
 
+h2 {
+  font-size: $font-size-2xl;     // 40px - Apple Section Heading
+  font-weight: $font-weight-semibold;
+  line-height: 1.10;
+  margin-bottom: $spacing-5;
+  
+  @include respond-to(md) {
+    font-size: $font-size-2xl;
+  }
+}
+
+h3 {
+  font-size: $font-size-xl;      // 28px - Apple Tile Heading
+  font-weight: $font-weight-normal; // Apple uses 400 for tile headings
+  line-height: $line-height-heading;
+  letter-spacing: $letter-spacing-heading;
+  margin-bottom: $spacing-4;
+}
+
 h4 {
-  @include heading('h4');
+  font-size: $font-size-lg;      // 21px - Apple Card/Sub-heading
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-sm;
+  letter-spacing: $letter-spacing-heading;
   margin-bottom: $spacing-3;
 }
 
 h5 {
-  @include heading('h5');
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-sm;
   margin-bottom: $spacing-2;
 }
 
 h6 {
-  @include heading('h6');
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  line-height: 1.29;
+  color: $color-text-secondary;
+  letter-spacing: -0.012em;
   margin-bottom: $spacing-2;
-  color: $color-text-light;
 }
 
 // Paragraphs
-// ==========================================================================
 p {
   margin-top: 0;
   margin-bottom: $spacing-4;
@@ -81,26 +92,24 @@ p {
   }
 }
 
-// Links
-// ==========================================================================
+// Links - Apple Blue only
 a {
-  color: $color-primary;
+  color: $color-link;
   text-decoration: none;
-  @include transition(color);
+  transition: color 0.2s ease;
   
   &:hover,
   &:focus {
-    color: darken($color-primary, 15%);
+    color: $color-link-hover;
     text-decoration: underline;
   }
   
   &:active {
-    color: darken($color-primary, 20%);
+    color: $color-link-hover;
   }
 }
 
 // Lists
-// ==========================================================================
 ul,
 ol {
   margin-top: 0;
@@ -113,52 +122,22 @@ ol {
   }
 }
 
-ul {
-  list-style-type: disc;
-}
-
-ol {
-  list-style-type: decimal;
-}
-
 li {
-  margin-bottom: $spacing-2;
+  margin-bottom: $spacing-1;
   
   &:last-child {
     margin-bottom: 0;
   }
 }
 
-// Definition lists
-// ==========================================================================
-dl {
-  margin-top: 0;
-  margin-bottom: $spacing-4;
-}
-
-dt {
-  font-weight: $font-weight-bold;
-  margin-top: $spacing-2;
-  
-  &:first-child {
-    margin-top: 0;
-  }
-}
-
-dd {
-  margin-left: $spacing-4;
-  margin-bottom: $spacing-2;
-}
-
-// Blockquotes
-// ==========================================================================
+// Blockquotes - Apple clean
 blockquote {
   margin: $spacing-6 0;
   padding: $spacing-4 $spacing-6;
-  border-left: 4px solid $color-primary;
+  border-left: 3px solid $color-primary;
   background-color: $color-bg-alt;
-  font-style: italic;
-  color: $color-text-light;
+  font-style: normal;
+  color: $color-text-secondary;
   
   p:last-child {
     margin-bottom: 0;
@@ -169,30 +148,31 @@ blockquote {
     margin-top: $spacing-2;
     font-style: normal;
     font-weight: $font-weight-medium;
-    color: $color-text;
+    color: $color-text-primary;
+    font-size: $font-size-sm;
   }
 }
 
-// Code
-// ==========================================================================
+// Code - Apple style
 code,
 kbd,
 pre,
 samp {
-  font-family: $font-family-mono;
+  font-family: $font-family-monospace;
 }
 
 code {
-  padding: $spacing-1 $spacing-2;
+  padding: 2px 6px;
   background-color: $color-bg-alt;
   border-radius: $border-radius-sm;
   font-size: 0.875em;
-  color: $color-accent;
+  color: $color-near-black;
+  font-weight: 400;
 }
 
 kbd {
-  padding: $spacing-1 $spacing-2;
-  background-color: $color-gray-900;
+  padding: 2px 6px;
+  background-color: $color-near-black;
   border-radius: $border-radius-sm;
   font-size: 0.875em;
   color: $color-white;
@@ -200,13 +180,13 @@ kbd {
 
 pre {
   margin: $spacing-6 0;
-  padding: $spacing-4;
+  padding: $spacing-5;
   overflow: auto;
-  background-color: $color-gray-900;
-  border-radius: $border-radius-md;
+  background-color: $color-near-black;
+  border-radius: $border-radius-lg;
   font-size: 0.875em;
-  line-height: $line-height-relaxed;
-  color: $color-gray-200;
+  line-height: 1.6;
+  color: #f5f5f7;
   
   code {
     padding: 0;
@@ -217,252 +197,27 @@ pre {
   }
 }
 
-// Horizontal rules
-// ==========================================================================
+// Horizontal Rules
 hr {
   margin: $spacing-8 0;
   border: 0;
   border-top: 1px solid $color-border;
-  
-  &.divider {
-    margin: $spacing-12 0;
-  }
-  
-  &.light {
-    border-top-color: $color-border-light;
-  }
-  
-  &.dark {
-    border-top-color: $color-border-dark;
-  }
 }
 
-// Small text
-// ==========================================================================
+// Small Text
 small,
 .small {
   font-size: $font-size-sm;
-  color: $color-text-light;
-}
-
-// Text alignment
-// ==========================================================================
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-justify {
-  text-align: justify;
-}
-
-// Text transformation
-// ==========================================================================
-.text-uppercase {
-  text-transform: uppercase;
-}
-
-.text-lowercase {
-  text-transform: lowercase;
-}
-
-.text-capitalize {
-  text-transform: capitalize;
-}
-
-// Font weights
-// ==========================================================================
-.font-light {
-  font-weight: $font-weight-light;
-}
-
-.font-normal {
-  font-weight: $font-weight-normal;
-}
-
-.font-medium {
-  font-weight: $font-weight-medium;
-}
-
-.font-semibold {
-  font-weight: $font-weight-semibold;
-}
-
-.font-bold {
-  font-weight: $font-weight-bold;
-}
-
-.font-black {
-  font-weight: $font-weight-black;
-}
-
-// Text colors
-// ==========================================================================
-.text-primary {
-  color: $color-primary;
-}
-
-.text-secondary {
-  color: $color-secondary;
-}
-
-.text-accent {
-  color: $color-accent;
-}
-
-.text-success {
-  color: $color-success;
-}
-
-.text-warning {
-  color: $color-warning;
-}
-
-.text-danger {
-  color: $color-danger;
-}
-
-.text-info {
-  color: $color-info;
-}
-
-.text-white {
-  color: $color-white;
-}
-
-.text-black {
-  color: $color-black;
-}
-
-.text-gray-50 {
-  color: $color-gray-50;
-}
-
-.text-gray-100 {
-  color: $color-gray-100;
-}
-
-.text-gray-200 {
-  color: $color-gray-200;
-}
-
-.text-gray-300 {
-  color: $color-gray-300;
-}
-
-.text-gray-400 {
-  color: $color-gray-400;
-}
-
-.text-gray-500 {
-  color: $color-gray-500;
-}
-
-.text-gray-600 {
-  color: $color-gray-600;
-}
-
-.text-gray-700 {
-  color: $color-gray-700;
-}
-
-.text-gray-800 {
-  color: $color-gray-800;
-}
-
-.text-gray-900 {
-  color: $color-gray-900;
-}
-
-// Line heights
-// ==========================================================================
-.leading-none {
-  line-height: $line-height-none;
-}
-
-.leading-tight {
-  line-height: $line-height-tight;
-}
-
-.leading-snug {
-  line-height: $line-height-snug;
-}
-
-.leading-normal {
-  line-height: $line-height-normal;
-}
-
-.leading-relaxed {
-  line-height: $line-height-relaxed;
-}
-
-.leading-loose {
-  line-height: $line-height-loose;
-}
-
-// Letter spacing
-// ==========================================================================
-.tracking-tighter {
-  letter-spacing: $letter-spacing-tighter;
-}
-
-.tracking-tight {
-  letter-spacing: $letter-spacing-tight;
-}
-
-.tracking-normal {
-  letter-spacing: $letter-spacing-normal;
-}
-
-.tracking-wide {
-  letter-spacing: $letter-spacing-wide;
-}
-
-.tracking-wider {
-  letter-spacing: $letter-spacing-wider;
-}
-
-.tracking-widest {
-  letter-spacing: $letter-spacing-widest;
-}
-
-// Text overflow
-// ==========================================================================
-.truncate {
-  @include truncate(1);
-}
-
-.line-clamp-2 {
-  @include truncate(2);
-}
-
-.line-clamp-3 {
-  @include truncate(3);
-}
-
-.line-clamp-4 {
-  @include truncate(4);
-}
-
-.line-clamp-5 {
-  @include truncate(5);
+  color: $color-text-secondary;
 }
 
 // Selection
-// ==========================================================================
 ::selection {
-  background-color: rgba($color-primary, 0.2);
-  color: $color-text;
+  background-color: rgba($color-primary, 0.15);
+  color: $color-text-primary;
 }
 
 ::-moz-selection {
-  background-color: rgba($color-primary, 0.2);
-  color: $color-text;
+  background-color: rgba($color-primary, 0.15);
+  color: $color-text-primary;
 }

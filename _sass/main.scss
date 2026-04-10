@@ -1,7 +1,6 @@
-// Main SCSS Entry Point
-// xfengyin.github.io - Main Stylesheet
+// Main SCSS Entry Point - Apple Design System
+// xfengyin.github.io
 
-// Use @use instead of @import (Sass Module System)
 @use 'abstracts/variables' as vars;
 @use 'abstracts/mixins' as mix;
 @use 'base/reset';
@@ -12,24 +11,25 @@
 @use 'layout/footer';
 @use 'pages/home';
 
-// Global Styles
+// Global Styles - Apple Design System
 body {
-  font-family: vars.$font-primary;
+  font-family: vars.$font-family-display;
   color: vars.$color-text-primary;
-  background-color: vars.$color-background;
-  line-height: 1.6;
+  background-color: vars.$color-bg-alt;
+  line-height: 1.47;
+  letter-spacing: vars.$letter-spacing-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Container
+// Container - Apple max-width 980px
 .container {
   max-width: vars.$container-max-width;
   margin: 0 auto;
-  padding: 0 vars.$spacing-md;
+  padding: 0 1.5rem;
   
-  @include mix.respond-to('tablet') {
-    padding: 0 vars.$spacing-lg;
+  @include mix.respond-to('lg') {
+    padding: 0 2rem;
   }
 }
 
@@ -63,8 +63,23 @@ body {
   border: 0;
 }
 
-// Selection
+// Selection - Apple Blue
 ::selection {
-  background-color: vars.$color-primary;
-  color: vars.$color-white;
+  background-color: rgba(vars.$color-primary, 0.15);
+  color: vars.$color-text-primary;
+}
+
+// Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Focus styles - Apple accessibility
+:focus-visible {
+  outline: 2px solid vars.$color-primary;
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
 }

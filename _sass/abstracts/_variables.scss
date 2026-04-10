@@ -1,157 +1,176 @@
 // =============================================================================
-// Variables
+// Variables - Apple Design System
 // =============================================================================
 
-// Color Palette
+// Apple Color Palette
 // -----------------------------------------------------------------------------
 
-// Primary Colors
-$color-primary: #007bff !default;
-$color-primary-light: lighten($color-primary, 10%) !default;
-$color-primary-dark: darken($color-primary, 10%) !default;
+// Primary - Apple Blue (the ONLY accent color)
+$color-primary: #0071e3 !default;
+$color-primary-light: #2997ff !default;
+$color-primary-dark: #0066cc !default;
 
-// Secondary Colors
-$color-secondary: #6c757d !default;
-$color-secondary-light: lighten($color-secondary, 10%) !default;
-$color-secondary-dark: darken($color-secondary, 10%) !default;
-
-// Success, Warning, Danger, Info
-$color-success: #28a745 !default;
-$color-warning: #ffc107 !default;
-$color-danger: #dc3545 !default;
-$color-info: #17a2b8 !default;
-
-// Neutral Colors
+// Apple Neutral Colors
 $color-white: #ffffff !default;
-$color-gray-100: #f8f9fa !default;
-$color-gray-200: #e9ecef !default;
-$color-gray-300: #dee2e6 !default;
-$color-gray-400: #ced4da !default;
-$color-gray-500: #adb5bd !default;
-$color-gray-600: #6c757d !default;
-$color-gray-700: #495057 !default;
-$color-gray-800: #343a40 !default;
-$color-gray-900: #212529 !default;
-$color-black: #000000 !default;
+$color-bg-light: #f5f5f7 !default;
+$color-bg-dark: #000000 !default;
+$color-near-black: #1d1d1f !default;
 
-// Text Colors
-$color-text-primary: $color-gray-900 !default;
-$color-text-secondary: $color-gray-600 !default;
-$color-text-muted: $color-gray-500 !default;
-$color-text-light: $color-gray-400 !default;
+// Text Colors - Apple System
+$color-text-primary: #1d1d1f !default;
+$color-text-secondary: rgba(0, 0, 0, 0.8) !default;
+$color-text-muted: rgba(0, 0, 0, 0.48) !default;
+$color-text-light: rgba(0, 0, 0, 0.32) !default;
+
+// Apple Surface Colors (Dark Mode)
+$color-surface-dark-1: #272729 !default;
+$color-surface-dark-2: #262628 !default;
+$color-surface-dark-3: #28282a !default;
+$color-surface-dark-4: #2a2a2d !default;
+
+// Link Colors
+$color-link: #0066cc !default;
+$color-link-hover: #0071e3 !default;
+$color-link-dark-bg: #2997ff !default;
+
+// Semantic Colors (minimal, rarely used)
+$color-success: #34c759 !default;
+$color-warning: #ff9f0a !default;
+$color-danger: #ff3b30 !default;
+$color-info: #0071e3 !default;
+
+// Gray Scale (Apple)
+$color-gray-50: #fafafc !default;
+$color-gray-100: #f5f5f7 !default;
+$color-gray-200: #e8e8ed !default;
+$color-gray-300: #d2d2d7 !default;
+$color-gray-400: #aeaeb2 !default;
+$color-gray-500: #8e8e93 !default;
+$color-gray-600: #636366 !default;
+$color-gray-700: #48484a !default;
+$color-gray-800: #2c2c2e !default;
+$color-gray-900: #1c1c1e !default;
+$color-black: #000000 !default;
 
 // Background Colors
 $color-bg-body: $color-white !default;
-$color-bg-alt: $color-gray-100 !default;
-$color-bg-dark: $color-gray-900 !default;
+$color-bg-alt: $color-bg-light !default;
+$color-bg-dark: $color-bg-dark !default;
 
-// Border Colors
-$color-border: $color-gray-300 !default;
-$color-border-light: $color-gray-200 !default;
-$color-border-dark: $color-gray-400 !default;
+// Border Colors - Apple uses minimal borders
+$color-border: rgba(0, 0, 0, 0.08) !default;
+$color-border-light: rgba(0, 0, 0, 0.04) !default;
+$color-border-dark: rgba(0, 0, 0, 0.12) !default;
 
-// Link Colors
-$color-link: $color-primary !default;
-$color-link-hover: $color-primary-dark !default;
-$color-link-visited: darken($color-primary, 15%) !default;
-
-// Typography
+// Typography - Apple Design System
 // -----------------------------------------------------------------------------
 
-// Font Families
-$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-$font-family-serif: Georgia, "Times New Roman", Times, serif !default;
-$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$font-family-base: $font-family-sans-serif !default;
+// Font Families - SF Pro with system fallbacks
+$font-family-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'system-ui', 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', sans-serif !default;
+$font-family-text: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'system-ui', 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', sans-serif !default;
+$font-family-base: $font-family-display !default;
+$font-family-serif: Georgia, 'Times New Roman', Times, serif !default;
+$font-family-monospace: 'SF Mono', 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace !default;
 
-// Font Sizes
-$font-size-base: 1rem !default; // 16px
-$font-size-sm: $font-size-base * 0.875 !default; // 14px
-$font-size-lg: $font-size-base * 1.25 !default; // 20px
-$font-size-xl: $font-size-base * 1.5 !default; // 24px
-$font-size-xxl: $font-size-base * 2 !default; // 32px
+// Font Sizes - Apple Scale
+$font-size-base: 1.0625rem !default;   // 17px - Apple body size
+$font-size-sm: 0.875rem !default;      // 14px - Apple caption
+$font-size-lg: 1.3125rem !default;     // 21px - Apple subheading
+$font-size-xl: 1.75rem !default;       // 28px - Apple tile heading
+$font-size-2xl: 2.5rem !default;       // 40px - Apple section heading
+$font-size-3xl: 3.5rem !default;       // 56px - Apple display hero
+$font-size-hero: 3.5rem !default;      // 56px - Hero headlines
 
-// Font Weights
+// Font Weights - Apple restraint (300-700, no 800/900)
 $font-weight-light: 300 !default;
 $font-weight-normal: 400 !default;
 $font-weight-medium: 500 !default;
 $font-weight-semibold: 600 !default;
 $font-weight-bold: 700 !default;
-$font-weight-black: 900 !default;
 
-// Line Heights
-$line-height-base: 1.5 !default;
-$line-height-sm: 1.25 !default;
-$line-height-lg: 1.75 !default;
+// Line Heights - Apple dramatic range
+$line-height-base: 1.47 !default;       // Apple body
+$line-height-tight: 1.07 !default;      // Apple hero headlines
+$line-height-heading: 1.14 !default;    // Apple tile/section headings
+$line-height-sm: 1.19 !default;         // Apple card titles
+$line-height-lg: 1.65 !default;         // Relaxed reading
 
-// Letter Spacing
-$letter-spacing-base: 0 !default;
-$letter-spacing-wide: 0.025em !default;
-$letter-spacing-wider: 0.05em !default;
-$letter-spacing-widest: 0.1em !default;
+// Letter Spacing - Apple negative tracking
+$letter-spacing-base: -0.022em !default;  // Apple body
+$letter-spacing-tight: -0.028em !default;  // Apple display
+$letter-spacing-heading: 0.0196em !default; // Apple tile heading
+$letter-spacing-normal: 0 !default;
+$letter-spacing-wide: 0.02em !default;
 
-// Breakpoints
+// Breakpoints - Apple Responsive
 // -----------------------------------------------------------------------------
 
 $breakpoint-xs: 0 !default;
 $breakpoint-sm: 576px !default;
 $breakpoint-md: 768px !default;
 $breakpoint-lg: 992px !default;
-$breakpoint-xl: 1200px !default;
-$breakpoint-xxl: 1400px !default;
+$breakpoint-xl: 1070px !default;
+$breakpoint-xxl: 1440px !default;
 
-// Container Max Widths
+// Container - Apple max-width ~980px
+$container-max-width: 980px !default;
 $container-max-width-sm: 540px !default;
 $container-max-width-md: 720px !default;
-$container-max-width-lg: 960px !default;
-$container-max-width-xl: 1140px !default;
-$container-max-width-xxl: 1320px !default;
+$container-max-width-lg: 980px !default;
+$container-max-width-xl: 980px !default;
+$container-max-width-xxl: 1080px !default;
 
-// Spacing
+// Spacing - Apple generous whitespace
 // -----------------------------------------------------------------------------
 
-$spacing-unit: 1rem !default; // 16px
-
-// Spacing Scale
+$spacing-unit: 1rem !default;
 $spacing-0: 0 !default;
-$spacing-1: $spacing-unit * 0.25 !default; // 4px
-$spacing-2: $spacing-unit * 0.5 !default;  // 8px
-$spacing-3: $spacing-unit * 0.75 !default; // 12px
-$spacing-4: $spacing-unit !default;        // 16px
-$spacing-5: $spacing-unit * 1.5 !default;  // 24px
-$spacing-6: $spacing-unit * 2 !default;    // 32px
-$spacing-7: $spacing-unit * 2.5 !default;  // 40px
-$spacing-8: $spacing-unit * 3 !default;    // 48px
-$spacing-9: $spacing-unit * 4 !default;    // 64px
-$spacing-10: $spacing-unit * 5 !default;   // 80px
+$spacing-1: $spacing-unit * 0.25 !default;
+$spacing-2: $spacing-unit * 0.5 !default;
+$spacing-3: $spacing-unit * 0.75 !default;
+$spacing-4: $spacing-unit !default;
+$spacing-5: $spacing-unit * 1.5 !default;
+$spacing-6: $spacing-unit * 2 !default;
+$spacing-7: $spacing-unit * 2.5 !default;
+$spacing-8: $spacing-unit * 3 !default;
+$spacing-9: $spacing-unit * 4 !default;
+$spacing-10: $spacing-unit * 5 !default;
+$spacing-12: $spacing-unit * 6 !default;
+$spacing-16: $spacing-unit * 8 !default;
+$spacing-20: $spacing-unit * 10 !default;
 
-// Border Radius
+// Section spacing - Apple cinematic (80-120px)
+$section-spacing: 100px !default;
+$section-spacing-mobile: 60px !default;
+
+// Border Radius - Apple Scale
 // -----------------------------------------------------------------------------
 
-$border-radius-sm: 0.125rem !default; // 2px
-$border-radius: 0.25rem !default;     // 4px
-$border-radius-lg: 0.5rem !default;   // 8px
-$border-radius-xl: 1rem !default;     // 16px
-$border-radius-pill: 50rem !default;  // For pill-shaped elements
-$border-radius-circle: 50% !default;  // For circular elements
+$border-radius-sm: 5px !default;     // Apple micro
+$border-radius: 8px !default;        // Apple standard (buttons, cards)
+$border-radius-lg: 12px !default;    // Apple comfortable (feature panels)
+$border-radius-xl: 18px !default;    // Apple large (hero cards)
+$border-radius-pill: 980px !default; // Apple pill CTAs
+$border-radius-circle: 50% !default; // Apple circular (controls)
 
-// Shadows
+// Shadows - Apple minimal
 // -----------------------------------------------------------------------------
 
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !default;
-$shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !default;
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !default;
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !default;
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !default;
-$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !default;
-$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !default;
+$shadow-sm: rgba(0, 0, 0, 0.04) 0px 2px 8px 0px !default;
+$shadow: rgba(0, 0, 0, 0.04) 0px 2px 8px 0px !default;
+$shadow-md: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px !default;  // Apple card shadow
+$shadow-lg: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px !default;  // Same - Apple uses one shadow
+$shadow-xl: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px !default;
+$shadow-2xl: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px !default;
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04) !default;
+$shadow-none: none !default;
 
 // Transitions
 // -----------------------------------------------------------------------------
 
-$transition-base: all 0.2s ease-in-out !default;
-$transition-fast: all 0.1s ease-in-out !default;
-$transition-slow: all 0.3s ease-in-out !default;
+$transition-base: all 0.3s ease !default;
+$transition-fast: all 0.15s ease !default;
+$transition-slow: all 0.5s ease !default;
 
 // Z-index Layers
 // -----------------------------------------------------------------------------
@@ -165,53 +184,36 @@ $z-index-popover: 1060 !default;
 $z-index-tooltip: 1070 !default;
 $z-index-toast: 1080 !default;
 
-// Grid System
-// -----------------------------------------------------------------------------
-
-$grid-columns: 12 !default;
-$grid-gutter-width: $spacing-4 !default; // 16px
-
 // Layout
 // -----------------------------------------------------------------------------
 
-$header-height: 4rem !default; // 64px
-$footer-height: 3rem !default; // 48px
-$sidebar-width: 16rem !default; // 256px
-$sidebar-width-collapsed: 4rem !default; // 64px
+$header-height: 3rem !default;           // 48px - Apple compact nav
+$footer-height: 3rem !default;
+$sidebar-width: 16rem !default;
+$sidebar-width-collapsed: 4rem !default;
 
 // Components
 // -----------------------------------------------------------------------------
 
-// Button
-$button-padding-y: 0.375rem !default;
-$button-padding-x: 0.75rem !default;
+// Button - Apple CTA
+$button-padding-y: 0.5rem !default;
+$button-padding-x: 0.9375rem !default;   // 15px - Apple CTA padding
 $button-font-size: $font-size-base !default;
-$button-line-height: $line-height-base !default;
+$button-line-height: 1 !default;
 $button-border-radius: $border-radius !default;
 
-// Card
-$card-padding: $spacing-4 !default;
-$card-border-radius: $border-radius-lg !default;
-$card-border-width: 1px !default;
-$card-border-color: $color-border !default;
+// Card - Apple style
+$card-padding: 1.5rem !default;
+$card-border-radius: $border-radius-xl !default;   // 18px - Apple large radius
+$card-border-width: 0 !default;                     // Apple: NO visible borders
+$card-border-color: transparent !default;
 $card-bg: $color-white !default;
-$card-shadow: $shadow !default;
-
-// Form Controls
-$input-padding-y: 0.375rem !default;
-$input-padding-x: 0.75rem !default;
-$input-font-size: $font-size-base !default;
-$input-line-height: $line-height-base !default;
-$input-border-radius: $border-radius !default;
-$input-border-width: 1px !default;
-$input-border-color: $color-border !default;
-$input-bg: $color-white !default;
-$input-color: $color-text-primary !default;
+$card-shadow: $shadow-sm !default;
 
 // Code
-$code-font-size: $font-size-sm !default;
+$code-font-size: 0.875rem !default;
 $code-font-family: $font-family-monospace !default;
-$code-color: $color-danger !default;
+$code-color: $color-near-black !default;
 $code-bg: $color-gray-100 !default;
 $code-padding: 0.2rem 0.4rem !default;
 $code-border-radius: $border-radius-sm !default;

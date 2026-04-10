@@ -50,34 +50,24 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
     
-    <!-- Fonts -->
+    <!-- Fonts: Apple Design System -->
+    <!-- SF Pro is native on Apple devices; Noto Sans SC for Chinese; system-ui as universal fallback -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Primary Font: Inter (Modern, clean, highly legible) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Monospace Font: JetBrains Mono (for code blocks) -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Accent Font: Poppins (for headings) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Monospace Font: SF Mono style -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer">
     
-    <!-- Bootstrap 5 (Optional - for layout components) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous">
-    
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
-    <!-- Prism.js for Syntax Highlighting -->
+    <!-- Prism.js for Syntax Highlighting - Custom dark theme applied via CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" 
           rel="stylesheet">
     
@@ -86,9 +76,9 @@
     <link rel="stylesheet" href="{{ '/assets/css/syntax-highlighting.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/animations.css' | relative_url }}">
     
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#667eea">
-    <meta name="msapplication-TileColor" content="#667eea">
+    <!-- Theme Color - Apple style -->
+    <meta name="theme-color" content="#1d1d1f">
+    <meta name="msapplication-TileColor" content="#1d1d1f">
     
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
@@ -122,7 +112,6 @@
     
     <!-- Custom JavaScript Variables -->
     <script>
-        // Global configuration
         const SITE_CONFIG = {
             baseUrl: '{{ site.baseurl }}',
             title: '{{ site.title }}',
@@ -135,50 +124,67 @@
             }
         };
         
-        // Theme initialization
+        // Theme initialization - Apple prefers light
         (function() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
     
-    <!-- Preload Critical Resources -->
-    <link rel="preload" as="font" type="font/woff2" 
-          href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" 
-          crossorigin>
-    
-    <!-- Critical CSS (Inline for faster rendering) -->
+    <!-- Critical CSS (Inline for faster rendering) - Apple Design System -->
     <style>
         :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-color: #2d3748;
-            --text-light: #718096;
+            /* Apple Color System */
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-link-blue: #0066cc;
+            --apple-bright-blue: #2997ff;
+            --apple-black: #1d1d1f;
+            --apple-white: #ffffff;
+            --apple-bg-light: #f5f5f7;
+            --apple-bg-dark: #000000;
+            --apple-text-primary: #1d1d1f;
+            --apple-text-secondary: rgba(0, 0, 0, 0.8);
+            --apple-text-tertiary: rgba(0, 0, 0, 0.48);
+            --apple-border: rgba(0, 0, 0, 0.08);
+            --apple-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+            --apple-shadow-sm: rgba(0, 0, 0, 0.04) 0px 2px 8px 0px;
+            --apple-radius: 12px;
+            --apple-radius-lg: 18px;
+            --apple-radius-pill: 980px;
+            
+            /* Semantic tokens */
+            --primary-color: #0071e3;
+            --text-color: #1d1d1f;
+            --text-light: rgba(0, 0, 0, 0.48);
             --bg-color: #ffffff;
-            --bg-secondary: #f7fafc;
-            --border-color: #e2e8f0;
-            --code-bg: #2d3748;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --bg-secondary: #f5f5f7;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --code-bg: #1d1d1f;
+            --shadow-sm: rgba(0, 0, 0, 0.04) 0px 2px 8px 0px;
+            --shadow-md: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+            --shadow-lg: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
         }
         
         [data-theme="dark"] {
-            --text-color: #e2e8f0;
-            --text-light: #a0aec0;
-            --bg-color: #1a202c;
-            --bg-secondary: #2d3748;
-            --border-color: #4a5568;
+            --text-color: #f5f5f7;
+            --text-light: rgba(255, 255, 255, 0.56);
+            --bg-color: #000000;
+            --bg-secondary: #1d1d1f;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --code-bg: #0d0d0d;
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'system-ui', 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
             color: var(--text-color);
             background-color: var(--bg-color);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.47;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            letter-spacing: -0.022em;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
         

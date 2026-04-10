@@ -1,124 +1,97 @@
-// =============================================================================
-// Home Page
-// =============================================================================
+// Home Page - Apple Design System
+// Apple: Full-width hero, cinematic whitespace, alternating sections
 
-// Hero Section
-// -----------------------------------------------------------------------------
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mix;
 
+// Apple Hero Section - Full viewport width
 .home-hero {
   position: relative;
-  padding: $spacing-16 $spacing-4;
-  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
-  color: $color-white;
+  padding: 6rem 2rem 5rem;
+  background: vars.$color-bg-dark; // Apple black
+  color: vars.$color-white;
   text-align: center;
   overflow: hidden;
   
   @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
+    padding: 8rem 2.5rem 6rem;
   }
   
   @include respond-to(lg) {
-    padding: $spacing-24 $spacing-8;
+    padding: 10rem 3rem 7rem;
   }
   
+  // No pattern overlay - Apple uses solid backgrounds
   &-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
-    
-    &-pattern {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      opacity: 0.3;
-    }
-    
-    &-gradient {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at 20% 80%, rgba($color-white, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba($color-white, 0.05) 0%, transparent 50%);
-    }
+    display: none;
   }
   
   &-content {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 780px;
     margin: 0 auto;
   }
   
+  // Hero Title - Apple Display Hero (56px, weight 600, lh 1.07)
   &-title {
-    font-size: $font-size-xxl;
-    font-weight: $font-weight-black;
-    line-height: 1.1;
-    margin-bottom: $spacing-4;
+    font-family: vars.$font-family-display;
+    font-size: 3.5rem;
+    font-weight: 600;
+    line-height: 1.07;
+    letter-spacing: -0.028em;
+    margin-bottom: vars.$spacing-4;
+    color: vars.$color-white;
     
     @include respond-to(md) {
-      font-size: $font-size-xxl * 1.5;
-    }
-    
-    @include respond-to(lg) {
-      font-size: $font-size-xxl * 2;
+      font-size: 3.5rem;
     }
     
     &-highlight {
-      color: $color-warning;
+      color: vars.$color-primary-light; // Apple bright blue on dark
       position: relative;
-      display: inline-block;
+      display: inline;
       
       &::after {
-        content: '';
-        position: absolute;
-        bottom: 0.125em;
-        left: 0;
-        right: 0;
-        height: 0.125em;
-        background-color: $color-warning;
-        border-radius: 1px;
+        display: none; // No underline decoration - Apple clean
       }
     }
     
+    // Subtitle - Apple sub-heading style
     &-subtitle {
-      font-size: $font-size-lg;
-      font-weight: $font-weight-light;
-      line-height: $line-height-lg;
-      margin-bottom: $spacing-6;
-      opacity: 0.9;
+      font-size: 1.3125rem;
+      font-weight: 400;
+      line-height: 1.19;
+      letter-spacing: 0.0231em;
+      margin-bottom: vars.$spacing-6;
+      color: rgba(255, 255, 255, 0.85);
       
       @include respond-to(md) {
-        font-size: $font-size-xl;
+        font-size: 1.3125rem;
       }
     }
   }
   
   &-description {
-    font-size: $font-size-base;
-    line-height: $line-height-lg;
-    margin-bottom: $spacing-8;
+    font-size: 1.0625rem;
+    line-height: 1.47;
+    margin-bottom: vars.$spacing-8;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.72);
+    letter-spacing: -0.022em;
     
     @include respond-to(md) {
-      font-size: $font-size-lg;
+      font-size: 1.0625rem;
     }
   }
   
+  // Hero Actions - Apple pill CTAs
   &-actions {
     display: flex;
     flex-direction: column;
-    gap: $spacing-3;
+    gap: vars.$spacing-3;
     justify-content: center;
     
     @include respond-to(sm) {
@@ -126,7 +99,7 @@
     }
     
     .btn {
-      min-width: 200px;
+      min-width: 180px;
       
       @include respond-to(sm) {
         min-width: 160px;
@@ -134,11 +107,12 @@
     }
   }
   
+  // Stats - Apple clean
   &-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: $spacing-6;
-    margin-top: $spacing-12;
+    gap: vars.$spacing-6;
+    margin-top: vars.$spacing-12;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -153,113 +127,76 @@
     
     &-number {
       display: block;
-      font-size: $font-size-xxl;
-      font-weight: $font-weight-bold;
-      line-height: 1;
-      margin-bottom: $spacing-1;
-      
-      @include respond-to(md) {
-        font-size: $font-size-xxl * 1.25;
-      }
+      font-size: 2.5rem;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.028em;
+      margin-bottom: vars.$spacing-1;
+      color: vars.$color-white;
     }
     
     &-label {
       display: block;
-      font-size: $font-size-sm;
-      opacity: 0.8;
-      text-transform: uppercase;
-      letter-spacing: $letter-spacing-wide;
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.56);
+      letter-spacing: -0.012em;
     }
   }
   
+  // Scroll indicator
   &-scroll {
     position: absolute;
-    bottom: $spacing-6;
+    bottom: vars.$spacing-6;
     left: 50%;
     transform: translateX(-50%);
-    color: $color-white;
+    color: rgba(255, 255, 255, 0.48);
     text-decoration: none;
-    opacity: 0.7;
     transition: opacity 0.2s ease;
     
     &:hover {
-      opacity: 1;
-    }
-    
-    &-icon {
-      display: block;
-      width: 2rem;
-      height: 2rem;
-      margin: 0 auto $spacing-1;
-      animation: bounce 2s infinite;
-    }
-    
-    &-text {
-      font-size: $font-size-sm;
-      text-transform: uppercase;
-      letter-spacing: $letter-spacing-wide;
+      color: rgba(255, 255, 255, 0.8);
     }
   }
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-// Features Section
-// -----------------------------------------------------------------------------
-
+// Features Section - Apple alternating light
 .home-features {
-  padding: $spacing-16 $spacing-4;
-  background-color: $color-bg-body;
+  padding: vars.$section-spacing vars.$spacing-4;
+  background-color: vars.$color-bg-body;
   
   @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
+    padding: vars.$section-spacing-mobile vars.$spacing-6;
   }
   
   &-header {
     text-align: center;
     max-width: 600px;
-    margin: 0 auto $spacing-12;
-    
-    @include respond-to(md) {
-      margin-bottom: $spacing-16;
-    }
+    margin: 0 auto vars.$spacing-12;
   }
   
   &-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-3;
-    
-    @include respond-to(md) {
-      font-size: $font-size-xxl;
-    }
+    font-family: vars.$font-family-display;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: vars.$color-text-primary;
+    margin-bottom: vars.$spacing-3;
+    letter-spacing: -0.028em;
+    line-height: 1.10;
   }
   
   &-subtitle {
-    font-size: $font-size-base;
-    color: $color-text-secondary;
-    line-height: $line-height-lg;
-    
-    @include respond-to(md) {
-      font-size: $font-size-lg;
-    }
+    font-size: 1.0625rem;
+    color: vars.$color-text-secondary;
+    line-height: 1.47;
+    letter-spacing: -0.022em;
   }
   
   &-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $spacing-8;
+    gap: vars.$spacing-6;
+    max-width: 980px;
+    margin: 0 auto;
     
     @include respond-to(sm) {
       grid-template-columns: repeat(2, 1fr);
@@ -270,465 +207,63 @@
     }
   }
   
+  // Feature Card - Apple tile style
   &-card {
     text-align: center;
-    padding: $spacing-6;
-    background-color: $color-white;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow;
+    padding: vars.$spacing-6;
+    background-color: vars.$color-white;
+    border: none;
+    border-radius: vars.$border-radius-xl;
+    box-shadow: vars.$shadow-sm;
     transition: all 0.3s ease;
     
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: $shadow-lg;
+      transform: translateY(-3px);
+      box-shadow: vars.$shadow-md;
     }
     
     &-icon {
-      width: 4rem;
-      height: 4rem;
-      margin: 0 auto $spacing-4;
-      color: $color-primary;
-      background-color: rgba($color-primary, 0.1);
-      border-radius: $border-radius-circle;
+      width: 3.5rem;
+      height: 3.5rem;
+      margin: 0 auto vars.$spacing-4;
+      color: vars.$color-primary;
+      background-color: rgba(0, 113, 227, 0.06);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       
       svg {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
       }
     }
     
     &-title {
-      font-size: $font-size-lg;
-      font-weight: $font-weight-bold;
-      color: $color-text-primary;
-      margin-bottom: $spacing-3;
+      font-size: 1.3125rem;
+      font-weight: 600;
+      color: vars.$color-text-primary;
+      margin-bottom: vars.$spacing-3;
+      letter-spacing: 0.0231em;
+      line-height: 1.19;
     }
     
     &-description {
-      font-size: $font-size-base;
-      color: $color-text-secondary;
-      line-height: $line-height-lg;
+      font-size: 0.9375rem;
+      color: vars.$color-text-secondary;
+      line-height: 1.47;
+      letter-spacing: -0.022em;
     }
   }
 }
 
-// Showcase Section
-// -----------------------------------------------------------------------------
-
-.home-showcase {
-  padding: $spacing-16 $spacing-4;
-  background-color: $color-gray-100;
-  
-  @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
-  }
-  
-  &-header {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto $spacing-12;
-    
-    @include respond-to(md) {
-      margin-bottom: $spacing-16;
-    }
-  }
-  
-  &-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-3;
-    
-    @include respond-to(md) {
-      font-size: $font-size-xxl;
-    }
-  }
-  
-  &-subtitle {
-    font-size: $font-size-base;
-    color: $color-text-secondary;
-    line-height: $line-height-lg;
-    
-    @include respond-to(md) {
-      font-size: $font-size-lg;
-    }
-  }
-  
-  &-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: $spacing-8;
-    
-    @include respond-to(md) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    @include respond-to(lg) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  
-  &-item {
-    position: relative;
-    border-radius: $border-radius-lg;
-    overflow: hidden;
-    box-shadow: $shadow;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: $shadow-lg;
-      
-      .home-showcase-image img {
-        transform: scale(1.05);
-      }
-      
-      .home-showcase-overlay {
-        opacity: 1;
-      }
-    }
-    
-    &-link {
-      display: block;
-      color: inherit;
-      text-decoration: none;
-      
-      &:hover {
-        color: inherit;
-      }
-    }
-  }
-  
-  &-image {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-    
-    @include respond-to(md) {
-      height: 250px;
-    }
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-  }
-  
-  &-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba($color-black, 0) 0%, rgba($color-black, 0.7) 100%);
-    display: flex;
-    align-items: flex-end;
-    padding: $spacing-4;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  &-content {
-    color: $color-white;
-  }
-  
-  &-category {
-    display: inline-block;
-    padding: $spacing-1 $spacing-2;
-    background-color: $color-primary;
-    color: $color-white;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    border-radius: $border-radius-sm;
-    margin-bottom: $spacing-2;
-  }
-  
-  &-item-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-1;
-  }
-  
-  &-item-description {
-    font-size: $font-size-sm;
-    opacity: 0.9;
-  }
-}
-
-// Testimonials Section
-// -----------------------------------------------------------------------------
-
-.home-testimonials {
-  padding: $spacing-16 $spacing-4;
-  background-color: $color-white;
-  
-  @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
-  }
-  
-  &-header {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto $spacing-12;
-    
-    @include respond-to(md) {
-      margin-bottom: $spacing-16;
-    }
-  }
-  
-  &-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-3;
-    
-    @include respond-to(md) {
-      font-size: $font-size-xxl;
-    }
-  }
-  
-  &-subtitle {
-    font-size: $font-size-base;
-    color: $color-text-secondary;
-    line-height: $line-height-lg;
-    
-    @include respond-to(md) {
-      font-size: $font-size-lg;
-    }
-  }
-  
-  &-slider {
-    position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  &-container {
-    overflow: hidden;
-  }
-  
-  &-track {
-    display: flex;
-    transition: transform 0.5s ease;
-  }
-  
-  &-slide {
-    flex: 0 0 100%;
-    padding: $spacing-4;
-    
-    @include respond-to(md) {
-      padding: $spacing-6;
-    }
-  }
-  
-  &-card {
-    background-color: $color-gray-100;
-    border-radius: $border-radius-lg;
-    padding: $spacing-6;
-    text-align: center;
-    
-    @include respond-to(md) {
-      padding: $spacing-8;
-    }
-    
-    &-quote {
-      font-size: $font-size-lg;
-      font-style: italic;
-      color: $color-text-primary;
-      line-height: $line-height-lg;
-      margin-bottom: $spacing-6;
-      position: relative;
-      
-      &::before,
-      &::after {
-        font-size: $font-size-xxl;
-        color: $color-primary;
-        opacity: 0.2;
-        position: absolute;
-      }
-      
-      &::before {
-        content: '“';
-        top: -$spacing-2;
-        left: -$spacing-2;
-      }
-      
-      &::after {
-        content: '”';
-        bottom: -$spacing-4;
-        right: -$spacing-2;
-      }
-    }
-    
-    &-author {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: $spacing-3;
-    }
-    
-    &-avatar {
-      width: 3rem;
-      height: 3rem;
-      border-radius: $border-radius-circle;
-      object-fit: cover;
-    }
-    
-    &-info {
-      text-align: left;
-    }
-    
-    &-name {
-      font-size: $font-size-base;
-      font-weight: $font-weight-bold;
-      color: $color-text-primary;
-      margin-bottom: $spacing-1;
-    }
-    
-    &-role {
-      font-size: $font-size-sm;
-      color: $color-text-secondary;
-    }
-  }
-  
-  &-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-4;
-    margin-top: $spacing-8;
-  }
-  
-  &-prev,
-  &-next {
-    width: 3rem;
-    height: 3rem;
-    border-radius: $border-radius-circle;
-    background-color: $color-gray-200;
-    color: $color-text-primary;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    
-    &:hover {
-      background-color: $color-primary;
-      color: $color-white;
-    }
-    
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      
-      &:hover {
-        background-color: $color-gray-200;
-        color: $color-text-primary;
-      }
-    }
-    
-    svg {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
-  
-  &-dots {
-    display: flex;
-    gap: $spacing-2;
-    
-    &-dot {
-      width: 0.75rem;
-      height: 0.75rem;
-      border-radius: $border-radius-circle;
-      background-color: $color-gray-300;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      
-      &.is-active {
-        background-color: $color-primary;
-        transform: scale(1.2);
-      }
-    }
-  }
-}
-
-// CTA Section
-// -----------------------------------------------------------------------------
-
-.home-cta {
-  padding: $spacing-16 $spacing-4;
-  background: linear-gradient(135deg, $color-gray-900 0%, $color-gray-800 100%);
-  color: $color-white;
-  text-align: center;
-  
-  @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
-  }
-  
-  &-content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  &-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    margin-bottom: $spacing-4;
-    
-    @include respond-to(md) {
-      font-size: $font-size-xxl;
-    }
-  }
-  
-  &-description {
-    font-size: $font-size-base;
-    line-height: $line-height-lg;
-    margin-bottom: $spacing-8;
-    opacity: 0.9;
-    
-    @include respond-to(md) {
-      font-size: $font-size-lg;
-    }
-  }
-  
-  &-actions {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-3;
-    justify-content: center;
-    
-    @include respond-to(sm) {
-      flex-direction: row;
-    }
-    
-    .btn {
-      min-width: 200px;
-      
-      @include respond-to(sm) {
-        min-width: 160px;
-      }
-    }
-  }
-}
-
-// Blog Preview Section
-// -----------------------------------------------------------------------------
-
+// Blog Preview Section - Apple tiles
 .home-blog {
-  padding: $spacing-16 $spacing-4;
-  background-color: $color-bg-body;
+  padding: vars.$section-spacing vars.$spacing-4;
+  background-color: vars.$color-bg-alt;
   
   @include respond-to(md) {
-    padding: $spacing-20 $spacing-6;
+    padding: vars.$section-spacing-mobile vars.$spacing-6;
   }
   
   &-header {
@@ -736,23 +271,26 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-12;
+    margin-bottom: vars.$spacing-12;
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
     
     @include respond-to(md) {
       flex-direction: row;
-      margin-bottom: $spacing-16;
     }
   }
   
   &-title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-3;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: vars.$color-text-primary;
+    margin-bottom: vars.$spacing-3;
     text-align: center;
+    letter-spacing: -0.028em;
+    line-height: 1.10;
     
     @include respond-to(md) {
-      font-size: $font-size-xxl;
       text-align: left;
       margin-bottom: 0;
     }
@@ -761,26 +299,25 @@
   &-link {
     display: inline-flex;
     align-items: center;
-    gap: $spacing-2;
-    color: $color-primary;
+    gap: vars.$spacing-1;
+    color: vars.$color-primary;
     text-decoration: none;
-    font-weight: $font-weight-medium;
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.012em;
     
     &:hover {
-      color: $color-primary-dark;
       text-decoration: underline;
-    }
-    
-    svg {
-      width: 1rem;
-      height: 1rem;
+      color: vars.$color-primary-dark;
     }
   }
   
   &-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: $spacing-8;
+    gap: vars.$spacing-5;
+    max-width: 980px;
+    margin: 0 auto;
     
     @include respond-to(md) {
       grid-template-columns: repeat(2, 1fr);
@@ -791,36 +328,24 @@
     }
   }
   
+  // Blog Card - Apple tile
   &-card {
-    background-color: $color-white;
-    border-radius: $border-radius-lg;
+    background-color: vars.$color-white;
+    border: none;
+    border-radius: vars.$border-radius-xl;
     overflow: hidden;
-    box-shadow: $shadow;
+    box-shadow: vars.$shadow-sm;
     transition: all 0.3s ease;
     
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: $shadow-lg;
-      
-      .home-blog-image img {
-        transform: scale(1.05);
-      }
-    }
-    
-    &-link {
-      display: block;
-      color: inherit;
-      text-decoration: none;
-      
-      &:hover {
-        color: inherit;
-      }
+      transform: translateY(-3px);
+      box-shadow: vars.$shadow-md;
     }
   }
   
   &-image {
     position: relative;
-    height: 200px;
+    height: 180px;
     overflow: hidden;
     
     img {
@@ -832,135 +357,77 @@
     
     &-category {
       position: absolute;
-      top: $spacing-3;
-      left: $spacing-3;
-      padding: $spacing-1 $spacing-2;
-      background-color: $color-primary;
-      color: $color-white;
-      font-size: $font-size-sm;
-      font-weight: $font-weight-medium;
-      border-radius: $border-radius-sm;
+      top: vars.$spacing-3;
+      left: vars.$spacing-3;
+      padding: 0.25rem 0.625rem;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: saturate(180%) blur(20px);
+      color: vars.$color-near-black;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: vars.$border-radius-pill;
+      letter-spacing: -0.01em;
     }
   }
   
   &-content {
-    padding: $spacing-6;
+    padding: vars.$spacing-5;
   }
   
   &-meta {
     display: flex;
     align-items: center;
-    gap: $spacing-3;
-    margin-bottom: $spacing-3;
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
-  }
-  
-  &-date,
-  &-author {
-    display: flex;
-    align-items: center;
-    gap: $spacing-1;
-    
-    svg {
-      width: 1rem;
-      height: 1rem;
-    }
+    gap: vars.$spacing-3;
+    margin-bottom: vars.$spacing-3;
+    font-size: 0.75rem;
+    color: vars.$color-text-secondary;
+    letter-spacing: -0.012em;
   }
   
   &-card-title {
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-3;
-    line-height: $line-height-sm;
+    font-size: 1.3125rem;
+    font-weight: 600;
+    color: vars.$color-text-primary;
+    margin-bottom: vars.$spacing-3;
+    line-height: 1.19;
+    letter-spacing: 0.0231em;
     
     a {
       color: inherit;
       text-decoration: none;
       
       &:hover {
-        color: $color-primary;
+        color: vars.$color-primary;
       }
     }
   }
   
   &-excerpt {
-    font-size: $font-size-base;
-    color: $color-text-secondary;
-    line-height: $line-height-lg;
-    margin-bottom: $spacing-4;
+    font-size: 0.9375rem;
+    color: vars.$color-text-secondary;
+    line-height: 1.47;
+    margin-bottom: vars.$spacing-4;
+    letter-spacing: -0.022em;
   }
   
+  // Read More - Apple pill link
   &-read-more {
     display: inline-flex;
     align-items: center;
-    gap: $spacing-1;
-    color: $color-primary;
+    gap: 0.25rem;
+    color: vars.$color-primary;
     text-decoration: none;
-    font-weight: $font-weight-medium;
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.012em;
     
     &:hover {
-      color: $color-primary-dark;
       text-decoration: underline;
     }
-    
-    svg {
-      width: 1rem;
-      height: 1rem;
-      transition: transform 0.2s ease;
-    }
-    
-    &:hover svg {
-      transform: translateX(2px);
-    }
   }
 }
 
-// Responsive Adjustments
-// -----------------------------------------------------------------------------
-
-@include respond-to-max($breakpoint-sm) {
-  .home-hero {
-    &-title {
-      font-size: $font-size-xl;
-    }
-    
-    &-title-subtitle {
-      font-size: $font-size-base;
-    }
-    
-    &-stats {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  .home-features,
-  .home-showcase,
-  .home-testimonials,
-  .home-cta,
-  .home-blog {
-    padding: $spacing-12 $spacing-3;
-  }
-  
-  .home-features-card,
-  .home-showcase-item,
-  .home-blog-card {
-    padding: $spacing-4;
-  }
-  
-  .home-testimonials-card {
-    padding: $spacing-4;
-    
-    &-quote {
-      font-size: $font-size-base;
-    }
-  }
-}
-
-// Animation Classes
-// -----------------------------------------------------------------------------
-
+// Animation
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -977,44 +444,44 @@
   
   &-delay-1 {
     animation-delay: 0.1s;
+    animation-fill-mode: both;
   }
   
   &-delay-2 {
     animation-delay: 0.2s;
+    animation-fill-mode: both;
   }
   
   &-delay-3 {
     animation-delay: 0.3s;
+    animation-fill-mode: both;
   }
 }
 
-// Print Styles
-// -----------------------------------------------------------------------------
+// Responsive
+@include respond-to-max(vars.$breakpoint-sm) {
+  .home-hero {
+    padding: 4rem 1.5rem 3rem;
+    
+    &-title {
+      font-size: 2.5rem;
+    }
+    
+    &-title-subtitle {
+      font-size: 1.0625rem;
+    }
+  }
+  
+  .home-features,
+  .home-blog {
+    padding: vars.$spacing-12 vars.$spacing-3;
+  }
+}
 
+// Print
 @media print {
-  .home-hero,
-  .home-cta {
+  .home-hero {
     background: none !important;
-    color: $color-black !important;
-  }
-  
-  .home-hero-background,
-  .home-hero-scroll,
-  .home-cta-actions .btn {
-    display: none;
-  }
-  
-  .home-testimonials-slider,
-  .home-testimonials-controls {
-    display: none;
-  }
-  
-  .home-testimonials-track {
-    display: block;
-  }
-  
-  .home-testimonials-slide {
-    display: block;
-    page-break-inside: avoid;
+    color: vars.$color-black !important;
   }
 }
