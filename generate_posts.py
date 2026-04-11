@@ -1,19 +1,65 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>.gitignore 忽略文件配置指南 | xfengyin</title>
-    <meta name="description" content=".gitignore 忽略文件配置指南">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+#!/usr/bin/env python3
+"""
+从 _posts/*.md 重新生成 post/*.html，修复代码块渲染异常。
+添加 Prism.js 语法高亮、Mermaid.js 流程图、代码复制按钮、TOC 等。
+"""
 
-    <!-- Prism.js CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+import os
+import re
+import glob
+import yaml
+import markdown
+from markdown.extensions.toc import TocExtension
+from markdown.extensions.fenced_code import FencedCodeExtension
+from datetime import datetime
 
-    <style>
+# ─── 文件名映射 ───────────────────────────────────────────
+FILENAME_MAP = {
+    "2026-04-03-zen-framework.md": "zen-framework.html",
+    "2026-04-03-kongming-microservices.md": "kongming-microservices.html",
+    "2026-04-03-xingju-dev-notes.md": "xingju-dev-notes.html",
+    "2026-04-03-cyberpunk-ui-design.md": "cyberpunk-ui.html",
+    "2026-04-03-blog-optimization-notes.md": "blog-optimization.html",
+    "2024-12-01-blog-guide-index.md": "blog-guide-index.html",
+    "2024-09-20-sensor-calibration.md": "sensor-calibration.html",
+    "2024-09-01-power-integrity.md": "power-integrity.html",
+    "2024-08-15-oscilloscope-guide.md": "oscilloscope-guide.html",
+    "2024-08-01-pcb-design-checklist.md": "pcb-design-checklist.html",
+    "2024-07-17-qs03b-test.md": "qs03b-test.html",
+    "2024-07-17-mos-gate-resistor.md": "mos-gate-resistor.html",
+    "2024-07-17-hardware-test-battery.md": "battery-test.html",
+    "2024-07-17-gitignore-guide.md": "gitignore-guide.html",
+    "2024-07-17-esp32-micropython.md": "esp32-micropython.html",
+    "2024-07-17-electric-bike.md": "electric-bike.html",
+    "2026-04-14-wetdry-cleaner-battery-test.md": "wetdry-cleaner-battery.html",
+}
+
+# ─── 分类到标签的映射 ────────────────────────────────────
+CATEGORY_TAG_MAP = {
+    "Python": "Python",
+    "架构设计": "框架",
+    "Go": "Go",
+    "微服务": "微服务",
+    "前端": "前端",
+    "UI设计": "设计",
+    "博客": "博客",
+    "硬件测试": "测试",
+    "传感器": "传感器",
+    "信号完整性": "信号完整性",
+    "电源设计": "电源",
+    "仪器使用": "仪器",
+    "PCB设计": "PCB",
+    "嵌入式": "嵌入式",
+    "电池测试": "电池",
+    "Git": "Git",
+    "ESP32": "ESP32",
+    "硬件设计": "硬件",
+    "交通出行": "出行",
+    "清洁设备": "测试",
+}
+
+# ─── 共享 CSS（抽取出来，不再每个文件重复 200 行）──────────
+SHARED_CSS = """
 :root {
     --primary: #6366f1;
     --primary-dark: #4f46e5;
@@ -415,7 +461,28 @@ pre[class*="language-"] {
     margin: 0;
     overflow: auto;
 }
-</style>
+"""
+
+# ─── HTML 模板 ────────────────────────────────────────────
+def build_html(title: str, description: str, tag: str, date_str: str,
+               reading_time: str, toc_html: str, content_html: str,
+               last_updated: str) -> str:
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} | xfengyin</title>
+    <meta name="description" content="{description}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+
+    <style>{SHARED_CSS}</style>
 </head>
 <body>
     <div class="bg-animation"></div>
@@ -433,184 +500,16 @@ pre[class*="language-"] {
     <article class="article-container">
         <a href="../" class="back-to-home">← 返回首页</a>
         <header class="article-header">
-            <span class="article-tag">Git</span>
-            <h1>.gitignore 忽略文件配置指南</h1>
-            <div class="article-meta">📅 2024-07-17 · ⏱️ 阅读时间约 1 分钟</div>
+            <span class="article-tag">{tag}</span>
+            <h1>{title}</h1>
+            <div class="article-meta">📅 {date_str} · ⏱️ 阅读时间约 {reading_time}</div>
         </header>
         <div class="article-content">
-            <h2 id="什么是-gitignore">什么是 .gitignore？</h2>
-            <p><code>.gitignore</code> 是 Git 版本控制系统中的一个配置文件，用于指定哪些文件或目录不应该被 Git 跟踪和提交到代码仓库中。</p>
-            <h2 id="为什么需要-gitignore">为什么需要 .gitignore？</h2>
-            <p>在开发过程中，我们经常会产生一些不需要版本控制的文件：</p>
-            <ul>
-            <li><strong>编译生成的文件</strong>: <code>.exe</code>, <code>.o</code>, <code>.class</code>, <code>dist/</code>, <code>build/</code></li>
-            <li><strong>依赖目录</strong>: <code>node_modules/</code>, <code>vendor/</code></li>
-            <li><strong>IDE配置文件</strong>: <code>.idea/</code>, <code>.vscode/</code>, <code>*.iml</code></li>
-            <li><strong>日志文件</strong>: <code>*.log</code>, <code>logs/</code></li>
-            <li><strong>临时文件</strong>: <code>*.tmp</code>, <code>.DS_Store</code>, <code>Thumbs.db</code></li>
-            <li><strong>敏感信息</strong>: 配置文件包含密码、API密钥等</li>
-            </ul>
-            <h2 id="基本语法">基本语法</h2>
-            <pre><code class="language-gitignore"># 这是注释，以 # 开头
-            
-            # 忽略所有 .log 文件
-            *.log
-            
-            # 忽略 node_modules 目录
-            node_modules/
-            
-            # 忽略所有 .tmp 文件，但不忽略 important.tmp
-            *.tmp
-            !important.tmp
-            
-            # 忽略 build 目录下的所有文件
-            build/
-            
-            # 忽略所有以 temp 开头的文件
-            temp*
-            
-            # 忽略 doc 目录下的 .txt 文件，但不忽略 doc/server/ 下的 .txt 文件
-            doc/*.txt
-            
-            # 只忽略当前目录下的 config.ini，不忽略子目录下的 config.ini
-            /config.ini
-            </code></pre>
-            <h2 id="常见项目的-gitignore-模板">常见项目的 .gitignore 模板</h2>
-            <h3 id="python-项目">Python 项目</h3>
-            <pre><code class="language-gitignore"># Byte-compiled / optimized / DLL files
-            __pycache__/
-            *.py[cod]
-            *$py.class
-            
-            # Distribution / packaging
-            .Python
-            build/
-            develop-eggs/
-            dist/
-            downloads/
-            eggs/
-            .eggs/
-            lib/
-            lib64/
-            parts/
-            sdist/
-            var/
-            wheels/
-            *.egg-info/
-            .installed.cfg
-            *.egg
-            
-            # Virtual environments
-            venv/
-            ENV/
-            env/
-            
-            # IDE
-            .idea/
-            .vscode/
-            *.swp
-            *.swo
-            
-            # Testing
-            .tox/
-            .coverage
-            htmlcov/
-            .pytest_cache/
-            
-            # Jupyter Notebook
-            .ipynb_checkpoints
-            </code></pre>
-            <h3 id="node-js-项目">Node.js 项目</h3>
-            <pre><code class="language-gitignore"># Dependencies
-            node_modules/
-            
-            # Build output
-            dist/
-            build/
-            
-            # Logs
-            logs/
-            *.log
-            npm-debug.log*
-            
-            # Environment variables
-            .env
-            .env.local
-            .env.*.local
-            
-            # IDE
-            .idea/
-            .vscode/
-            *.swp
-            
-            # OS
-            .DS_Store
-            Thumbs.db
-            
-            # Testing
-            coverage/
-            .nyc_output/
-            </code></pre>
-            <h3 id="rust-项目">Rust 项目</h3>
-            <pre><code class="language-gitignore"># Build
-            target/
-            Cargo.lock
-            
-            # IDE
-            .idea/
-            .vscode/
-            *.iml
-            
-            # OS
-            .DS_Store
-            Thumbs.db
-            
-            # Documentation
-            doc/
-            </code></pre>
-            <h2 id="最佳实践">最佳实践</h2>
-            <ol>
-            <li><strong>尽早创建</strong>: 在项目初始化时就创建 <code>.gitignore</code> 文件</li>
-            <li><strong>团队统一</strong>: 确保团队成员使用相同的忽略规则</li>
-            <li><strong>不要忽略重要文件</strong>: 小心使用通配符，避免误忽略</li>
-            <li><strong>定期审查</strong>: 随着项目发展，更新 <code>.gitignore</code> 规则</li>
-            <li><strong>使用模板</strong>: GitHub 提供了各种语言的 <a href="https://github.com/github/gitignore" target="_blank" rel="noopener noreferrer">gitignore 模板</a></li>
-            </ol>
-            <h2 id="常用操作">常用操作</h2>
-            <pre><code class="language-bash"># 检查哪些文件被忽略了
-            git check-ignore -v filename
-            
-            # 强制添加被忽略的文件
-            git add -f filename
-            
-            # 清除已跟踪但现在在 .gitignore 中的文件
-            git rm -r --cached .
-            git add .
-            git commit -m &quot;更新 .gitignore&quot;
-            </code></pre>
-            <h2 id="总结">总结</h2>
-            <p>合理使用 <code>.gitignore</code> 可以保持代码仓库的整洁，避免提交不必要的文件，提高团队协作效率。</p>
-            <hr />
-            <p><em>最后更新: 2024-07-17</em></p>
+{content_html}
         </div>
     </article>
 
-    <aside class="toc-sidebar">
-    <div class="toc-title">目录</div>
-    <ul>
-<li><a href="#什么是-gitignore" class="toc-h2">什么是 .gitignore？</a></li>
-<li><a href="#为什么需要-gitignore" class="toc-h3">为什么需要 .gitignore？</a></li>
-<li><a href="#基本语法" class="toc-h4">基本语法</a></li>
-<li><a href="#常见项目的-gitignore-模板" class="toc-h4">常见项目的 .gitignore 模板</a></li>
-<li><a href="#python-项目" class="toc-h4">Python 项目</a></li>
-<li><a href="#node-js-项目" class="toc-h4">Node.js 项目</a></li>
-<li><a href="#rust-项目" class="toc-h4">Rust 项目</a></li>
-<li><a href="#最佳实践" class="toc-h4">最佳实践</a></li>
-<li><a href="#常用操作" class="toc-h4">常用操作</a></li>
-<li><a href="#总结" class="toc-h4">总结</a></li>
-
-    </ul>
-</aside>
+    {toc_html}
 
     <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
 
@@ -649,26 +548,26 @@ pre[class*="language-"] {
 
     <script>
     // Mermaid 初始化
-    mermaid.initialize({
+    mermaid.initialize({{
         startOnLoad: true,
         theme: 'dark',
-        themeVariables: {
+        themeVariables: {{
             primaryColor: '#6366f1',
             primaryTextColor: '#f1f5f9',
             primaryBorderColor: '#8b5cf6',
             lineColor: '#94a3b8',
             secondaryColor: '#16162a',
             tertiaryColor: '#0f0f1a'
-        }
-    });
+        }}
+    }});
 
     // 代码复制按钮
-    document.querySelectorAll('pre').forEach(function(pre) {
+    document.querySelectorAll('pre').forEach(function(pre) {{
         var code = pre.querySelector('code');
         if (!code) return;
 
         // 获取语言
-        var langClass = code.className.match(/language-(\w+)/);
+        var langClass = code.className.match(/language-(\\w+)/);
         var lang = langClass ? langClass[1] : '';
 
         // 创建头部容器
@@ -678,7 +577,7 @@ pre[class*="language-"] {
         // 语言标签
         var langLabel = document.createElement('span');
         langLabel.className = 'code-block-lang';
-        var langNames = {
+        var langNames = {{
             python: 'Python', javascript: 'JavaScript', typescript: 'TypeScript',
             bash: 'Bash', shell: 'Shell', go: 'Go', rust: 'Rust',
             yaml: 'YAML', json: 'JSON', html: 'HTML', css: 'CSS',
@@ -687,23 +586,23 @@ pre[class*="language-"] {
             tsx: 'TSX', jsx: 'JSX', protobuf: 'Protobuf',
             scss: 'SCSS', markdown: 'Markdown', gitignore: 'Git',
             git: 'Git'
-        };
+        }};
         langLabel.textContent = langNames[lang] || langNames['default'];
 
         // 复制按钮
         var copyBtn = document.createElement('button');
         copyBtn.className = 'code-copy-btn';
         copyBtn.innerHTML = '📋 复制';
-        copyBtn.addEventListener('click', function() {
+        copyBtn.addEventListener('click', function() {{
             var text = code.textContent;
-            navigator.clipboard.writeText(text).then(function() {
+            navigator.clipboard.writeText(text).then(function() {{
                 copyBtn.innerHTML = '✅ 已复制';
                 copyBtn.classList.add('copied');
-                setTimeout(function() {
+                setTimeout(function() {{
                     copyBtn.innerHTML = '📋 复制';
                     copyBtn.classList.remove('copied');
-                }, 2000);
-            }).catch(function() {
+                }}, 2000);
+            }}).catch(function() {{
                 // fallback
                 var textarea = document.createElement('textarea');
                 textarea.value = text;
@@ -713,12 +612,12 @@ pre[class*="language-"] {
                 document.body.removeChild(textarea);
                 copyBtn.innerHTML = '✅ 已复制';
                 copyBtn.classList.add('copied');
-                setTimeout(function() {
+                setTimeout(function() {{
                     copyBtn.innerHTML = '📋 复制';
                     copyBtn.classList.remove('copied');
-                }, 2000);
-            });
-        });
+                }}, 2000);
+            }});
+        }});
 
         header.appendChild(langLabel);
         header.appendChild(copyBtn);
@@ -726,46 +625,294 @@ pre[class*="language-"] {
 
         // 添加 line-numbers class
         pre.classList.add('line-numbers');
-    });
+    }});
 
     // 返回顶部按钮
     var backToTop = document.getElementById('backToTop');
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
+    window.addEventListener('scroll', function() {{
+        if (window.scrollY > 300) {{
             backToTop.classList.add('visible');
-        } else {
+        }} else {{
             backToTop.classList.remove('visible');
-        }
-    });
-    backToTop.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+        }}
+    }});
+    backToTop.addEventListener('click', function() {{
+        window.scrollTo({{ top: 0, behavior: 'smooth' }});
+    }});
 
     // TOC 滚动高亮
     var tocLinks = document.querySelectorAll('.toc-sidebar a');
-    if (tocLinks.length > 0) {
+    if (tocLinks.length > 0) {{
         var headings = [];
-        tocLinks.forEach(function(link) {
+        tocLinks.forEach(function(link) {{
             var id = link.getAttribute('href').substring(1);
             var el = document.getElementById(id);
-            if (el) headings.push({ el: el, link: link });
-        });
+            if (el) headings.push({{ el: el, link: link }});
+        }});
 
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function() {{
             var scrollPos = window.scrollY + 120;
-            headings.forEach(function(item, i) {
+            headings.forEach(function(item, i) {{
                 var top = item.el.offsetTop;
                 var bottom = (i < headings.length - 1) ? headings[i + 1].el.offsetTop : Infinity;
-                if (scrollPos >= top && scrollPos < bottom) {
-                    tocLinks.forEach(function(l) { l.classList.remove('toc-active'); });
+                if (scrollPos >= top && scrollPos < bottom) {{
+                    tocLinks.forEach(function(l) {{ l.classList.remove('toc-active'); }});
                     item.link.classList.add('toc-active');
-                }
-            });
-        });
-    }
+                }}
+            }});
+        }});
+    }}
 
     // 重新触发 Prism 高亮
     Prism.highlightAll();
     </script>
 </body>
-</html>
+</html>"""
+
+
+def parse_front_matter(text: str) -> tuple:
+    """解析 YAML front matter，返回 (metadata_dict, body_text)"""
+    match = re.match(r'^---\s*\n(.*?)\n---\s*\n(.*)$', text, re.DOTALL)
+    if not match:
+        return {}, text
+    meta = yaml.safe_load(match.group(1)) or {}
+    body = match.group(2)
+    return meta, body
+
+
+def estimate_reading_time(text: str) -> str:
+    """估算阅读时间"""
+    # 中文约 400字/分钟，英文约 200词/分钟，代码块按3倍计
+    chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', text))
+    english_words = len(re.findall(r'[a-zA-Z]+', text))
+    code_chars = len(re.findall(r'```[\s\S]*?```', text))
+    total_time = chinese_chars / 400 + english_words / 200 + code_chars / 300
+    minutes = max(1, int(total_time) or 1)
+    return f"{minutes} 分钟"
+
+
+def get_tag_from_categories(categories: list) -> str:
+    """从 categories 获取显示标签"""
+    if not categories:
+        return "技术"
+    for cat in categories:
+        if cat in CATEGORY_TAG_MAP:
+            return CATEGORY_TAG_MAP[cat]
+    return categories[0] if categories else "技术"
+
+
+def format_date(date_val) -> str:
+    """格式化日期"""
+    if isinstance(date_val, datetime):
+        return date_val.strftime("%Y-%m-%d")
+    if isinstance(date_val, str):
+        # 解析 "2026-04-03 12:00:00 +0800" 格式
+        try:
+            dt = datetime.strptime(date_val.split("+")[0].strip(), "%Y-%m-%d %H:%M:%S")
+            return dt.strftime("%Y-%m-%d")
+        except ValueError:
+            try:
+                dt = datetime.strptime(date_val.strip(), "%Y-%m-%d")
+                return dt.strftime("%Y-%m-%d")
+            except ValueError:
+                return date_val[:10] if len(date_val) >= 10 else date_val
+    return str(date_val)[:10]
+
+
+def build_toc_html(toc_text: str) -> str:
+    """从 markdown toc 扩展输出构建 TOC 侧边栏 HTML"""
+    if not toc_text or not toc_text.strip():
+        return ""
+
+    # 解析 TOC 条目
+    entries = []
+    for m in re.finditer(r'<a href="#([^"]+)">(.+?)</a>', toc_text):
+        href = m.group(1)
+        text = re.sub(r'<[^>]+>', '', m.group(2))  # strip HTML tags
+        # 确定 heading 层级
+        level = "h2"
+        before = toc_text[:m.start()]
+        if before.rstrip().endswith('</li>'):
+            pass
+        # 通过检查 TOC 嵌套结构来推断
+        li_match = re.findall(r'<li(?: class="[^"]*")?>', toc_text[:m.start()])
+        indent = len(li_match)
+        if indent <= 1:
+            level = "h2"
+        elif indent == 2:
+            level = "h3"
+        else:
+            level = "h4"
+        entries.append((href, text, level))
+
+    if not entries:
+        return ""
+
+    items_html = ""
+    for href, text, level in entries:
+        items_html += f'<li><a href="#{href}" class="toc-{level}">{text}</a></li>\n'
+
+    return f"""<aside class="toc-sidebar">
+    <div class="toc-title">目录</div>
+    <ul>
+{items_html}
+    </ul>
+</aside>"""
+
+
+def convert_markdown_to_html(md_text: str) -> tuple:
+    """将 Markdown 转换为 HTML，返回 (content_html, toc_text)"""
+    # 配置 markdown 扩展 - 使用标准 fenced_code，让 Prism.js 做语法高亮
+    md = markdown.Markdown(
+        extensions=[
+            TocExtension(toc_depth="2-4", slugify=lambda text, sep: re.sub(r'[^\w\u4e00-\u9fff-]+', sep, text.lower()).strip(sep)),
+            "tables",
+            FencedCodeExtension(),
+            "attr_list",
+            "md_in_html",
+            "footnotes",
+            "abbr",
+        ],
+    )
+
+    content_html = md.convert(md_text)
+    toc_text = md.toc or ""
+
+    return content_html, toc_text
+
+
+def post_process_html(html: str) -> str:
+    """后处理 HTML：添加代码块包装、Mermaid 转换等"""
+    # 1. 处理 mermaid 代码块 - 将 <pre><code class="language-mermaid"> 转为 <div class="mermaid">
+    def replace_mermaid_block(m):
+        code_content = m.group(1)
+        # 解码 HTML 实体
+        code_content = code_content.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&').replace('&quot;', '"')
+        return f'<div class="mermaid">\n{code_content}\n</div>'
+
+    html = re.sub(
+        r'<pre><code class="language-mermaid">(.*?)</code></pre>',
+        replace_mermaid_block,
+        html,
+        flags=re.DOTALL
+    )
+
+    # 2. 确保所有 <pre><code> 代码块正确包裹
+    # 处理没有 language class 的代码块
+    html = re.sub(
+        r'<pre><code>(.*?)</code></pre>',
+        r'<pre><code class="language-text">\1</code></pre>',
+        html,
+        flags=re.DOTALL
+    )
+
+    # 3. 处理图片懒加载
+    html = re.sub(
+        r'<img([^>]*)>',
+        lambda m: '<img' + m.group(1) + ' loading="lazy">' if 'loading=' not in m.group(1) else '<img' + m.group(1) + '>',
+        html
+    )
+
+    # 4. 给外部链接添加 target="_blank"
+    html = re.sub(
+        r'<a href="(https?://[^"]+)"(?![^>]*target=)',
+        r'<a href="\1" target="_blank" rel="noopener noreferrer"',
+        html
+    )
+
+    return html
+
+
+def process_md_file(md_path: str, output_dir: str):
+    """处理单个 Markdown 文件，生成 HTML"""
+    basename = os.path.basename(md_path)
+    out_name = FILENAME_MAP.get(basename)
+    if not out_name:
+        print(f"  ⚠️  跳过未映射文件: {basename}")
+        return
+
+    print(f"  📝 {basename} → {out_name}")
+
+    # 读取文件
+    with open(md_path, "r", encoding="utf-8") as f:
+        raw = f.read()
+
+    # 解析 front matter
+    meta, body = parse_front_matter(raw)
+    title = meta.get("title", basename.replace(".md", ""))
+    date_val = meta.get("date", "")
+    categories = meta.get("categories", [])
+    if isinstance(categories, str):
+        categories = [categories]
+    tags = meta.get("tags", [])
+    description = meta.get("description", title)
+    last_modified = meta.get("last_modified_at", date_val)
+
+    # 提取文章末尾的更新日期
+    update_match = re.search(r'\*最后更新[：:]\s*(.+?)\*', body)
+    if update_match:
+        last_updated_text = update_match.group(1).strip()
+    else:
+        last_updated_text = format_date(last_modified) if last_modified else format_date(date_val)
+
+    # 格式化日期
+    date_str = format_date(date_val)
+
+    # 获取标签
+    tag = get_tag_from_categories(categories)
+
+    # 估算阅读时间
+    reading_time = estimate_reading_time(body)
+
+    # 转换 Markdown → HTML
+    content_html, toc_text = convert_markdown_to_html(body)
+
+    # 后处理
+    content_html = post_process_html(content_html)
+
+    # 构建 TOC
+    toc_html = build_toc_html(toc_text)
+
+    # 缩进内容
+    content_lines = content_html.split('\n')
+    indented_content = '\n'.join('            ' + line for line in content_lines)
+
+    # 生成完整 HTML
+    full_html = build_html(
+        title=title,
+        description=description,
+        tag=tag,
+        date_str=date_str,
+        reading_time=reading_time,
+        toc_html=toc_html,
+        content_html=indented_content,
+        last_updated=last_updated_text,
+    )
+
+    # 写入文件
+    out_path = os.path.join(output_dir, out_name)
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(full_html)
+
+    print(f"  ✅ 已生成: {out_path}")
+
+
+def main():
+    """主函数：处理所有 Markdown 文件"""
+    base_dir = "/tmp/xfengyin-blog"
+    posts_dir = os.path.join(base_dir, "_posts")
+    output_dir = os.path.join(base_dir, "post")
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    md_files = sorted(glob.glob(os.path.join(posts_dir, "*.md")))
+    print(f"🚀 找到 {len(md_files)} 个 Markdown 文件\n")
+
+    for md_path in md_files:
+        process_md_file(md_path, output_dir)
+
+    print(f"\n🎉 全部完成！共处理 {len(md_files)} 个文件。")
+
+
+if __name__ == "__main__":
+    main()

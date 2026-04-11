@@ -3,233 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen框架实战 | xfengyin</title>
-    <meta name="description" content="引言
-
-"禅是一种生活的艺术，是通往宁静与自由的途径。" —— 铃木大拙
-
-在构建AI Agent和工作流自动化系统时，我遇到了一个核心问题：如何让多个任务按正确的顺序执行，同时保持代码的简洁和可维护性？ Zen框架应运而生，它借鉴禅宗思想，追求简单、优雅、高效的模块化执行。
-
-
-
-为什么需要Zen...">
+    <title>Zen框架：Python模块化执行的禅意之道 | xfengyin</title>
+    <meta name="description" content="借鉴禅宗思想的Python模块化执行框架，支持声明式任务定义、自动依赖解析和并行执行优化">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --bg: #0f0f1a;
-            --bg-card: #16162a;
-            --bg-code: #0d1117;
-            --text: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border: rgba(255,255,255,0.08);
-            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-            --shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.8;
-        }
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
-        }
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 1rem 2rem;
-            background: rgba(15, 15, 26, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-        .nav-container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-        }
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-        .nav-links a:hover { color: var(--text); }
-        .article-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 8rem 2rem 4rem;
-        }
-        .article-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .article-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--primary);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .article-header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-        .article-meta {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-        .article-content {
-            font-size: 1.05rem;
-            line-height: 1.9;
-        }
-        .article-content h2 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 2.5rem 0 1rem;
-            color: var(--text);
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--primary);
-            display: inline-block;
-        }
-        .article-content h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin: 2rem 0 1rem;
-            color: var(--secondary);
-        }
-        .article-content h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 1.5rem 0 0.75rem;
-            color: var(--text);
-        }
-        .article-content p {
-            margin-bottom: 1.25rem;
-            color: var(--text);
-        }
-        .article-content ul, .article-content ol {
-            margin: 1rem 0 1.5rem 1.5rem;
-        }
-        .article-content li {
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-        .article-content strong {
-            color: var(--accent);
-            font-weight: 600;
-        }
-        .article-content code {
-            background: var(--bg-code);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9em;
-            color: var(--accent);
-        }
-        .article-content pre {
-            background: var(--bg-code);
-            padding: 1.25rem;
-            border-radius: 12px;
-            overflow-x: auto;
-            margin: 1.5rem 0;
-            border: 1px solid var(--border);
-        }
-        .article-content pre code {
-            background: none;
-            padding: 0;
-            color: var(--text);
-        }
-        .article-content blockquote {
-            border-left: 4px solid var(--primary);
-            padding-left: 1.5rem;
-            margin: 1.5rem 0;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-        .article-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.95rem;
-        }
-        .article-content th, .article-content td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        .article-content th {
-            background: var(--bg-card);
-            font-weight: 600;
-            color: var(--primary);
-        }
-        .article-content tr:hover {
-            background: rgba(99, 102, 241, 0.05);
-        }
-        .article-content hr {
-            border: none;
-            height: 1px;
-            background: var(--border);
-            margin: 2rem 0;
-        }
-        .back-to-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 2rem;
-            transition: color 0.3s;
-        }
-        .back-to-home:hover { color: var(--primary); }
-        footer {
-            text-align: center;
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border);
-            margin-top: 4rem;
-            color: var(--text-muted);
-        }
-        @media (max-width: 768px) {
-            .article-container { padding: 7rem 1.5rem 3rem; }
-            .article-header h1 { font-size: 1.6rem; }
-            .nav-links { display: none; }
-        }
-    </style>
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --accent: #ec4899;
+    --bg: #0f0f1a;
+    --bg-card: #16162a;
+    --bg-code: #0d1117;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+    --shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+}
+.bg-animation {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+}
+
+/* ─── 导航栏 ─── */
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    background: rgba(15, 15, 26, 0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+}
+.nav-container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+}
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+}
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--text); }
+
+/* ─── 文章容器 ─── */
+.article-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 8rem 2rem 4rem;
+}
+.article-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+}
+.article-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.article-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+.article-meta {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.back-to-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    transition: color 0.3s;
+}
+.back-to-home:hover { color: var(--primary); }
+
+/* ─── 文章内容 ─── */
+.article-content {
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+.article-content h2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 2.5rem 0 1rem;
+    color: var(--text);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+}
+.article-content h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--secondary);
+}
+.article-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text);
+}
+.article-content p {
+    margin-bottom: 1.25rem;
+    color: var(--text);
+}
+.article-content ul, .article-content ol {
+    margin: 1rem 0 1.5rem 1.5rem;
+}
+.article-content li {
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+.article-content strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+.article-content code {
+    background: var(--bg-code);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    color: var(--accent);
+}
+.article-content blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ─── 表格 ─── */
+.article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    display: block;
+    overflow-x: auto;
+}
+.article-content th, .article-content td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+.article-content th {
+    background: var(--bg-card);
+    font-weight: 600;
+    color: var(--primary);
+}
+.article-content tr:nth-child(even) {
+    background: rgba(99, 102, 241, 0.03);
+}
+.article-content tr:hover {
+    background: rgba(99, 102, 241, 0.05);
+}
+.article-content hr {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+}
+
+/* ─── 代码块 ─── */
+.article-content pre {
+    background: var(--bg-code);
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    position: relative;
+}
+.article-content pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+/* ─── 代码块头部（语言标签 + 复制按钮）─── */
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+}
+.code-block-lang {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+}
+.code-copy-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+.code-copy-btn:hover {
+    color: var(--text);
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+.code-copy-btn.copied {
+    color: #10b981;
+    border-color: #10b981;
+}
+
+/* ─── Prism 行号 ─── */
+pre[class*="language-"].line-numbers {
+    padding-left: 3.8em;
+}
+pre[class*="language-"].line-numbers .line-numbers-rows {
+    border-right: 1px solid var(--border);
+}
+
+/* ─── Mermaid ─── */
+.mermaid {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    overflow-x: auto;
+}
+
+/* ─── TOC 侧边栏 ─── */
+.toc-sidebar {
+    position: fixed;
+    top: 6rem;
+    right: 2rem;
+    width: 220px;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    padding: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+.toc-sidebar::-webkit-scrollbar { width: 4px; }
+.toc-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.toc-title {
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.toc-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.toc-sidebar li {
+    margin-bottom: 0.35rem;
+}
+.toc-sidebar a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: block;
+    padding: 0.15rem 0;
+}
+.toc-sidebar a:hover {
+    color: var(--primary);
+}
+.toc-sidebar .toc-h2 { padding-left: 0; }
+.toc-sidebar .toc-h3 { padding-left: 1rem; }
+.toc-sidebar .toc-h4 { padding-left: 2rem; }
+.toc-sidebar .toc-active {
+    color: var(--primary);
+    border-left: 2px solid var(--primary);
+    padding-left: 0.5rem;
+}
+
+/* ─── 返回顶部 ─── */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 999;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.back-to-top:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* ─── Footer ─── */
+footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+    color: var(--text-muted);
+}
+
+/* ─── 响应式 ─── */
+@media (max-width: 1200px) {
+    .toc-sidebar { display: none; }
+}
+@media (max-width: 768px) {
+    .article-container { padding: 7rem 1.5rem 3rem; }
+    .article-header h1 { font-size: 1.6rem; }
+    .nav-links { display: none; }
+    .article-content pre { border-radius: 8px; }
+}
+
+/* ─── Prism Tomorrow Night 覆盖 ─── */
+code[class*="language-"],
+pre[class*="language-"] {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    tab-size: 4;
+    background: none;
+}
+pre[class*="language-"] {
+    padding: 1.25rem;
+    margin: 0;
+    overflow: auto;
+}
+</style>
 </head>
 <body>
     <div class="bg-animation"></div>
@@ -243,509 +429,716 @@
             </ul>
         </div>
     </nav>
+
     <article class="article-container">
         <a href="../" class="back-to-home">← 返回首页</a>
         <header class="article-header">
-            <span class="article-tag">框架</span>
-            <h1>Zen框架实战</h1>
-            <div class="article-meta">📅 2026-04-03 · ⏱️ 阅读时间约 6 分钟</div>
+            <span class="article-tag">Python</span>
+            <h1>Zen框架：Python模块化执行的禅意之道</h1>
+            <div class="article-meta">📅 2026-04-03 · ⏱️ 阅读时间约 7 分钟</div>
         </header>
         <div class="article-content">
-            <h2>引言</h2>
-
-<blockquote>"禅是一种生活的艺术，是通往宁静与自由的途径。" —— 铃木大拙</blockquote>
-
-<p>在构建AI Agent和工作流自动化系统时，我遇到了一个核心问题：<strong>如何让多个任务按正确的顺序执行，同时保持代码的简洁和可维护性？</strong> Zen框架应运而生，它借鉴禅宗思想，追求简单、优雅、高效的模块化执行。</p>
-
-<hr>
-
-<h2>为什么需要Zen？</h2>
-
-<h3>传统脚本的问题</h3>
-
-<p>``<code>python
-<h1>传统方式：紧耦合、难维护</h1>
-def main():
-    data = fetch_data()
-    cleaned = clean_data(data)
-    transformed = transform_data(cleaned)
-    result = save_data(transformed)
-    notify_user(result)
-    
-if __name__ == "__main__":
-    main()
-</code>`<code></p>
-
-<strong>痛点：</strong>
-<ul>
-<li>逻辑耦合，难以复用</li>
-<li>错误处理复杂</li>
-<li>无法并行执行独立任务</li>
-<li>缺少执行追踪</li>
-
-</ul>
-<h3>Zen的解决方案</h3>
-
-<p></code>`<code>python
-from zen import Zen, Task</p>
-
-<p><h1>定义任务</h1>
-fetch_task = Task("fetch", func=fetch_data)
-clean_task = Task("clean", func=clean_data, deps=["fetch"])
-transform_task = Task("transform", func=transform_data, deps=["clean"])
-save_task = Task("save", func=save_data, deps=["transform"])
-notify_task = Task("notify", func=notify_user, deps=["save"])</p>
-
-<p><h1>构建工作流</h1>
-zen = Zen()
-zen.add_tasks([fetch_task, clean_task, transform_task, save_task, notify_task])</p>
-
-<h1>执行</h1>
-zen.execute()
-</code>`<code>
-
-<strong>优势：</strong>
-<ul>
-<li>✅ 声明式任务定义</li>
-<li>✅ 自动依赖解析</li>
-<li>✅ 并行执行优化</li>
-<li>✅ 完整执行追踪</li>
-
-</ul>
-<hr>
-
-<h2>核心设计</h2>
-
-<h3>1. 依赖图（Dependency Graph）</h3>
-
-</code>`<code>
-┌─────────┐
-│  fetch  │
-└────┬────┘
-     │
-     ▼
-┌─────────┐
-│  clean  │
-└────┬────┘
-     │
-     ▼
-┌─────────┐
-│transform│
-└────┬────┘
-     │
-     ▼
-┌─────────┐
-│  save   │
-└────┬────┘
-     │
-     ▼
-┌─────────┐
-│ notify  │
-└─────────┘
-</code>`<code>
-
-<h3>2. 核心概念</h3>
-
-<table>
-<tr><th>概念</th><th>说明</th><th>类比</th></tr>
-<tr><td><strong>Task（任务）</strong></td><td>最小执行单元</td><td>禅宗公案</td></tr>
-<tr><td><strong>Module（模块）</strong></td><td>任务集合</td><td>禅宗寺院</td></tr>
-<tr><td><strong>Graph（图）</strong></td><td>依赖关系</td><td>因果轮回</td></tr>
-<tr><td><strong>Context（上下文）</strong></td><td>执行环境</td><td>禅定境界</td></tr>
-<tr><td><strong>Executor（执行器）</strong></td><td>调度引擎</td><td>禅师</td></tr>
-</table>
-
-<hr>
-
-<h2>架构实现</h2>
-
-<h3>任务定义</h3>
-
-<p></code>`<code>python
-from dataclasses import dataclass, field
-from typing import Callable, List, Optional, Any
-from enum import Enum, auto</p>
-
-<p>class TaskStatus(Enum):
-    PENDING = auto()
-    RUNNING = auto()
-    SUCCESS = auto()
-    FAILED = auto()
-    SKIPPED = auto()</p>
-
-<p>@dataclass
-class Task:
-    """任务定义"""
-    name: str
-    func: Callable[..., Any]
-    deps: List[str] = field(default_factory=list)
-    inputs: Dict[str, Any] = field(default_factory=dict)
-    outputs: Dict[str, Any] = field(default_factory=dict)
-    retry: int = 0
-    timeout: Optional[float] = None
-    
-    status: TaskStatus = field(default=TaskStatus.PENDING, init=False)
-    result: Any = field(default=None, init=False)
-    error: Optional[Exception] = field(default=None, init=False)
-    start_time: Optional[float] = field(default=None, init=False)
-    end_time: Optional[float] = field(default=None, init=False)
-    
-    def execute(self, context: 'Context') -> Any:
-        """执行任务"""
-        self.status = TaskStatus.RUNNING
-        self.start_time = time.time()
-        
-        try:
-            # 注入依赖任务的输出
-            inputs = self._resolve_inputs(context)
-            self.result = self.func(**inputs)
-            self.status = TaskStatus.SUCCESS
-        except Exception as e:
-            self.error = e
-            self.status = TaskStatus.FAILED
-            raise
-        finally:
-            self.end_time = time.time()
-        
-        return self.result
-</code>`<code></p>
-
-<h3>依赖图构建</h3>
-
-<p></code>`<code>python
-from collections import defaultdict, deque</p>
-
-<p>class DependencyGraph:
-    """依赖图管理"""
-    
-    def __init__(self):
-        self.tasks: Dict[str, Task] = {}
-        self.dependencies: Dict[str, Set[str]] = defaultdict(set)
-        self.dependents: Dict[str, Set[str]] = defaultdict(set)
-    
-    def add_task(self, task: Task):
-        """添加任务"""
-        self.tasks[task.name] = task
-        
-        for dep in task.deps:
-            self.dependencies[task.name].add(dep)
-            self.dependents[dep].add(task.name)
-    
-    def topological_sort(self) -> List[str]:
-        """拓扑排序 - 确定执行顺序"""
-        in_degree = {name: len(deps) for name, deps in self.dependencies.items()}
-        queue = deque([name for name in self.tasks if in_degree[name] == 0])
-        result = []
-        
-        while queue:
-            current = queue.popleft()
-            result.append(current)
+            <h2 id="引言">引言</h2>
+            <blockquote>
+            <p>"禅是一种生活的艺术，是通往宁静与自由的途径。" —— 铃木大拙</p>
+            </blockquote>
+            <p>在构建AI Agent和工作流自动化系统时，我遇到了一个核心问题：<strong>如何让多个任务按正确的顺序执行，同时保持代码的简洁和可维护性？</strong> Zen框架应运而生，它借鉴禅宗思想，追求简单、优雅、高效的模块化执行。</p>
+            <hr />
+            <h2 id="为什么需要zen">为什么需要Zen？</h2>
+            <h3 id="传统脚本的问题">传统脚本的问题</h3>
+            <pre><code class="language-python"># 传统方式：紧耦合、难维护
+            def main():
+                data = fetch_data()
+                cleaned = clean_data(data)
+                transformed = transform_data(cleaned)
+                result = save_data(transformed)
+                notify_user(result)
             
-            for dependent in self.dependents[current]:
-                in_degree[dependent] -= 1
-                if in_degree[dependent] == 0:
-                    queue.append(dependent)
-        
-        if len(result) != len(self.tasks):
-            raise CircularDependencyError("检测到循环依赖")
-        
-        return result
-    
-    def get_execution_levels(self) -> List[List[str]]:
-        """获取执行层级 - 同一层可并行执行"""
-        in_degree = {name: len(deps) for name, deps in self.dependencies.items()}
-        levels = []
-        current_level = [name for name in self.tasks if in_degree[name] == 0]
-        
-        while current_level:
-            levels.append(current_level)
-            next_level = []
+            if __name__ == &quot;__main__&quot;:
+                main()
+            </code></pre>
+            <p><strong>痛点：</strong>
+            - 逻辑耦合，难以复用
+            - 错误处理复杂
+            - 无法并行执行独立任务
+            - 缺少执行追踪</p>
+            <h3 id="zen的解决方案">Zen的解决方案</h3>
+            <pre><code class="language-python">from zen import Zen, Task
             
-            for task_name in current_level:
-                for dependent in self.dependents[task_name]:
-                    in_degree[dependent] -= 1
-                    if in_degree[dependent] == 0:
-                        next_level.append(dependent)
+            # 定义任务
+            fetch_task = Task(&quot;fetch&quot;, func=fetch_data)
+            clean_task = Task(&quot;clean&quot;, func=clean_data, deps=[&quot;fetch&quot;])
+            transform_task = Task(&quot;transform&quot;, func=transform_data, deps=[&quot;clean&quot;])
+            save_task = Task(&quot;save&quot;, func=save_data, deps=[&quot;transform&quot;])
+            notify_task = Task(&quot;notify&quot;, func=notify_user, deps=[&quot;save&quot;])
             
-            current_level = next_level
-        
-        return levels
-</code>`<code></p>
-
-<h3>并行执行器</h3>
-
-<p></code>`<code>python
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor</p>
-
-<p>class ParallelExecutor:
-    """并行执行器"""
-    
-    def __init__(self, max_workers: int = 4, executor_type: str = "thread"):
-        self.max_workers = max_workers
-        self.executor_type = executor_type
-        self.executor = self._create_executor()
-    
-    def _create_executor(self):
-        if self.executor_type == "thread":
-            return ThreadPoolExecutor(max_workers=self.max_workers)
-        elif self.executor_type == "process":
-            return ProcessPoolExecutor(max_workers=self.max_workers)
-        else:
-            raise ValueError(f"Unknown executor type: {self.executor_type}")
-    
-    def execute_parallel(self, tasks: List[Task], context: Context) -> List[Any]:
-        """并行执行任务"""
-        futures = [
-            self.executor.submit(task.execute, context)
-            for task in tasks
-        ]
-        return [f.result() for f in futures]
-    
-    async def execute_parallel_async(self, tasks: List[Task], context: Context) -> List[Any]:
-        """异步并行执行"""
-        loop = asyncio.get_event_loop()
-        futures = [
-            loop.run_in_executor(self.executor, task.execute, context)
-            for task in tasks
-        ]
-        return await asyncio.gather(*futures)
-</code>`<code></p>
-
-<hr>
-
-<h2>实战案例</h2>
-
-<h3>1. 数据ETL管道</h3>
-
-<p></code>`<code>python
-from zen import Zen, Task
-import pandas as pd</p>
-
-<p><h1>定义任务函数</h1>
-def extract_from_api(source: str) -> pd.DataFrame:
-    """从API提取数据"""
-    import requests
-    response = requests.get(source)
-    return pd.DataFrame(response.json())</p>
-
-<p>def extract_from_db(connection_string: str) -> pd.DataFrame:
-    """从数据库提取数据"""
-    import sqlalchemy
-    engine = sqlalchemy.create_engine(connection_string)
-    return pd.read_sql("SELECT * FROM users", engine)</p>
-
-<p>def merge_dataframes(api_data: pd.DataFrame, db_data: pd.DataFrame) -> pd.DataFrame:
-    """合并数据"""
-    return pd.merge(api_data, db_data, on="user_id", how="left")</p>
-
-<p>def clean_data(data: pd.DataFrame) -> pd.DataFrame:
-    """清洗数据"""
-    data = data.dropna()
-    data = data.drop_duplicates()
-    return data</p>
-
-<p>def transform_data(data: pd.DataFrame) -> pd.DataFrame:
-    """转换数据"""
-    data["age_group"] = pd.cut(data["age"], bins=[0, 18, 30, 50, 100], 
-                               labels=["少年", "青年", "中年", "老年"])
-    return data</p>
-
-<p>def load_to_warehouse(data: pd.DataFrame, warehouse_url: str):
-    """加载到数据仓库"""
-    data.to_parquet(f"{warehouse_url}/users.parquet", index=False)
-    return f"Loaded {len(data)} rows"</p>
-
-<p><h1>构建工作流</h1>
-zen = Zen()</p>
-
-<p>zen.add_tasks([
-    Task("extract_api", extract_from_api, inputs={"source": "https://api.example.com/users"}),
-    Task("extract_db", extract_from_db, inputs={"connection_string": "postgresql://localhost/db"}),
-    Task("merge", merge_data, deps=["extract_api", "extract_db"]),
-    Task("clean", clean_data, deps=["merge"]),
-    Task("transform", transform_data, deps=["clean"]),
-    Task("load", load_to_warehouse, deps=["transform"], 
-         inputs={"warehouse_url": "s3://data-warehouse/"})
-])</p>
-
-<h1>执行并可视化</h1>
-result = zen.execute()
-zen.visualize()  # 生成执行图
-</code>`<code>
-
-<h3>2. AI Agent工作流</h3>
-
-<p></code>`<code>python
-from zen import Zen, Task
-import openai</p>
-
-<p><h1>定义AI任务</h1>
-def understand_intent(user_input: str) -> dict:
-    """理解用户意图"""
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{
-            "role": "system",
-            "content": "分析用户意图，提取关键信息"
-        }, {
-            "role": "user",
-            "content": user_input
-        }]
-    )
-    return json.loads(response.choices[0].message.content)</p>
-
-<p>def retrieve_knowledge(intent: dict) -> list:
-    """检索知识库"""
-    from vector_db import search
-    return search(intent["keywords"])</p>
-
-<p>def generate_response(intent: dict, knowledge: list) -> str:
-    """生成回复"""
-    context = "\n".join(knowledge)
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{
-            "role": "system",
-            "content": f"基于以下知识回答问题:\n{context}"
-        }, {
-            "role": "user",
-            "content": intent["question"]
-        }]
-    )
-    return response.choices[0].message.content</p>
-
-<p>def save_conversation(user_input: str, response: str, intent: dict):
-    """保存对话历史"""
-    db.insert({
-        "input": user_input,
-        "response": response,
-        "intent": intent,
-        "timestamp": datetime.now()
-    })</p>
-
-<p><h1>构建AI工作流</h1>
-agent = Zen()
-agent.add_tasks([
-    Task("intent", understand_intent, inputs={"user_input": "{{user_input}}"}),
-    Task("retrieve", retrieve_knowledge, deps=["intent"]),
-    Task("generate", generate_response, deps=["intent", "retrieve"]),
-    Task("save", save_conversation, deps=["generate"])
-])</p>
-
-<h1>运行Agent</h1>
-result = agent.execute(context={"user_input": "Python中的装饰器怎么用？"})
-print(result["generate"])
-</code>`<code>
-
-<hr>
-
-<h2>高级特性</h2>
-
-<h3>1. 条件执行</h3>
-
-<p></code>`<code>python
-def should_process(data: dict) -> bool:
-    return data.get("status") == "active"</p>
-
-<p>conditional_task = Task(
-    "conditional_process",
-    process_data,
-    deps=["fetch"],
-    condition=should_process  # 条件判断
-)
-</code>`<code></p>
-
-<h3>2. 错误重试</h3>
-
-</code>`<code>python
-unreliable_task = Task(
-    "api_call",
-    call_external_api,
-    retry=3,                    # 重试3次
-    retry_delay=2,              # 每次间隔2秒
-    retry_backoff="exponential" # 指数退避
-)
-</code>`<code>
-
-<h3>3. 执行追踪</h3>
-
-<p></code>`<code>python
-from zen.tracing import ConsoleTracer, JSONTracer</p>
-
-<p><h1>添加追踪器</h1>
-zen.add_tracer(ConsoleTracer())
-zen.add_tracer(JSONTracer(output_file="execution.json"))</p>
-
-<h1>执行后会生成详细的执行报告</h1>
-zen.execute()
-</code>`<code>
-
-<hr>
-
-<h2>性能对比</h2>
-
-<table>
-<tr><th>场景</th><th>串行执行</th><th>Zen并行</th><th>提升</th></tr>
-<tr><td>10个独立API调用</td><td>10s</td><td>2s</td><td><strong>5x</strong></td></tr>
-<tr><td>数据处理管道</td><td>30s</td><td>12s</td><td><strong>2.5x</strong></td></tr>
-<tr><td>AI工作流</td><td>5s</td><td>3s</td><td><strong>1.7x</strong></td></tr>
-</table>
-
-<hr>
-
-<h2>安装与使用</h2>
-
-<p></code>`<code>bash
-<h1>安装</h1>
-pip install zen-framework</p>
-
-<p><h1>快速开始</h1>
-zen init my-workflow
-cd my-workflow
-zen run
-</code>``</p>
-
-<hr>
-
-<h2>总结</h2>
-
-<p>Zen框架的设计哲学：</p>
-
-<ol>
-<li><strong>简单即美</strong>：最小化概念，最大化表达</li>
-<li><strong>显式优于隐式</strong>：依赖关系清晰可见</li>
-<li><strong>并行是常态</strong>：充分利用现代硬件</li>
-<li><strong>失败是常态</strong>：优雅的错误处理</li>
-
-</ol>
-<h3>与同类框架对比</h3>
-
-<table>
-<tr><th>特性</th><th>Zen</th><th>Airflow</th><th>Prefect</th><th>Luigi</th></tr>
-<tr><td>学习曲线</td><td>⭐⭐ 简单</td><td>⭐⭐⭐⭐ 复杂</td><td>⭐⭐⭐ 中等</td><td>⭐⭐⭐ 中等</td></tr>
-<tr><td>并行执行</td><td>✅ 内置</td><td>✅ 支持</td><td>✅ 支持</td><td>✅ 支持</td></tr>
-<tr><td>可视化</td><td>✅ 内置</td><td>✅ 完善</td><td>✅ 完善</td><td>⚠️ 有限</td></tr>
-<tr><td>适用规模</td><td>小到中型</td><td>大型</td><td>中大型</td><td>中大型</td></tr>
-<tr><td>部署复杂度</td><td>⭐ 简单</td><td>⭐⭐⭐⭐⭐ 复杂</td><td>⭐⭐⭐⭐ 中等</td><td>⭐⭐⭐ 中等</td></tr>
-</table>
-
-<hr>
-
-<h2>相关项目</h2>
-
-<ul>
-<li><a href="https://github.com/xfengyin/XingJu" style="color:var(--primary)">XingJu 星聚</a> - 跨平台聚合应用</li>
-<li><a href="https://github.com/xfengyin/kongming" style="color:var(--primary)">Kongming 孔明</a> - Go微服务框架</li>
-
-</ul>
-<hr>
-
-<em>最后更新：2026年4月3日</em>
+            # 构建工作流
+            zen = Zen()
+            zen.add_tasks([fetch_task, clean_task, transform_task, save_task, notify_task])
+            
+            # 执行
+            zen.execute()
+            </code></pre>
+            <p><strong>优势：</strong>
+            - ✅ 声明式任务定义
+            - ✅ 自动依赖解析
+            - ✅ 并行执行优化
+            - ✅ 完整执行追踪</p>
+            <hr />
+            <h2 id="核心设计">核心设计</h2>
+            <h3 id="1-依赖图-dependency-graph">1. 依赖图（Dependency Graph）</h3>
+            <pre><code class="language-text">┌─────────┐
+            │  fetch  │
+            └────┬────┘
+                 │
+                 ▼
+            ┌─────────┐
+            │  clean  │
+            └────┬────┘
+                 │
+                 ▼
+            ┌─────────┐
+            │transform│
+            └────┬────┘
+                 │
+                 ▼
+            ┌─────────┐
+            │  save   │
+            └────┬────┘
+                 │
+                 ▼
+            ┌─────────┐
+            │ notify  │
+            └─────────┘
+            </code></pre>
+            <h3 id="2-核心概念">2. 核心概念</h3>
+            <table>
+            <thead>
+            <tr>
+            <th>概念</th>
+            <th>说明</th>
+            <th>类比</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td><strong>Task（任务）</strong></td>
+            <td>最小执行单元</td>
+            <td>禅宗公案</td>
+            </tr>
+            <tr>
+            <td><strong>Module（模块）</strong></td>
+            <td>任务集合</td>
+            <td>禅宗寺院</td>
+            </tr>
+            <tr>
+            <td><strong>Graph（图）</strong></td>
+            <td>依赖关系</td>
+            <td>因果轮回</td>
+            </tr>
+            <tr>
+            <td><strong>Context（上下文）</strong></td>
+            <td>执行环境</td>
+            <td>禅定境界</td>
+            </tr>
+            <tr>
+            <td><strong>Executor（执行器）</strong></td>
+            <td>调度引擎</td>
+            <td>禅师</td>
+            </tr>
+            </tbody>
+            </table>
+            <hr />
+            <h2 id="架构实现">架构实现</h2>
+            <h3 id="任务定义">任务定义</h3>
+            <pre><code class="language-python">from dataclasses import dataclass, field
+            from typing import Callable, List, Optional, Any
+            from enum import Enum, auto
+            
+            class TaskStatus(Enum):
+                PENDING = auto()
+                RUNNING = auto()
+                SUCCESS = auto()
+                FAILED = auto()
+                SKIPPED = auto()
+            
+            @dataclass
+            class Task:
+                &quot;&quot;&quot;任务定义&quot;&quot;&quot;
+                name: str
+                func: Callable[..., Any]
+                deps: List[str] = field(default_factory=list)
+                inputs: Dict[str, Any] = field(default_factory=dict)
+                outputs: Dict[str, Any] = field(default_factory=dict)
+                retry: int = 0
+                timeout: Optional[float] = None
+            
+                status: TaskStatus = field(default=TaskStatus.PENDING, init=False)
+                result: Any = field(default=None, init=False)
+                error: Optional[Exception] = field(default=None, init=False)
+                start_time: Optional[float] = field(default=None, init=False)
+                end_time: Optional[float] = field(default=None, init=False)
+            
+                def execute(self, context: 'Context') -&gt; Any:
+                    &quot;&quot;&quot;执行任务&quot;&quot;&quot;
+                    self.status = TaskStatus.RUNNING
+                    self.start_time = time.time()
+            
+                    try:
+                        # 注入依赖任务的输出
+                        inputs = self._resolve_inputs(context)
+                        self.result = self.func(**inputs)
+                        self.status = TaskStatus.SUCCESS
+                    except Exception as e:
+                        self.error = e
+                        self.status = TaskStatus.FAILED
+                        raise
+                    finally:
+                        self.end_time = time.time()
+            
+                    return self.result
+            </code></pre>
+            <h3 id="依赖图构建">依赖图构建</h3>
+            <pre><code class="language-python">from collections import defaultdict, deque
+            
+            class DependencyGraph:
+                &quot;&quot;&quot;依赖图管理&quot;&quot;&quot;
+            
+                def __init__(self):
+                    self.tasks: Dict[str, Task] = {}
+                    self.dependencies: Dict[str, Set[str]] = defaultdict(set)
+                    self.dependents: Dict[str, Set[str]] = defaultdict(set)
+            
+                def add_task(self, task: Task):
+                    &quot;&quot;&quot;添加任务&quot;&quot;&quot;
+                    self.tasks[task.name] = task
+            
+                    for dep in task.deps:
+                        self.dependencies[task.name].add(dep)
+                        self.dependents[dep].add(task.name)
+            
+                def topological_sort(self) -&gt; List[str]:
+                    &quot;&quot;&quot;拓扑排序 - 确定执行顺序&quot;&quot;&quot;
+                    in_degree = {name: len(deps) for name, deps in self.dependencies.items()}
+                    queue = deque([name for name in self.tasks if in_degree[name] == 0])
+                    result = []
+            
+                    while queue:
+                        current = queue.popleft()
+                        result.append(current)
+            
+                        for dependent in self.dependents[current]:
+                            in_degree[dependent] -= 1
+                            if in_degree[dependent] == 0:
+                                queue.append(dependent)
+            
+                    if len(result) != len(self.tasks):
+                        raise CircularDependencyError(&quot;检测到循环依赖&quot;)
+            
+                    return result
+            
+                def get_execution_levels(self) -&gt; List[List[str]]:
+                    &quot;&quot;&quot;获取执行层级 - 同一层可并行执行&quot;&quot;&quot;
+                    in_degree = {name: len(deps) for name, deps in self.dependencies.items()}
+                    levels = []
+                    current_level = [name for name in self.tasks if in_degree[name] == 0]
+            
+                    while current_level:
+                        levels.append(current_level)
+                        next_level = []
+            
+                        for task_name in current_level:
+                            for dependent in self.dependents[task_name]:
+                                in_degree[dependent] -= 1
+                                if in_degree[dependent] == 0:
+                                    next_level.append(dependent)
+            
+                        current_level = next_level
+            
+                    return levels
+            </code></pre>
+            <h3 id="并行执行器">并行执行器</h3>
+            <pre><code class="language-python">import asyncio
+            from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+            
+            class ParallelExecutor:
+                &quot;&quot;&quot;并行执行器&quot;&quot;&quot;
+            
+                def __init__(self, max_workers: int = 4, executor_type: str = &quot;thread&quot;):
+                    self.max_workers = max_workers
+                    self.executor_type = executor_type
+                    self.executor = self._create_executor()
+            
+                def _create_executor(self):
+                    if self.executor_type == &quot;thread&quot;:
+                        return ThreadPoolExecutor(max_workers=self.max_workers)
+                    elif self.executor_type == &quot;process&quot;:
+                        return ProcessPoolExecutor(max_workers=self.max_workers)
+                    else:
+                        raise ValueError(f&quot;Unknown executor type: {self.executor_type}&quot;)
+            
+                def execute_parallel(self, tasks: List[Task], context: Context) -&gt; List[Any]:
+                    &quot;&quot;&quot;并行执行任务&quot;&quot;&quot;
+                    futures = [
+                        self.executor.submit(task.execute, context)
+                        for task in tasks
+                    ]
+                    return [f.result() for f in futures]
+            
+                async def execute_parallel_async(self, tasks: List[Task], context: Context) -&gt; List[Any]:
+                    &quot;&quot;&quot;异步并行执行&quot;&quot;&quot;
+                    loop = asyncio.get_event_loop()
+                    futures = [
+                        loop.run_in_executor(self.executor, task.execute, context)
+                        for task in tasks
+                    ]
+                    return await asyncio.gather(*futures)
+            </code></pre>
+            <hr />
+            <h2 id="实战案例">实战案例</h2>
+            <h3 id="1-数据etl管道">1. 数据ETL管道</h3>
+            <pre><code class="language-python">from zen import Zen, Task
+            import pandas as pd
+            
+            # 定义任务函数
+            def extract_from_api(source: str) -&gt; pd.DataFrame:
+                &quot;&quot;&quot;从API提取数据&quot;&quot;&quot;
+                import requests
+                response = requests.get(source)
+                return pd.DataFrame(response.json())
+            
+            def extract_from_db(connection_string: str) -&gt; pd.DataFrame:
+                &quot;&quot;&quot;从数据库提取数据&quot;&quot;&quot;
+                import sqlalchemy
+                engine = sqlalchemy.create_engine(connection_string)
+                return pd.read_sql(&quot;SELECT * FROM users&quot;, engine)
+            
+            def merge_dataframes(api_data: pd.DataFrame, db_data: pd.DataFrame) -&gt; pd.DataFrame:
+                &quot;&quot;&quot;合并数据&quot;&quot;&quot;
+                return pd.merge(api_data, db_data, on=&quot;user_id&quot;, how=&quot;left&quot;)
+            
+            def clean_data(data: pd.DataFrame) -&gt; pd.DataFrame:
+                &quot;&quot;&quot;清洗数据&quot;&quot;&quot;
+                data = data.dropna()
+                data = data.drop_duplicates()
+                return data
+            
+            def transform_data(data: pd.DataFrame) -&gt; pd.DataFrame:
+                &quot;&quot;&quot;转换数据&quot;&quot;&quot;
+                data[&quot;age_group&quot;] = pd.cut(data[&quot;age&quot;], bins=[0, 18, 30, 50, 100], 
+                                           labels=[&quot;少年&quot;, &quot;青年&quot;, &quot;中年&quot;, &quot;老年&quot;])
+                return data
+            
+            def load_to_warehouse(data: pd.DataFrame, warehouse_url: str):
+                &quot;&quot;&quot;加载到数据仓库&quot;&quot;&quot;
+                data.to_parquet(f&quot;{warehouse_url}/users.parquet&quot;, index=False)
+                return f&quot;Loaded {len(data)} rows&quot;
+            
+            # 构建工作流
+            zen = Zen()
+            
+            zen.add_tasks([
+                Task(&quot;extract_api&quot;, extract_from_api, inputs={&quot;source&quot;: &quot;https://api.example.com/users&quot;}),
+                Task(&quot;extract_db&quot;, extract_from_db, inputs={&quot;connection_string&quot;: &quot;postgresql://localhost/db&quot;}),
+                Task(&quot;merge&quot;, merge_data, deps=[&quot;extract_api&quot;, &quot;extract_db&quot;]),
+                Task(&quot;clean&quot;, clean_data, deps=[&quot;merge&quot;]),
+                Task(&quot;transform&quot;, transform_data, deps=[&quot;clean&quot;]),
+                Task(&quot;load&quot;, load_to_warehouse, deps=[&quot;transform&quot;], 
+                     inputs={&quot;warehouse_url&quot;: &quot;s3://data-warehouse/&quot;})
+            ])
+            
+            # 执行并可视化
+            result = zen.execute()
+            zen.visualize()  # 生成执行图
+            </code></pre>
+            <h3 id="2-ai-agent工作流">2. AI Agent工作流</h3>
+            <pre><code class="language-python">from zen import Zen, Task
+            import openai
+            
+            # 定义AI任务
+            def understand_intent(user_input: str) -&gt; dict:
+                &quot;&quot;&quot;理解用户意图&quot;&quot;&quot;
+                response = openai.ChatCompletion.create(
+                    model=&quot;gpt-4&quot;,
+                    messages=[{
+                        &quot;role&quot;: &quot;system&quot;,
+                        &quot;content&quot;: &quot;分析用户意图，提取关键信息&quot;
+                    }, {
+                        &quot;role&quot;: &quot;user&quot;,
+                        &quot;content&quot;: user_input
+                    }]
+                )
+                return json.loads(response.choices[0].message.content)
+            
+            def retrieve_knowledge(intent: dict) -&gt; list:
+                &quot;&quot;&quot;检索知识库&quot;&quot;&quot;
+                from vector_db import search
+                return search(intent[&quot;keywords&quot;])
+            
+            def generate_response(intent: dict, knowledge: list) -&gt; str:
+                &quot;&quot;&quot;生成回复&quot;&quot;&quot;
+                context = &quot;\n&quot;.join(knowledge)
+                response = openai.ChatCompletion.create(
+                    model=&quot;gpt-4&quot;,
+                    messages=[{
+                        &quot;role&quot;: &quot;system&quot;,
+                        &quot;content&quot;: f&quot;基于以下知识回答问题:\n{context}&quot;
+                    }, {
+                        &quot;role&quot;: &quot;user&quot;,
+                        &quot;content&quot;: intent[&quot;question&quot;]
+                    }]
+                )
+                return response.choices[0].message.content
+            
+            def save_conversation(user_input: str, response: str, intent: dict):
+                &quot;&quot;&quot;保存对话历史&quot;&quot;&quot;
+                db.insert({
+                    &quot;input&quot;: user_input,
+                    &quot;response&quot;: response,
+                    &quot;intent&quot;: intent,
+                    &quot;timestamp&quot;: datetime.now()
+                })
+            
+            # 构建AI工作流
+            agent = Zen()
+            agent.add_tasks([
+                Task(&quot;intent&quot;, understand_intent, inputs={&quot;user_input&quot;: &quot;{{user_input}}&quot;}),
+                Task(&quot;retrieve&quot;, retrieve_knowledge, deps=[&quot;intent&quot;]),
+                Task(&quot;generate&quot;, generate_response, deps=[&quot;intent&quot;, &quot;retrieve&quot;]),
+                Task(&quot;save&quot;, save_conversation, deps=[&quot;generate&quot;])
+            ])
+            
+            # 运行Agent
+            result = agent.execute(context={&quot;user_input&quot;: &quot;Python中的装饰器怎么用？&quot;})
+            print(result[&quot;generate&quot;])
+            </code></pre>
+            <hr />
+            <h2 id="高级特性">高级特性</h2>
+            <h3 id="1-条件执行">1. 条件执行</h3>
+            <pre><code class="language-python">def should_process(data: dict) -&gt; bool:
+                return data.get(&quot;status&quot;) == &quot;active&quot;
+            
+            conditional_task = Task(
+                &quot;conditional_process&quot;,
+                process_data,
+                deps=[&quot;fetch&quot;],
+                condition=should_process  # 条件判断
+            )
+            </code></pre>
+            <h3 id="2-错误重试">2. 错误重试</h3>
+            <pre><code class="language-python">unreliable_task = Task(
+                &quot;api_call&quot;,
+                call_external_api,
+                retry=3,                    # 重试3次
+                retry_delay=2,              # 每次间隔2秒
+                retry_backoff=&quot;exponential&quot; # 指数退避
+            )
+            </code></pre>
+            <h3 id="3-执行追踪">3. 执行追踪</h3>
+            <pre><code class="language-python">from zen.tracing import ConsoleTracer, JSONTracer
+            
+            # 添加追踪器
+            zen.add_tracer(ConsoleTracer())
+            zen.add_tracer(JSONTracer(output_file=&quot;execution.json&quot;))
+            
+            # 执行后会生成详细的执行报告
+            zen.execute()
+            </code></pre>
+            <hr />
+            <h2 id="性能对比">性能对比</h2>
+            <table>
+            <thead>
+            <tr>
+            <th>场景</th>
+            <th>串行执行</th>
+            <th>Zen并行</th>
+            <th>提升</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>10个独立API调用</td>
+            <td>10s</td>
+            <td>2s</td>
+            <td><strong>5x</strong></td>
+            </tr>
+            <tr>
+            <td>数据处理管道</td>
+            <td>30s</td>
+            <td>12s</td>
+            <td><strong>2.5x</strong></td>
+            </tr>
+            <tr>
+            <td>AI工作流</td>
+            <td>5s</td>
+            <td>3s</td>
+            <td><strong>1.7x</strong></td>
+            </tr>
+            </tbody>
+            </table>
+            <hr />
+            <h2 id="安装与使用">安装与使用</h2>
+            <pre><code class="language-bash"># 安装
+            pip install zen-framework
+            
+            # 快速开始
+            zen init my-workflow
+            cd my-workflow
+            zen run
+            </code></pre>
+            <hr />
+            <h2 id="总结">总结</h2>
+            <p>Zen框架的设计哲学：</p>
+            <ol>
+            <li><strong>简单即美</strong>：最小化概念，最大化表达</li>
+            <li><strong>显式优于隐式</strong>：依赖关系清晰可见</li>
+            <li><strong>并行是常态</strong>：充分利用现代硬件</li>
+            <li><strong>失败是常态</strong>：优雅的错误处理</li>
+            </ol>
+            <h3 id="与同类框架对比">与同类框架对比</h3>
+            <table>
+            <thead>
+            <tr>
+            <th>特性</th>
+            <th>Zen</th>
+            <th>Airflow</th>
+            <th>Prefect</th>
+            <th>Luigi</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>学习曲线</td>
+            <td>⭐⭐ 简单</td>
+            <td>⭐⭐⭐⭐ 复杂</td>
+            <td>⭐⭐⭐ 中等</td>
+            <td>⭐⭐⭐ 中等</td>
+            </tr>
+            <tr>
+            <td>并行执行</td>
+            <td>✅ 内置</td>
+            <td>✅ 支持</td>
+            <td>✅ 支持</td>
+            <td>✅ 支持</td>
+            </tr>
+            <tr>
+            <td>可视化</td>
+            <td>✅ 内置</td>
+            <td>✅ 完善</td>
+            <td>✅ 完善</td>
+            <td>⚠️ 有限</td>
+            </tr>
+            <tr>
+            <td>适用规模</td>
+            <td>小到中型</td>
+            <td>大型</td>
+            <td>中大型</td>
+            <td>中大型</td>
+            </tr>
+            <tr>
+            <td>部署复杂度</td>
+            <td>⭐ 简单</td>
+            <td>⭐⭐⭐⭐⭐ 复杂</td>
+            <td>⭐⭐⭐⭐ 中等</td>
+            <td>⭐⭐⭐ 中等</td>
+            </tr>
+            </tbody>
+            </table>
+            <hr />
+            <h2 id="相关项目">相关项目</h2>
+            <ul>
+            <li><a href="https://github.com/xfengyin/XingJu" target="_blank" rel="noopener noreferrer">XingJu 星聚</a> - 跨平台聚合应用</li>
+            <li><a href="https://github.com/xfengyin/kongming" target="_blank" rel="noopener noreferrer">Kongming 孔明</a> - Go微服务框架</li>
+            </ul>
+            <hr />
+            <p><em>最后更新：2026年4月3日</em></p>
         </div>
     </article>
+
+    <aside class="toc-sidebar">
+    <div class="toc-title">目录</div>
+    <ul>
+<li><a href="#引言" class="toc-h2">引言</a></li>
+<li><a href="#为什么需要zen" class="toc-h3">为什么需要Zen？</a></li>
+<li><a href="#传统脚本的问题" class="toc-h4">传统脚本的问题</a></li>
+<li><a href="#zen的解决方案" class="toc-h4">Zen的解决方案</a></li>
+<li><a href="#核心设计" class="toc-h4">核心设计</a></li>
+<li><a href="#1-依赖图-dependency-graph" class="toc-h4">1. 依赖图（Dependency Graph）</a></li>
+<li><a href="#2-核心概念" class="toc-h4">2. 核心概念</a></li>
+<li><a href="#架构实现" class="toc-h4">架构实现</a></li>
+<li><a href="#任务定义" class="toc-h4">任务定义</a></li>
+<li><a href="#依赖图构建" class="toc-h4">依赖图构建</a></li>
+<li><a href="#并行执行器" class="toc-h4">并行执行器</a></li>
+<li><a href="#实战案例" class="toc-h4">实战案例</a></li>
+<li><a href="#1-数据etl管道" class="toc-h4">1. 数据ETL管道</a></li>
+<li><a href="#2-ai-agent工作流" class="toc-h4">2. AI Agent工作流</a></li>
+<li><a href="#高级特性" class="toc-h4">高级特性</a></li>
+<li><a href="#1-条件执行" class="toc-h4">1. 条件执行</a></li>
+<li><a href="#2-错误重试" class="toc-h4">2. 错误重试</a></li>
+<li><a href="#3-执行追踪" class="toc-h4">3. 执行追踪</a></li>
+<li><a href="#性能对比" class="toc-h4">性能对比</a></li>
+<li><a href="#安装与使用" class="toc-h4">安装与使用</a></li>
+<li><a href="#总结" class="toc-h4">总结</a></li>
+<li><a href="#与同类框架对比" class="toc-h4">与同类框架对比</a></li>
+<li><a href="#相关项目" class="toc-h4">相关项目</a></li>
+
+    </ul>
+</aside>
+
+    <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+
     <footer>
         <p>© 2024-2026 xfengyin. 荣耀存于心，而非留于形。</p>
     </footer>
+
+    <!-- Prism.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-shell-session.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-docker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-ini.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-protobuf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-scss.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-git.min.js"></script>
+
+    <!-- Mermaid.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.0/mermaid.min.js"></script>
+
+    <script>
+    // Mermaid 初始化
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#6366f1',
+            primaryTextColor: '#f1f5f9',
+            primaryBorderColor: '#8b5cf6',
+            lineColor: '#94a3b8',
+            secondaryColor: '#16162a',
+            tertiaryColor: '#0f0f1a'
+        }
+    });
+
+    // 代码复制按钮
+    document.querySelectorAll('pre').forEach(function(pre) {
+        var code = pre.querySelector('code');
+        if (!code) return;
+
+        // 获取语言
+        var langClass = code.className.match(/language-(\w+)/);
+        var lang = langClass ? langClass[1] : '';
+
+        // 创建头部容器
+        var header = document.createElement('div');
+        header.className = 'code-block-header';
+
+        // 语言标签
+        var langLabel = document.createElement('span');
+        langLabel.className = 'code-block-lang';
+        var langNames = {
+            python: 'Python', javascript: 'JavaScript', typescript: 'TypeScript',
+            bash: 'Bash', shell: 'Shell', go: 'Go', rust: 'Rust',
+            yaml: 'YAML', json: 'JSON', html: 'HTML', css: 'CSS',
+            c: 'C', cpp: 'C++', sql: 'SQL', docker: 'Docker',
+            ini: 'INI', text: 'Text', default: 'Code',
+            tsx: 'TSX', jsx: 'JSX', protobuf: 'Protobuf',
+            scss: 'SCSS', markdown: 'Markdown', gitignore: 'Git',
+            git: 'Git'
+        };
+        langLabel.textContent = langNames[lang] || langNames['default'];
+
+        // 复制按钮
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'code-copy-btn';
+        copyBtn.innerHTML = '📋 复制';
+        copyBtn.addEventListener('click', function() {
+            var text = code.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                copyBtn.innerHTML = '✅ 已复制';
+                copyBtn.classList.add('copied');
+                setTimeout(function() {
+                    copyBtn.innerHTML = '📋 复制';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(function() {
+                // fallback
+                var textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                copyBtn.innerHTML = '✅ 已复制';
+                copyBtn.classList.add('copied');
+                setTimeout(function() {
+                    copyBtn.innerHTML = '📋 复制';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+
+        header.appendChild(langLabel);
+        header.appendChild(copyBtn);
+        pre.insertBefore(header, pre.firstChild);
+
+        // 添加 line-numbers class
+        pre.classList.add('line-numbers');
+    });
+
+    // 返回顶部按钮
+    var backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // TOC 滚动高亮
+    var tocLinks = document.querySelectorAll('.toc-sidebar a');
+    if (tocLinks.length > 0) {
+        var headings = [];
+        tocLinks.forEach(function(link) {
+            var id = link.getAttribute('href').substring(1);
+            var el = document.getElementById(id);
+            if (el) headings.push({ el: el, link: link });
+        });
+
+        window.addEventListener('scroll', function() {
+            var scrollPos = window.scrollY + 120;
+            headings.forEach(function(item, i) {
+                var top = item.el.offsetTop;
+                var bottom = (i < headings.length - 1) ? headings[i + 1].el.offsetTop : Infinity;
+                if (scrollPos >= top && scrollPos < bottom) {
+                    tocLinks.forEach(function(l) { l.classList.remove('toc-active'); });
+                    item.link.classList.add('toc-active');
+                }
+            });
+        });
+    }
+
+    // 重新触发 Prism 高亮
+    Prism.highlightAll();
+    </script>
 </body>
 </html>
