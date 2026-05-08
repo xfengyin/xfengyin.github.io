@@ -4,40 +4,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags - 增强版 -->
     {% if page.description %}
-    <meta name="description" content="{{ page.description }}">
+    <meta name="description" content="{{ page.description | truncate: 160 }}">
     {% else %}
-    <meta name="description" content="{{ site.description }}">
+    <meta name="description" content="{{ site.description | truncate: 160 }}">
     {% endif %}
     
     <meta name="author" content="{{ site.author }}">
+    {% if page.keywords %}
+    <meta name="keywords" content="{{ page.keywords | join: ', ' }}">
+    {% elsif site.keywords %}
     <meta name="keywords" content="{{ site.keywords | join: ', ' }}">
+    {% endif %}
     
-    <!-- Open Graph / Social Media Meta Tags -->
-    <meta property="og:type" content="website">
+    {% if page.last_modified_at %}
+    <meta name="last-modified" content="{{ page.last_modified_at | date: '%Y-%m-%d' }}">
+    {% endif %}
+    
+    {% if page.tags %}
+    <meta name="keywords" content="{{ page.tags | join: ', ' }}">
+    {% endif %}
+    
+    {% if page.categories %}
+    <meta name="categories" content="{{ page.categories | join: ', ' }}">
+    {% endif %}
+    
+    <!-- Open Graph / Social Media Meta Tags - 增强版 -->
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
     <meta property="og:title" content="{{ page.title | default: site.title }}">
     <meta property="og:description" content="{{ page.description | default: site.description }}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:site_name" content="{{ site.title }}">
+    <meta property="og:locale" content="zh_CN">
+    
     {% if page.image %}
     <meta property="og:image" content="{{ page.image | absolute_url }}">
+    <meta property="og:image:secure_url" content="{{ page.image | absolute_url | replace: 'http://', 'https://' }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     {% else %}
-    <meta property="og:image" content="{{ '/assets/images/og-image.png' | absolute_url }}">
+    <meta property="og:image" content="{{ '/assets/img/covers/default-tech.png' | absolute_url }}">
+    <meta property="og:image:secure_url" content="{{ '/assets/img/covers/default-tech.png' | absolute_url | replace: 'http://', 'https://' }}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     {% endif %}
     
-    <!-- Twitter Card Meta Tags -->
+    {% if page.layout == 'post' %}
+    <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+    <meta property="article:modified_time" content="{{ page.last_modified_at | default: page.date | date_to_xmlschema }}">
+    <meta property="article:author" content="{{ site.author }}">
+    {% if page.tags %}
+    {% for tag in page.tags %}
+    <meta property="article:tag" content="{{ tag }}">
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    
+    <!-- Twitter Card Meta Tags - 增强版 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ page.title | default: site.title }}">
     <meta name="twitter:description" content="{{ page.description | default: site.description }}">
     {% if page.image %}
     <meta name="twitter:image" content="{{ page.image | absolute_url }}">
     {% else %}
-    <meta name="twitter:image" content="{{ '/assets/images/og-image.png' | absolute_url }}">
+    <meta name="twitter:image" content="{{ '/assets/img/covers/default-tech.png' | absolute_url }}">
     {% endif %}
     {% if site.twitter_username %}
     <meta name="twitter:site" content="@{{ site.twitter_username }}">
+    <meta name="twitter:creator" content="@{{ site.twitter_username }}">
     {% endif %}
+    <meta name="twitter:image:alt" content="{{ page.title | default: site.title }}">
+    <meta name="twitter:domain" content="{{ site.url | replace: 'https://', '' }}">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ page.url | absolute_url }}">
@@ -50,31 +90,99 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ '/assets/images/favicon-16x16.png' | relative_url }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
     
-    <!-- Fonts: Apple Design System -->
-    <!-- SF Pro is native on Apple devices; Noto Sans SC for Chinese; system-ui as universal fallback -->
+    <!-- DNS Prefetch & Preconnect - 关键资源 -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    
+    <!-- Preconnect - 建立早起连接 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    
+    <!-- Fonts: Apple Design System - 优化字体加载 -->
+    <!-- SF Pro is native on Apple devices; Noto Sans SC for Chinese; system-ui as universal fallback -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap">
+    </noscript>
     
     <!-- Monospace Font: SF Mono style -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
     
-    <!-- Font Awesome Icons -->
+    <!-- Font Awesome Icons - 优化加载 -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" as="style">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer">
+          crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" 
+              integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+              crossorigin="anonymous" referrerpolicy="no-referrer">
+    </noscript>
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Chart.js - 按需加载 - 使用defer优化 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
     
-    <!-- Prism.js for Syntax Highlighting - Custom dark theme applied via CSS -->
+    <!-- Prism.js - 延迟加载语法高亮 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js" defer></script>
+    
+    <!-- Custom Scripts - 关键脚本使用defer -->
+    <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/code-copy.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/skills-chart.js' | relative_url }}" defer></script>
+    
+    <!-- Prism.js for Syntax Highlighting - 延迟加载 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" 
-          rel="stylesheet">
+          rel="preload" as="style"
+          media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" 
+              rel="stylesheet">
+    </noscript>
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/syntax-highlighting.css' | relative_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/animations.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/animations.css' | relative_url }}" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="{{ '/assets/css/animations.css' | relative_url }}">
+    </noscript>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:;
+                   img-src 'self' data: https: blob:;
+                   connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.google-analytics.com;
+                   frame-src 'self' https://www.youtube.com https://player.vimeo.com;
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'self';
+                   frame-ancestors 'self';">
+    
+    <!-- Permissions Policy -->
+    <meta http-equiv="Permissions-Policy" 
+          content="accelerometer=(), camera=(), document-domain=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), sync-xhr=(self), usb=(), xr-spatial-tracking=()">
     
     <!-- Theme Color - Apple style -->
     <meta name="theme-color" content="#1d1d1f">
@@ -83,21 +191,69 @@
     <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
     
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data (JSON-LD) - 增强版 -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "{{ site.title }}",
-        "description": "{{ site.description }}",
-        "url": "{{ site.url }}",
+        "@type": "{% if page.layout == 'post' %}Article{% else %}WebSite{% endif %}",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ page.url | absolute_url }}"
+        },
+        "headline": "{{ page.title | default: site.title | escape }}",
+        "description": "{{ page.description | default: site.description | escape }}",
+        "image": "{{ page.image | default: '/assets/img/covers/default-tech.png' | absolute_url }}",
+        "url": "{{ page.url | absolute_url }}",
+        "datePublished": "{% if page.date %}{{ page.date | date_to_xmlschema }}{% endif %}",
+        "dateModified": "{% if page.last_modified_at %}{{ page.last_modified_at | date_to_xmlschema }}{% elsif page.date %}{{ page.date | date_to_xmlschema }}{% endif %}",
         "author": {
             "@type": "Person",
             "name": "{{ site.author }}",
             "url": "{{ site.url }}"
-        }
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ site.title }}",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ '/assets/img/covers/default-tech.png' | absolute_url }}"
+            }
+        },
+        "keywords": "{% if page.tags %}{{ page.tags | join: ', ' }}{% elsif site.keywords %}{{ site.keywords | join: ', ' }}{% endif %}",
+        "articleSection": "{% if page.categories %}{{ page.categories | first }}{% endif %}",
+        "wordCount": "{% if page.content %}{{ page.content | number_of_words }}{% endif %}",
+        "timeRequired": "{% if page.content %}PT{{ page.content | number_of_words | divided_by: 200 }}M{% endif %}"
     }
     </script>
+    
+    {% if page.layout == 'post' %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "{{ site.url }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "{{ '/blog/' | absolute_url }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ page.title | escape }}",
+                "item": "{{ page.url | absolute_url }}"
+            }
+        ]
+    }
+    </script>
+    {% endif %}
     
     <!-- Google Analytics (if configured) -->
     {% if site.google_analytics %}
