@@ -8,6 +8,9 @@ on:
       - .gitignore
       - README.md
       - LICENSE
+      - '**.md'
+      - 'docs/**'
+      - 'tools/**'
   workflow_dispatch:
 
 permissions:
@@ -17,7 +20,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -38,10 +41,18 @@ jobs:
           ruby-version: 3.2
           bundler-cache: true
 
+      - name: 安装依赖
+        run: bundle install
+
       - name: Build site
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: "production"
+
+      - name: 验证构建产物
+        run: |
+          test -f "_site${{ steps.pages.outputs.base_path }}/index.html" || (echo "构建失败：index.html 不存在" && exit 1)
+          echo "构建产物验证通过"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
