@@ -1,4 +1,4 @@
-// Home Page - Apple Design System
+﻿// Home Page - Apple Design System
 // Apple: Full-width hero, cinematic whitespace, alternating sections
 
 @use "../abstracts/variables" as vars;
@@ -8,8 +8,8 @@
 .home-hero {
   position: relative;
   padding: 6rem 2rem 5rem;
-  background: vars.$color-bg-dark; // Apple black
-  color: vars.$color-white;
+  background: $color-bg-dark; // Apple black
+  color: $color-white;
   text-align: center;
   overflow: hidden;
   
@@ -35,20 +35,20 @@
   
   // Hero Title - Apple Display Hero (56px, weight 600, lh 1.07)
   &-title {
-    font-family: vars.$font-family-display;
+    font-family: $font-family-display;
     font-size: 3.5rem;
     font-weight: 600;
     line-height: 1.07;
     letter-spacing: -0.028em;
-    margin-bottom: vars.$spacing-4;
-    color: vars.$color-white;
+    margin-bottom: $spacing-4;
+    color: $color-white;
     
     @include respond-to(md) {
       font-size: 3.5rem;
     }
     
     &-highlight {
-      color: vars.$color-primary-light; // Apple bright blue on dark
+      color: $color-primary-light; // Apple bright blue on dark
       position: relative;
       display: inline;
       
@@ -63,7 +63,7 @@
       font-weight: 400;
       line-height: 1.19;
       letter-spacing: 0.0231em;
-      margin-bottom: vars.$spacing-6;
+      margin-bottom: $spacing-6;
       color: rgba(255, 255, 255, 0.85);
       
       @include respond-to(md) {
@@ -75,7 +75,7 @@
   &-description {
     font-size: 1.0625rem;
     line-height: 1.47;
-    margin-bottom: vars.$spacing-8;
+    margin-bottom: $spacing-8;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -91,7 +91,7 @@
   &-actions {
     display: flex;
     flex-direction: column;
-    gap: vars.$spacing-3;
+    gap: $spacing-3;
     justify-content: center;
     
     @include respond-to(sm) {
@@ -111,8 +111,8 @@
   &-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: vars.$spacing-6;
-    margin-top: vars.$spacing-12;
+    gap: $spacing-6;
+    margin-top: $spacing-12;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -131,8 +131,8 @@
       font-weight: 600;
       line-height: 1.07;
       letter-spacing: -0.028em;
-      margin-bottom: vars.$spacing-1;
-      color: vars.$color-white;
+      margin-bottom: $spacing-1;
+      color: $color-white;
     }
     
     &-label {
@@ -146,7 +146,7 @@
   // Scroll indicator
   &-scroll {
     position: absolute;
-    bottom: vars.$spacing-6;
+    bottom: $spacing-6;
     left: 50%;
     transform: translateX(-50%);
     color: rgba(255, 255, 255, 0.48);
@@ -161,32 +161,32 @@
 
 // Features Section - Apple alternating light
 .home-features {
-  padding: vars.$section-spacing vars.$spacing-4;
-  background-color: vars.$color-bg-body;
+  padding: $section-spacing $spacing-4;
+  background-color: $color-bg-body;
   
   @include respond-to(md) {
-    padding: vars.$section-spacing-mobile vars.$spacing-6;
+    padding: $section-spacing-mobile $spacing-6;
   }
   
   &-header {
     text-align: center;
     max-width: 600px;
-    margin: 0 auto vars.$spacing-12;
+    margin: 0 auto $spacing-12;
   }
   
   &-title {
-    font-family: vars.$font-family-display;
+    font-family: $font-family-display;
     font-size: 2.5rem;
     font-weight: 600;
-    color: vars.$color-text-primary;
-    margin-bottom: vars.$spacing-3;
+    color: $color-text-primary;
+    margin-bottom: $spacing-3;
     letter-spacing: -0.028em;
     line-height: 1.10;
   }
   
   &-subtitle {
     font-size: 1.0625rem;
-    color: vars.$color-text-secondary;
+    color: $color-text-secondary;
     line-height: 1.47;
     letter-spacing: -0.022em;
   }
@@ -194,7 +194,7 @@
   &-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: vars.$spacing-6;
+    gap: $spacing-6;
     max-width: 980px;
     margin: 0 auto;
     
@@ -210,23 +210,23 @@
   // Feature Card - Apple tile style
   &-card {
     text-align: center;
-    padding: vars.$spacing-6;
-    background-color: vars.$color-white;
+    padding: $spacing-6;
+    background-color: $color-white;
     border: none;
-    border-radius: vars.$border-radius-xl;
-    box-shadow: vars.$shadow-sm;
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-sm;
     transition: all 0.3s ease;
     
     &:hover {
       transform: translateY(-3px);
-      box-shadow: vars.$shadow-md;
+      box-shadow: $shadow-md;
     }
     
     &-icon {
       width: 3.5rem;
       height: 3.5rem;
-      margin: 0 auto vars.$spacing-4;
-      color: vars.$color-primary;
+      margin: 0 auto $spacing-4;
+      color: $color-primary;
       background-color: rgba(0, 113, 227, 0.06);
       border-radius: 50%;
       display: flex;
@@ -242,15 +242,15 @@
     &-title {
       font-size: 1.3125rem;
       font-weight: 600;
-      color: vars.$color-text-primary;
-      margin-bottom: vars.$spacing-3;
+      color: $color-text-primary;
+      margin-bottom: $spacing-3;
       letter-spacing: 0.0231em;
       line-height: 1.19;
     }
     
     &-description {
       font-size: 0.9375rem;
-      color: vars.$color-text-secondary;
+      color: $color-text-secondary;
       line-height: 1.47;
       letter-spacing: -0.022em;
     }
@@ -259,11 +259,11 @@
 
 // Blog Preview Section - Apple tiles
 .home-blog {
-  padding: vars.$section-spacing vars.$spacing-4;
-  background-color: vars.$color-bg-alt;
+  padding: $section-spacing $spacing-4;
+  background-color: $color-bg-alt;
   
   @include respond-to(md) {
-    padding: vars.$section-spacing-mobile vars.$spacing-6;
+    padding: $section-spacing-mobile $spacing-6;
   }
   
   &-header {
@@ -271,7 +271,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: vars.$spacing-12;
+    margin-bottom: $spacing-12;
     max-width: 980px;
     margin-left: auto;
     margin-right: auto;
@@ -284,8 +284,8 @@
   &-title {
     font-size: 2.5rem;
     font-weight: 600;
-    color: vars.$color-text-primary;
-    margin-bottom: vars.$spacing-3;
+    color: $color-text-primary;
+    margin-bottom: $spacing-3;
     text-align: center;
     letter-spacing: -0.028em;
     line-height: 1.10;
@@ -299,8 +299,8 @@
   &-link {
     display: inline-flex;
     align-items: center;
-    gap: vars.$spacing-1;
-    color: vars.$color-primary;
+    gap: $spacing-1;
+    color: $color-primary;
     text-decoration: none;
     font-weight: 400;
     font-size: 0.875rem;
@@ -308,14 +308,14 @@
     
     &:hover {
       text-decoration: underline;
-      color: vars.$color-primary-dark;
+      color: $color-primary-dark;
     }
   }
   
   &-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: vars.$spacing-5;
+    gap: $spacing-5;
     max-width: 980px;
     margin: 0 auto;
     
@@ -330,16 +330,16 @@
   
   // Blog Card - Apple tile
   &-card {
-    background-color: vars.$color-white;
+    background-color: $color-white;
     border: none;
-    border-radius: vars.$border-radius-xl;
+    border-radius: $border-radius-xl;
     overflow: hidden;
-    box-shadow: vars.$shadow-sm;
+    box-shadow: $shadow-sm;
     transition: all 0.3s ease;
     
     &:hover {
       transform: translateY(-3px);
-      box-shadow: vars.$shadow-md;
+      box-shadow: $shadow-md;
     }
   }
   
@@ -357,38 +357,38 @@
     
     &-category {
       position: absolute;
-      top: vars.$spacing-3;
-      left: vars.$spacing-3;
+      top: $spacing-3;
+      left: $spacing-3;
       padding: 0.25rem 0.625rem;
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: saturate(180%) blur(20px);
-      color: vars.$color-near-black;
+      color: $color-near-black;
       font-size: 0.75rem;
       font-weight: 600;
-      border-radius: vars.$border-radius-pill;
+      border-radius: $border-radius-pill;
       letter-spacing: -0.01em;
     }
   }
   
   &-content {
-    padding: vars.$spacing-5;
+    padding: $spacing-5;
   }
   
   &-meta {
     display: flex;
     align-items: center;
-    gap: vars.$spacing-3;
-    margin-bottom: vars.$spacing-3;
+    gap: $spacing-3;
+    margin-bottom: $spacing-3;
     font-size: 0.75rem;
-    color: vars.$color-text-secondary;
+    color: $color-text-secondary;
     letter-spacing: -0.012em;
   }
   
   &-card-title {
     font-size: 1.3125rem;
     font-weight: 600;
-    color: vars.$color-text-primary;
-    margin-bottom: vars.$spacing-3;
+    color: $color-text-primary;
+    margin-bottom: $spacing-3;
     line-height: 1.19;
     letter-spacing: 0.0231em;
     
@@ -397,16 +397,16 @@
       text-decoration: none;
       
       &:hover {
-        color: vars.$color-primary;
+        color: $color-primary;
       }
     }
   }
   
   &-excerpt {
     font-size: 0.9375rem;
-    color: vars.$color-text-secondary;
+    color: $color-text-secondary;
     line-height: 1.47;
-    margin-bottom: vars.$spacing-4;
+    margin-bottom: $spacing-4;
     letter-spacing: -0.022em;
   }
   
@@ -415,7 +415,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    color: vars.$color-primary;
+    color: $color-primary;
     text-decoration: none;
     font-weight: 400;
     font-size: 0.875rem;
@@ -459,7 +459,7 @@
 }
 
 // Responsive
-@include respond-to-max(vars.$breakpoint-sm) {
+@include respond-to-max($breakpoint-sm) {
   .home-hero {
     padding: 4rem 1.5rem 3rem;
     
@@ -474,7 +474,7 @@
   
   .home-features,
   .home-blog {
-    padding: vars.$spacing-12 vars.$spacing-3;
+    padding: $spacing-12 $spacing-3;
   }
 }
 
@@ -482,6 +482,7 @@
 @media print {
   .home-hero {
     background: none !important;
-    color: vars.$color-black !important;
+    color: $color-black !important;
   }
 }
+

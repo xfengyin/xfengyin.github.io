@@ -1,34 +1,34 @@
-// Main SCSS Entry Point - Apple Design System
+﻿// Main SCSS Entry Point - Apple Design System
 // xfengyin.github.io
 
-@use 'abstracts/variables' as vars;
-@use 'abstracts/mixins' as mix;
-@use 'base/reset';
-@use 'base/typography';
-@use 'components/buttons';
-@use 'components/cards';
-@use 'layout/header';
-@use 'layout/footer';
-@use 'pages/home';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+@import 'base/reset';
+@import 'base/typography';
+@import 'components/buttons';
+@import 'components/cards';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'pages/home';
 
 // Global Styles - Apple Design System
 body {
-  font-family: vars.$font-family-display;
-  color: vars.$color-text-primary;
-  background-color: vars.$color-bg-alt;
+  font-family: $font-family-display;
+  color: $color-text-primary;
+  background-color: $color-bg-alt;
   line-height: 1.47;
-  letter-spacing: vars.$letter-spacing-base;
+  letter-spacing: $letter-spacing-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 // Container - Apple max-width 980px
 .container {
-  max-width: vars.$container-max-width;
+  max-width: $container-max-width;
   margin: 0 auto;
   padding: 0 1.5rem;
   
-  @include mix.respond-to('lg') {
+  @include respond-to('lg') {
     padding: 0 2rem;
   }
 }
@@ -38,17 +38,17 @@ body {
 .text-left { text-align: left; }
 .text-right { text-align: right; }
 
-.mt-1 { margin-top: vars.$spacing-xs; }
-.mt-2 { margin-top: vars.$spacing-sm; }
-.mt-3 { margin-top: vars.$spacing-md; }
-.mt-4 { margin-top: vars.$spacing-lg; }
-.mt-5 { margin-top: vars.$spacing-xl; }
+.mt-1 { margin-top: $spacing-xs; }
+.mt-2 { margin-top: $spacing-sm; }
+.mt-3 { margin-top: $spacing-md; }
+.mt-4 { margin-top: $spacing-lg; }
+.mt-5 { margin-top: $spacing-xl; }
 
-.mb-1 { margin-bottom: vars.$spacing-xs; }
-.mb-2 { margin-bottom: vars.$spacing-sm; }
-.mb-3 { margin-bottom: vars.$spacing-md; }
-.mb-4 { margin-bottom: vars.$spacing-lg; }
-.mb-5 { margin-bottom: vars.$spacing-xl; }
+.mb-1 { margin-bottom: $spacing-xs; }
+.mb-2 { margin-bottom: $spacing-sm; }
+.mb-3 { margin-bottom: $spacing-md; }
+.mb-4 { margin-bottom: $spacing-lg; }
+.mb-5 { margin-bottom: $spacing-xl; }
 
 // Screen Reader Only
 .sr-only {
@@ -65,8 +65,8 @@ body {
 
 // Selection - Apple Blue
 ::selection {
-  background-color: rgba(vars.$color-primary, 0.15);
-  color: vars.$color-text-primary;
+  background-color: rgba($color-primary, 0.15);
+  color: $color-text-primary;
 }
 
 // Smooth scrolling
@@ -76,10 +76,11 @@ html {
 
 // Focus styles - Apple accessibility
 :focus-visible {
-  outline: 2px solid vars.$color-primary;
+  outline: 2px solid $color-primary;
   outline-offset: 2px;
 }
 
 :focus:not(:focus-visible) {
   outline: none;
 }
+
