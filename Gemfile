@@ -20,7 +20,7 @@ gem "wdm", "~> 0.1", :platforms => [:mingw, :x64_mingw, :mswin]
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 group :test do
-  gem "htmlproofer", "~> 5.0"
+  gem "html-proofer", "~> 5.0"
   gem "bundler-audit", "~> 0.9"
 end
 
