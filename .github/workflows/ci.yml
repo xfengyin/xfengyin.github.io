@@ -1,4 +1,4 @@
-name: CI - 博客构建与测试
+﻿name: CI - 鍗氬鏋勫缓涓庢祴璇?
 
 on:
   push:
@@ -23,83 +23,83 @@ on:
       - '_includes/**'
       - '_sass/**'
       - 'assets/**'
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:  # 鍏佽鎵嬪姩瑙﹀彂
 
 env:
   RUBY_VERSION: '3.2'
   JEKYLL_ENV: 'production'
 
 jobs:
-  # 代码质量检查
+  # 浠ｇ爜璐ㄩ噺妫€鏌?
   lint:
-    name: 代码质量检查
+    name: 浠ｇ爜璐ㄩ噺妫€鏌?
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
+      - name: 妫€鍑轰唬鐮?
         uses: actions/checkout@v4
 
-      - name: 设置 Ruby
+      - name: 璁剧疆 Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: 安装依赖
+      - name: 瀹夎渚濊禆
         run: bundle install
 
-      - name: 检查 Ruby 语法
+      - name: 妫€鏌?Ruby 璇硶
         run: |
           find . -name "*.rb" -type f | xargs ruby -c
 
-      - name: 检查 YAML 语法
+      - name: 妫€鏌?YAML 璇硶
         run: |
           find . -name "*.yml" -type f | xargs yamllint --no-warnings || true
           find . -name "*.yaml" -type f | xargs yamllint --no-warnings || true
 
-      - name: 检查 Markdown 链接
+      - name: 妫€鏌?Markdown 閾炬帴
         run: |
           bundle exec htmlproofer ./_site --check-html --disable-external --allow-missing-href --empty-alt-ignore || true
 
-  # 构建测试
+  # 鏋勫缓娴嬭瘯
   build:
-    name: 构建测试
+    name: 鏋勫缓娴嬭瘯
     runs-on: ubuntu-latest
     needs: lint
     steps:
-      - name: 检出代码
+      - name: 妫€鍑轰唬鐮?
         uses: actions/checkout@v4
 
-      - name: 设置 Ruby
+      - name: 璁剧疆 Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: 安装依赖
+      - name: 瀹夎渚濊禆
         run: bundle install
 
-      - name: 构建网站
+      - name: 鏋勫缓缃戠珯
         run: |
           bundle exec jekyll build --trace
-          echo "构建完成，文件数量: $(find _site -type f | wc -l)"
+          echo "鏋勫缓瀹屾垚锛屾枃浠舵暟閲? $(find _site -type f | wc -l)"
 
-      - name: 检查构建结果
+      - name: 妫€鏌ユ瀯寤虹粨鏋?
         run: |
-          # 检查必要的文件是否存在
-          test -f _site/index.html || (echo "index.html 不存在" && exit 1)
-          test -d _site/assets || (echo "assets 目录不存在" && exit 1)
-          echo "✅ 基本文件检查通过"
+          # 妫€鏌ュ繀瑕佺殑鏂囦欢鏄惁瀛樺湪
+          test -f _site/index.html || (echo "index.html 涓嶅瓨鍦? && exit 1)
+          test -d _site/assets || (echo "assets 鐩綍涓嶅瓨鍦? && exit 1)
+          echo "鉁?鍩烘湰鏂囦欢妫€鏌ラ€氳繃"
 
-      - name: 验证 HTML
+      - name: 楠岃瘉 HTML
         run: |
-          # 安装 html5validator
+          # 瀹夎 html5validator
           sudo apt-get update
           sudo apt-get install -y html5validator
           
-          # 验证主要页面
+          # 楠岃瘉涓昏椤甸潰
           html5validator --root _site --ignore "*.min.js,*.min.css" --show-warnings || true
 
-      - name: 检查死链接
+      - name: 妫€鏌ユ閾炬帴
         run: |
           bundle exec htmlproofer ./_site \
             --check-html \
@@ -109,7 +109,7 @@ jobs:
             --empty-alt-ignore \
             --url-ignore "/#.*/" || true
 
-      - name: 上传构建产物
+      - name: 涓婁紶鏋勫缓浜х墿
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -117,116 +117,107 @@ jobs:
           path: _site/
           retention-days: 7
 
-  # 测试部署
+  # 娴嬭瘯閮ㄧ讲
   test-deploy:
-    name: 测试部署
+    name: 娴嬭瘯閮ㄧ讲
     runs-on: ubuntu-latest
     needs: build
     if: github.event_name == 'pull_request'
     steps:
-      - name: 检出代码
+      - name: 妫€鍑轰唬鐮?
         uses: actions/checkout@v4
 
-      - name: 设置 Ruby
+      - name: 璁剧疆 Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: 构建测试站点
+      - name: 鏋勫缓娴嬭瘯绔欑偣
         run: |
           bundle exec jekyll build --destination _test_site
-          echo "测试站点构建完成"
+          echo "娴嬭瘯绔欑偣鏋勫缓瀹屾垚"
 
-      - name: 启动测试服务器
+      - name: 鍚姩娴嬭瘯鏈嶅姟鍣?
         run: |
-          # 在后台启动测试服务器
+          # 鍦ㄥ悗鍙板惎鍔ㄦ祴璇曟湇鍔″櫒
           bundle exec jekyll serve --destination _test_site --port 8080 --host 0.0.0.0 &
-          sleep 10  # 等待服务器启动
+          sleep 10  # 绛夊緟鏈嶅姟鍣ㄥ惎鍔?
 
-      - name: 测试访问
+      - name: 娴嬭瘯璁块棶
         run: |
-          curl -f http://localhost:8080/ || (echo "无法访问本地服务器" && exit 1)
-          echo "✅ 测试服务器访问正常"
+          curl -f http://localhost:8080/ || (echo "鏃犳硶璁块棶鏈湴鏈嶅姟鍣? && exit 1)
+          echo "鉁?娴嬭瘯鏈嶅姟鍣ㄨ闂甯?
 
-  # 性能测试
+  # 鎬ц兘娴嬭瘯
   performance:
-    name: 性能测试
+    name: 鎬ц兘娴嬭瘯
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: 检出代码
+      - name: 妫€鍑轰唬鐮?
         uses: actions/checkout@v4
 
-      - name: 设置 Ruby
+      - name: 璁剧疆 Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: 构建网站
+      - name: 鏋勫缓缃戠珯
         run: bundle exec jekyll build
 
-      - name: 分析构建性能
+      - name: 鍒嗘瀽鏋勫缓鎬ц兘
         run: |
-          echo "=== 性能分析报告 ==="
-          echo "构建时间统计:"
+          echo "=== 鎬ц兘鍒嗘瀽鎶ュ憡 ==="
+          echo "鏋勫缓鏃堕棿缁熻:"
           time bundle exec jekyll build --profile
           
-          echo -e "\n文件大小统计:"
+          echo -e "\n鏂囦欢澶у皬缁熻:"
           find _site -type f -name "*.html" | xargs ls -lh | head -10
           
-          echo -e "\nCSS/JS 文件大小:"
+          echo -e "\nCSS/JS 鏂囦欢澶у皬:"
           find _site -type f \( -name "*.css" -o -name "*.js" \) | xargs ls -lh | head -10
 
-      - name: Lighthouse 测试
+      - name: Lighthouse 娴嬭瘯
         uses: treosh/lighthouse-ci-action@v11
         with:
           configPath: './lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
 
-  # 安全检查
+  # 瀹夊叏妫€鏌?
   security:
-    name: 安全检查
+    name: 瀹夊叏妫€鏌?
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
+      - name: 妫€鍑轰唬鐮?
         uses: actions/checkout@v4
 
-      - name: 依赖安全检查
+      - name: 渚濊禆瀹夊叏妫€鏌?
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
 
-      - name: 检查 Gem 依赖安全
+      - name: 妫€鏌?Gem 渚濊禆瀹夊叏
         run: |
           bundle audit check --update || true
 
-      - name: 检查敏感信息
+      - name: 妫€鏌ユ晱鎰熶俊鎭?
         run: |
-          # 检查配置文件中的敏感信息
+          # 妫€鏌ラ厤缃枃浠朵腑鐨勬晱鎰熶俊鎭?
           if grep -r "password\|secret\|token\|key" _config.yml --ignore-case; then
-            echo "⚠️  发现可能的敏感信息，请检查"
+            echo "鈿狅笍  鍙戠幇鍙兘鐨勬晱鎰熶俊鎭紝璇锋鏌?
           else
-            echo "✅ 未发现明显的敏感信息"
+            echo "鉁?鏈彂鐜版槑鏄剧殑鏁忔劅淇℃伅"
           fi
 
-      - name: 检查文件权限
+      - name: 妫€鏌ユ枃浠舵潈闄?
         run: |
           find . -type f -name "*.sh" -exec ls -la {} \;
-          echo "✅ 文件权限检查完成"
+          echo "鉁?鏂囦欢鏉冮檺妫€鏌ュ畬鎴?
 
-# 工作流通知
-notifications:
-  webhooks:
-    - url: ${{ secrets.WEBHOOK_URL }}
-      events: [workflow_run]
+# 宸ヤ綔娴侀€氱煡
 
-# 缓存配置
-cache:
-  paths:
-    - vendor/bundle
-    - .jekyll-cache
-    - node_modules
+# 缂撳瓨閰嶇疆
