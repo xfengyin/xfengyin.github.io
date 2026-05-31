@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+﻿# frozen_string_literal: true
 
 source "https://rubygems.org"
 
@@ -18,6 +18,11 @@ end
 
 gem "wdm", "~> 0.1", :platforms => [:mingw, :x64_mingw, :mswin]
 gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
+
+group :test do
+  gem "htmlproofer", "~> 5.0"
+  gem "bundler-audit", "~> 0.9"
+end
 
 # Lock jekyll version to avoid breaking changes
 # gem "jekyll", "~> 4.3"
