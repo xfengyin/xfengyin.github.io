@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ config.description }}" />
+  <meta name="author" content="{{ config.extra.author }}" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="{{ get_url(path='css/codex.css', trailing_slash=false) }}" />
+  <title>{{ section.title }} | Codex</title>
+</head>
+<body>
+  <!-- ============ title bar ============ -->
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/xfengyin.github.io</span></div>
+    <nav>
+      <a href="#about">~/about</a>
+      <a href="#posts">~/posts</a>
+      <a href="#projects">~/projects</a>
+      <a href="#skills">~/skills</a>
+      <a href="{{ config.extra.github }}" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <!-- ============ terminal hero ============ -->
+    <section class="terminal" id="terminal">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">xfengyin@github: ~</span>
+        <span class="status">bash</span>
+      </div>
+      <div class="term-body" id="termBody">
+        <!-- boot lines are rendered by js/codex.js -->
+      </div>
+    </section>
+
+    <!-- ============ about ============ -->
+    <div class="section-label" id="about">about.md</div>
+    <section class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">about.md</span>
+        <span class="status">utf-8 | markdown</span>
+      </div>
+      <div class="window-body about-grid">
+        <div class="avatar-card">
+          <img src="{{ config.extra.avatar }}" alt="avatar" />
+          <div class="name">{{ section.extra.hero_whoami }}</div>
+          <div class="role">{{ config.extra.role }}</div>
+          <span class="badge">● online</span>
+        </div>
+        <div class="about-text">
+          <div class="comment"># Hello, World! I'm...</div>
+          <h1>{{ section.extra.hero_title }}</h1>
+          <p class="lead">{{ section.extra.hero_role }}</p>
+          <div class="props">
+            <div><span class="k">quote</span> = <span class="str">"{{ section.extra.hero_quote }}"</span></div>
+            <div><span class="k">quote_en</span> = <span class="str">"{{ section.extra.hero_quote_en }}"</span></div>
+            <div><span class="k">location</span> = <span class="str">"China"</span></div>
+            <div><span class="k">focus</span> = ["硬件设计", "嵌入式", "Rust", "AI 应用"]</div>
+            <div><span class="k">github</span> = <a href="{{ config.extra.github }}" target="_blank" rel="noopener">{{ config.extra.github }}</a></div>
+            <div><span class="k">email</span> = <a href="mailto:{{ config.extra.email }}">{{ config.extra.email }}</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ posts ============ -->
+    <div class="section-label" id="posts">posts/*.md</div>
+    <section class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">posts — latest 6 files</span>
+        <span class="status">zola: sorted by date</span>
+      </div>
+      <div class="window-body">
+        <div class="posts">
+          {% set posts = get_section(path="posts/_index.md") %}
+          {% for post in posts.pages %}
+            {% if loop.index0 < 6 %}
+            <a class="post" href="{{ post.permalink }}">
+              <span class="tag">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}post{% endif %}</span>
+              <div class="title">{{ post.title }}</div>
+              <div class="meta">{{ post.date | date(format="%Y-%m-%d") }} · {{ post.word_count }} words</div>
+            </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ projects ============ -->
+    <div class="section-label" id="projects">projects.json</div>
+    <section class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">projects.json</span>
+        <span class="status">{{ section.extra.projects | length }} entries</span>
+      </div>
+      <div class="window-body">
+        <div class="projects">
+          {% for p in section.extra.projects %}
+          <div class="project">
+            <span class="lang">{{ p.lang }}</span>
+            <div class="name">{{ p.name }}</div>
+            <p class="desc">{{ p.desc }}</p>
+            <a class="link" href="{{ p.url }}" target="_blank" rel="noopener">git clone {{ p.url }}</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ skills ============ -->
+    <div class="section-label" id="skills">skills.py</div>
+    <section class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">skills.py</span>
+        <span class="status">python3</span>
+      </div>
+      <div class="window-body">
+        <div class="skills">
+          {% for s in section.extra.skills %}
+          <div class="skill">
+            <div class="icon">{{ s.icon }}</div>
+            <h4>{{ s.name }}</h4>
+            <p>{{ s.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> main</span>
+    <span class="item">UTF-8</span>
+    <span class="item">Zola</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> {{ config.extra.author }}</span>
+    <span class="item optional">Ln 1, Col 1</span>
+  </footer>
+
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script src="{{ get_url(path='js/codex.js', trailing_slash=false) }}"></script>
+</body>
+</html>
