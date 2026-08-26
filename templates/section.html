@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ config.description }}" />
+  <meta name="author" content="{{ config.extra.author }}" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="{{ get_url(path='css/codex.css', trailing_slash=false) }}" />
+  <title>{{ section.title }} | {{ config.title }}</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/#projects">~/projects</a>
+      <a href="/#skills">~/skills</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <div class="section-label">{{ section.title | lower }}.log</div>
+    <section class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">all-posts.txt</span>
+        <span class="status">{{ section.pages | length }} posts</span>
+      </div>
+      <div class="window-body">
+        <div class="posts">
+          {% for post in section.pages %}
+          <a class="post" href="{{ post.permalink }}">
+            <span class="tag">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}post{% endif %}</span>
+            <div class="title">{{ post.title }}</div>
+            <div class="meta">{{ post.date | date(format="%Y-%m-%d") }} · {{ post.word_count }} words</div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> posts</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> {{ config.extra.author }}</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Zola site configuration
+title = "xfengyin"
+base_url = "https://xfengyin.github.io"
+description = "xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主"
+compile_sass = false
+minify_html = false
+build_search_index = false
+generate_feeds = false
+
+[markdown]
+smart_punctuation = true
+
+[markdown.highlighting]
+theme = "github-dark"
+
+[extra]
+author = "xfengyin"
+role = "Hardware Engineer / Embedded Developer / Tech Blogger"
+site_url = "https://xfengyin.github.io"
+github = "https://github.com/xfengyin"
+email = "hi@xfengyin.github.io"
+avatar = "https://github.com/xfengyin.png"
+lang = "zh-CN"
+start_year = 2024

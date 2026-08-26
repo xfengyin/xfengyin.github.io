@@ -1,0 +1,20 @@
+# Zola build output
+public/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local secrets
+.env
+.env.local
+*.pem
+*.key
