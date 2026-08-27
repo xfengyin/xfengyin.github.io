@@ -14,6 +14,7 @@
   <!-- 顶部导航：透明 -> 滚动白底毛玻璃 -->
   <header class="toolbar" id="toolbar">
     <div class="toolbar-title">{{ config.extra.author }}<span>.</span></div>
+    <button class="dark-toggle" id="darkToggle" title="切换深浅色">🌙</button>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
       <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
@@ -35,7 +36,21 @@
         <div class="stat"><div class="num">{{ section.extra.projects | length }}</div><div class="label">项目</div></div>
         <div class="stat"><div class="num">{{ section.extra.skills | length }}</div><div class="label">技能</div></div>
       </div>
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off" />
+        <button id="searchBtn">搜索</button>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </section>
+
+  <!-- 弹幕墙 -->
+  <section class="danmaku-wall" aria-label="弹幕墙">
+    <div class="row"><span>大佬666，这个主页太有感觉了！</span></div>
+    <div class="row"><span>「荣耀存于心，而非留于形」写得真好。</span></div>
+    <div class="row"><span>硬件 + 嵌入式 + Rust，方向很硬核！</span></div>
+    <div class="row"><span>已 Star，期待更多文章。</span></div>
+    <div class="row"><span>中文风 + 诗意布局，爱了爱了。</span></div>
   </section>
 
   <!-- 主体 -->
@@ -56,13 +71,13 @@
 
       <div class="card">
         <div class="card-title">分类</div>
-        <div class="tag-cloud">
+        <div class="cloud">
           <a href="/posts/">全部</a>
           <a href="/posts/">硬件测试</a>
-          <a href="/posts/">嵌入式开发</a>
+          <a href="/posts/">嵌入式</a>
           <a href="/posts/">电路设计</a>
-          <a href="/posts/">后端开发</a>
-          <a href="/posts/">前端开发</a>
+          <a href="/posts/">后端</a>
+          <a href="/posts/">前端</a>
           <a href="/posts/">Python</a>
           <a href="/posts/">Rust</a>
         </div>
@@ -93,7 +108,7 @@
               {% if post.extra.image %}
               <img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" />
               {% else %}
-              文
+              <img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />
               {% endif %}
             </div>
             <div class="post-body">
@@ -132,6 +147,8 @@
     <p>© <span id="year">2026</span> {{ config.extra.author }} · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub Pages</a></p>
   </footer>
 
+  <script src="/js/search-data.js"></script>
+  <script src="/js/site.js"></script>
   <script>
     var toolbar = document.getElementById('toolbar');
     function onScroll() {
