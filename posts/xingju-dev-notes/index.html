@@ -5,47 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#0a0c10" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
-  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
   <title>Tauri v2 + React 18 跨平台开发实战：XingJu开发手记 | xfengyin</title>
 </head>
 <body>
-  <header class="titlebar">
-    <div class="traffic"><i></i><i></i><i></i></div>
-    <div class="path"><b>xfengyin</b>@github: <span>~/posts/xingju-dev-notes.md</span></div>
-    <nav>
-      <a href="/">~/home</a>
-      <a href="/posts/">~/posts</a>
-      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
-    </nav>
+  <header class="toolbar">
+    <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="menu-toggle" id="menuToggle">菜单</button>
+    <ul class="scroll-menu" id="scrollMenu">
+      <li><a href="/">首页</a></li>
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </header>
 
-  <main class="wrap" style="padding-top: 10px;">
-    <article class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">xingju-dev-notes.md</span>
-        <span class="status">2026-04-03</span>
+  <section class="signature-wall" style="min-height: 200px; padding: 36px 20px;">
+    <div class="signature-inner">
+      <h1 style="font-size: 26px;">Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</h1>
+    </div>
+  </section>
+
+  <div class="page-wrap" style="grid-template-columns: 1fr;">
+    <article class="article-card">
+      <div class="article-meta">
+        <span>2026-04-03</span>
+        <span>3 分钟 · 549 字</span>
       </div>
-      <div class="window-body article">
-        <div class="comment"># Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</div>
-        <h1>Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</h1>
-        <div class="meta-line">
-          <span class="t-dim">2026-04-03</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">3 min read</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">549 words</span>
-        </div>
-        
-        <div class="meta-line" style="margin-top: 10px;">
-          <kbd>技术实践</kbd><kbd>Rust</kbd>
-          <kbd>tauri</kbd><kbd>rust</kbd><kbd>react</kbd><kbd>桌面开发</kbd><kbd>跨平台</kbd>
-        </div>
-        
-        <div class="article-body">
-          <h2 id="xiang-mu-bei-jing">项目背景</h2>
+      
+      <div class="article-meta">
+        <kbd>技术实践</kbd><kbd>Rust</kbd>
+        <kbd>tauri</kbd><kbd>rust</kbd><kbd>react</kbd><kbd>桌面开发</kbd><kbd>跨平台</kbd>
+      </div>
+      
+      <div class="article-content">
+        <h2 id="xiang-mu-bei-jing">项目背景</h2>
 <p><a rel="external" href="https://github.com/xfengyin/XingJu">XingJu 星聚</a> 是我最近开发的一款跨平台聚合应用，支持音乐、视频、小说、漫画的多源搜索。本文记录开发过程中的技术选型和实战经验。</p>
 <h2 id="ji-shu-zhan-xuan-xing">技术栈选型</h2>
 <h3 id="wei-shen-me-xuan-ze-tauri">为什么选择 Tauri？</h3>
@@ -519,20 +514,22 @@
 <p><strong>项目地址</strong>: <a rel="external" href="https://github.com/xfengyin/XingJu">https://github.com/xfengyin/XingJu</a></p>
 <p><em>最后更新: 2026-04-03</em></p>
 
-        </div>
-        <div class="article-footer">
-          <a href="/posts/">← cd ~/posts</a>
-          <a href="/">cd ~</a>
-        </div>
+      </div>
+      <div class="article-footer">
+        <a href="/posts/">← 返回文章列表</a>
+        <a href="/">回到首页</a>
       </div>
     </article>
-  </main>
+  </div>
 
-  <footer class="statusbar">
-    <span class="item"><span class="dot"></span> xingju-dev-notes.md</span>
-    <span class="spacer"></span>
-    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  <footer class="footer">
+    <p>© <span id="year">2026</span> xfengyin</p>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('scrollMenu').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

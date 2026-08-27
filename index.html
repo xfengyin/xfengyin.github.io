@@ -5,276 +5,319 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#0a0c10" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
-  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
-  <title>xfengyin | Codex</title>
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
+  <title>xfengyin | xfengyin</title>
 </head>
 <body>
-  <!-- ============ title bar ============ -->
-  <header class="titlebar">
-    <div class="traffic"><i></i><i></i><i></i></div>
-    <div class="path"><b>xfengyin</b>@github: <span>~/xfengyin.github.io</span></div>
-    <nav>
-      <a href="#about">~/about</a>
-      <a href="#posts">~/posts</a>
-      <a href="#projects">~/projects</a>
-      <a href="#skills">~/skills</a>
-      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
-    </nav>
+  <!-- 顶部导航 -->
+  <header class="toolbar">
+    <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="menu-toggle" id="menuToggle">菜单</button>
+    <ul class="scroll-menu" id="scrollMenu">
+      <li><a href="/">首页</a></li>
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </header>
 
-  <main class="wrap">
-    <!-- ============ terminal hero ============ -->
-    <section class="terminal" id="terminal">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">xfengyin@github: ~</span>
-        <span class="status">bash</span>
+  <!-- 题词区 -->
+  <section class="signature-wall">
+    <div class="signature-inner">
+      <div class="seal">印</div>
+      <h1>荣耀存于心，而非留于形。</h1>
+      <p class="subtitle">Hardware Engineer / Embedded Developer / Tech Blogger</p>
+      <div class="stats">
+        <div class="stat"><div class="num">17</div><div class="label">文章</div></div>
+        <div class="stat"><div class="num">8</div><div class="label">项目</div></div>
+        <div class="stat"><div class="num">4</div><div class="label">技能</div></div>
       </div>
-      <div class="term-body" id="termBody">
-        <!-- boot lines are rendered by js/codex.js -->
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ============ about ============ -->
-    <div class="section-label" id="about">about.md</div>
-    <section class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">about.md</span>
-        <span class="status">utf-8 | markdown</span>
-      </div>
-      <div class="window-body about-grid">
-        <div class="avatar-card">
-          <img src="https://github.com/xfengyin.png" alt="avatar" />
-          <div class="name">xfengyin</div>
-          <div class="role">Hardware Engineer / Embedded Developer / Tech Blogger</div>
-          <span class="badge">● online</span>
-        </div>
-        <div class="about-text">
-          <div class="comment"># Hello, World! I'm...</div>
-          <h1>xfengyin</h1>
-          <p class="lead">Hardware Engineer / Embedded Developer / Tech Blogger</p>
-          <div class="props">
-            <div><span class="k">quote</span> = <span class="str">"荣耀存于心，而非留于形。"</span></div>
-            <div><span class="k">quote_en</span> = <span class="str">"&quot;The glory lies in the heart, not in the form.&quot;"</span></div>
-            <div><span class="k">location</span> = <span class="str">"China"</span></div>
-            <div><span class="k">focus</span> = ["硬件设计", "嵌入式", "Rust", "AI 应用"]</div>
-            <div><span class="k">github</span> = <a href="https://github.com/xfengyin" target="_blank" rel="noopener">https://github.com/xfengyin</a></div>
-            <div><span class="k">email</span> = <a href="mailto:hi@xfengyin.github.io">hi@xfengyin.github.io</a></div>
-          </div>
+  <!-- 主体 -->
+  <div class="page-wrap">
+    <!-- 左侧栏 -->
+    <aside>
+      <div class="card profile-card" id="about">
+        <img class="avatar" src="https://github.com/xfengyin.png" alt="avatar" />
+        <div class="name">xfengyin</div>
+        <div class="role">Hardware Engineer / Embedded Developer / Tech Blogger</div>
+        <p class="bio">&quot;The glory lies in the heart, not in the form.&quot;</p>
+        <div class="profile-stats">
+          <div><div class="num">17</div><div class="label">文章</div></div>
+          <div><div class="num">8</div><div class="label">项目</div></div>
+          <div><div class="num">4</div><div class="label">方向</div></div>
         </div>
       </div>
-    </section>
 
-    <!-- ============ posts ============ -->
-    <div class="section-label" id="posts">posts/*.md</div>
-    <section class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">posts — latest 6 files</span>
-        <span class="status">zola: sorted by date</span>
+      <div class="card">
+        <div class="card-title">分类</div>
+        <div class="tag-cloud">
+          <a href="/posts/">全部</a>
+          <a href="/posts/">硬件测试</a>
+          <a href="/posts/">嵌入式开发</a>
+          <a href="/posts/">电路设计</a>
+          <a href="/posts/">后端开发</a>
+          <a href="/posts/">前端开发</a>
+          <a href="/posts/">Python</a>
+          <a href="/posts/">Rust</a>
+        </div>
       </div>
-      <div class="window-body">
-        <div class="posts">
+
+      <div class="card">
+        <div class="card-title">项目</div>
+        <div class="aside-links">
           
+          <a href="https://github.com/xfengyin/kongming-agent" target="_blank" rel="noopener">kongming-agent · Go</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/wetdry-cleaner-battery-test/">
-              <span class="tag">洗地机测试</span>
-              <div class="title">洗地机电池续航测试方法与标准</div>
-              <div class="meta">2026-04-14 · 691 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/zhihu-salt-novel-downloader" target="_blank" rel="noopener">zhihu-salt-novel-downloader · Python</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/blog-optimization-notes/">
-              <span class="tag">博客建设</span>
-              <div class="title">博客优化手记：从部署到赛博朋克UI改造</div>
-              <div class="meta">2026-04-03 · 1197 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/youth-weekly" target="_blank" rel="noopener">youth-weekly · Python</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/cyberpunk-ui-design/">
-              <span class="tag">前端开发</span>
-              <div class="title">赛博朋克UI设计：XingJu的视觉实现</div>
-              <div class="meta">2026-04-03 · 435 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/jciyuan-spider" target="_blank" rel="noopener">jciyuan-spider · Go</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/zen-framework/">
-              <span class="tag">Python</span>
-              <div class="title">Zen框架：Python模块化执行的禅意之道</div>
-              <div class="meta">2026-04-03 · 547 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/orangepi-debug-tool" target="_blank" rel="noopener">orangepi-debug-tool · Rust</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/kongming-microservices/">
-              <span class="tag">后端开发</span>
-              <div class="title">Kongming微服务架构设计：从八卦到云原生</div>
-              <div class="meta">2026-04-03 · 555 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/Protocol-algorithm" target="_blank" rel="noopener">Protocol-algorithm · Python</a>
           
-            
-            <a class="post" href="https://xfengyin.github.io/posts/xingju-dev-notes/">
-              <span class="tag">技术实践</span>
-              <div class="title">Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</div>
-              <div class="meta">2026-04-03 · 549 words</div>
-            </a>
-            
+          <a href="https://github.com/xfengyin/XingJu" target="_blank" rel="noopener">XingJu · TypeScript</a>
           
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
-          
-            
+          <a href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">xfengyin.github.io · Rust</a>
           
         </div>
       </div>
-    </section>
+    </aside>
 
-    <!-- ============ projects ============ -->
-    <div class="section-label" id="projects">projects.json</div>
-    <section class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">projects.json</span>
-        <span class="status">8 entries</span>
+    <!-- 右侧文章区 -->
+    <main>
+      <div class="section-label">// 最新文章</div>
+      <div class="post-grid">
+        
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/wetdry-cleaner-battery-test/">
+            <div class="post-cover">
+              
+              <img src="/assets/images/wetdry-cleaner-test.jpg" alt="洗地机电池续航测试方法与标准" loading="lazy" />
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">洗地机测试</span>
+              <div class="post-title">洗地机电池续航测试方法与标准</div>
+              <div class="post-meta">
+                <span>2026-04-14</span>
+                <span>3 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/blog-optimization-notes/">
+            <div class="post-cover">
+              
+              博客建设
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">博客建设</span>
+              <div class="post-title">博客优化手记：从部署到赛博朋克UI改造</div>
+              <div class="post-meta">
+                <span>2026-04-03</span>
+                <span>6 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/cyberpunk-ui-design/">
+            <div class="post-cover">
+              
+              前端开发
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">前端开发</span>
+              <div class="post-title">赛博朋克UI设计：XingJu的视觉实现</div>
+              <div class="post-meta">
+                <span>2026-04-03</span>
+                <span>2 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/zen-framework/">
+            <div class="post-cover">
+              
+              <img src="/assets/img/posts/zen-workflow.png" alt="Zen框架：Python模块化执行的禅意之道" loading="lazy" />
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">Python</span>
+              <div class="post-title">Zen框架：Python模块化执行的禅意之道</div>
+              <div class="post-meta">
+                <span>2026-04-03</span>
+                <span>3 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/kongming-microservices/">
+            <div class="post-cover">
+              
+              <img src="/assets/img/posts/kongming-architecture.png" alt="Kongming微服务架构设计：从八卦到云原生" loading="lazy" />
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">后端开发</span>
+              <div class="post-title">Kongming微服务架构设计：从八卦到云原生</div>
+              <div class="post-meta">
+                <span>2026-04-03</span>
+                <span>3 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+          <a class="post-card" href="https://xfengyin.github.io/posts/xingju-dev-notes/">
+            <div class="post-cover">
+              
+              <img src="/assets/img/posts/xingju-cyberpunk.png" alt="Tauri v2 + React 18 跨平台开发实战：XingJu开发手记" loading="lazy" />
+              
+            </div>
+            <div class="post-body">
+              <span class="post-category">技术实践</span>
+              <div class="post-title">Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</div>
+              <div class="post-meta">
+                <span>2026-04-03</span>
+                <span>3 分钟</span>
+              </div>
+            </div>
+          </a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
       </div>
-      <div class="window-body">
-        <div class="projects">
-          
-          <div class="project">
-            <span class="lang">Go</span>
-            <div class="name">kongming-agent</div>
-            <p class="desc">孔明军师 AI 系统：融合三国智慧与现代 Agent 架构（LLM + RAG + Tool Use）</p>
-            <a class="link" href="https://github.com/xfengyin/kongming-agent" target="_blank" rel="noopener">git clone https://github.com/xfengyin/kongming-agent</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Python</span>
-            <div class="name">zhihu-salt-novel-downloader</div>
-            <p class="desc">知乎盐选小说下载器：CLI + GUI 双模式，多线程、断点续传</p>
-            <a class="link" href="https://github.com/xfengyin/zhihu-salt-novel-downloader" target="_blank" rel="noopener">git clone https://github.com/xfengyin/zhihu-salt-novel-downloader</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Python</span>
-            <div class="name">youth-weekly</div>
-            <p class="desc">青年周刊：科技 / 人文 / 动漫 / 游戏的 Z 世代内容聚合平台</p>
-            <a class="link" href="https://github.com/xfengyin/youth-weekly" target="_blank" rel="noopener">git clone https://github.com/xfengyin/youth-weekly</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Go</span>
-            <div class="name">jciyuan-spider</div>
-            <p class="desc">Go Web 爬虫：jciyuan 动漫站数据抓取</p>
-            <a class="link" href="https://github.com/xfengyin/jciyuan-spider" target="_blank" rel="noopener">git clone https://github.com/xfengyin/jciyuan-spider</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Rust</span>
-            <div class="name">orangepi-debug-tool</div>
-            <p class="desc">OrangePi 上位机调试工具</p>
-            <a class="link" href="https://github.com/xfengyin/orangepi-debug-tool" target="_blank" rel="noopener">git clone https://github.com/xfengyin/orangepi-debug-tool</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Python</span>
-            <div class="name">Protocol-algorithm</div>
-            <p class="desc">网络协议与算法学习笔记</p>
-            <a class="link" href="https://github.com/xfengyin/Protocol-algorithm" target="_blank" rel="noopener">git clone https://github.com/xfengyin/Protocol-algorithm</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">TypeScript</span>
-            <div class="name">XingJu</div>
-            <p class="desc">星聚：Windows 多元内容聚合工具（Music / Video / Novel / Manga）</p>
-            <a class="link" href="https://github.com/xfengyin/XingJu" target="_blank" rel="noopener">git clone https://github.com/xfengyin/XingJu</a>
-          </div>
-          
-          <div class="project">
-            <span class="lang">Rust</span>
-            <div class="name">xfengyin.github.io</div>
-            <p class="desc">本站源码：Zola 驱动的 Codex 风格个人主页</p>
-            <a class="link" href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">git clone https://github.com/xfengyin/xfengyin.github.io</a>
-          </div>
-          
-        </div>
-      </div>
-    </section>
 
-    <!-- ============ skills ============ -->
-    <div class="section-label" id="skills">skills.py</div>
-    <section class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">skills.py</span>
-        <span class="status">python3</span>
+      <div class="section-label" id="projects" style="margin-top: 34px;">// 项目</div>
+      <div class="post-grid">
+        
+        <a class="post-card" href="https://github.com/xfengyin/kongming-agent" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Go</div>
+          <div class="post-body">
+            <span class="post-category">Go</span>
+            <div class="post-title">kongming-agent</div>
+            <p class="post-meta"><span>孔明军师 AI 系统：融合三国智慧与现代 Agent 架构（LLM + RAG + Tool Use）</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/zhihu-salt-novel-downloader" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Python</div>
+          <div class="post-body">
+            <span class="post-category">Python</span>
+            <div class="post-title">zhihu-salt-novel-downloader</div>
+            <p class="post-meta"><span>知乎盐选小说下载器：CLI + GUI 双模式，多线程、断点续传</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/youth-weekly" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Python</div>
+          <div class="post-body">
+            <span class="post-category">Python</span>
+            <div class="post-title">youth-weekly</div>
+            <p class="post-meta"><span>青年周刊：科技 / 人文 / 动漫 / 游戏的 Z 世代内容聚合平台</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/jciyuan-spider" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Go</div>
+          <div class="post-body">
+            <span class="post-category">Go</span>
+            <div class="post-title">jciyuan-spider</div>
+            <p class="post-meta"><span>Go Web 爬虫：jciyuan 动漫站数据抓取</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/orangepi-debug-tool" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Rust</div>
+          <div class="post-body">
+            <span class="post-category">Rust</span>
+            <div class="post-title">orangepi-debug-tool</div>
+            <p class="post-meta"><span>OrangePi 上位机调试工具</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/Protocol-algorithm" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Python</div>
+          <div class="post-body">
+            <span class="post-category">Python</span>
+            <div class="post-title">Protocol-algorithm</div>
+            <p class="post-meta"><span>网络协议与算法学习笔记</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/XingJu" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">TypeScript</div>
+          <div class="post-body">
+            <span class="post-category">TypeScript</span>
+            <div class="post-title">XingJu</div>
+            <p class="post-meta"><span>星聚：Windows 多元内容聚合工具（Music / Video / Novel / Manga）</span></p>
+          </div>
+        </a>
+        
+        <a class="post-card" href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">
+          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">Rust</div>
+          <div class="post-body">
+            <span class="post-category">Rust</span>
+            <div class="post-title">xfengyin.github.io</div>
+            <p class="post-meta"><span>本站源码：Zola 驱动的 Codex 风格个人主页</span></p>
+          </div>
+        </a>
+        
       </div>
-      <div class="window-body">
-        <div class="skills">
-          
-          <div class="skill">
-            <div class="icon">⚡</div>
-            <h4>硬件设计</h4>
-            <p>原理图 / PCB Layout / 电源完整性 / 信号完整性</p>
-          </div>
-          
-          <div class="skill">
-            <div class="icon">🔧</div>
-            <h4>嵌入式开发</h4>
-            <p>STM32 / ESP32 / RTOS / 驱动开发</p>
-          </div>
-          
-          <div class="skill">
-            <div class="icon">🧪</div>
-            <h4>测试验证</h4>
-            <p>硬件功能测试 / 可靠性测试 / 自动化测试脚本</p>
-          </div>
-          
-          <div class="skill">
-            <div class="icon">🦀</div>
-            <h4>Rust / Go / Python</h4>
-            <p>Rust 工具链 / Go 后端 / Python 脚本与爬虫</p>
-          </div>
-          
-        </div>
-      </div>
-    </section>
-  </main>
+    </main>
+  </div>
 
-  <footer class="statusbar">
-    <span class="item"><span class="dot"></span> main</span>
-    <span class="item">UTF-8</span>
-    <span class="item">Zola</span>
-    <span class="spacer"></span>
-    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
-    <span class="item optional">Ln 1, Col 1</span>
+  <footer class="footer">
+    <p>© <span id="year">2026</span> xfengyin · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">GitHub Pages</a></p>
   </footer>
 
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-  <script src="https://xfengyin.github.io/js/codex.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('scrollMenu').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
