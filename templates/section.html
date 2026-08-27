@@ -38,7 +38,7 @@
             {% if post.extra.image %}
             <img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" />
             {% else %}
-            {% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}文{% endif %}
+            文
             {% endif %}
           </div>
           <div class="post-body">

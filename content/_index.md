@@ -56,7 +56,7 @@ url = "https://github.com/xfengyin/XingJu"
 [[extra.projects]]
 name = "xfengyin.github.io"
 lang = "Rust"
-desc = "本站源码：Zola 驱动的 Codex 风格个人主页"
+desc = "本站源码：Zola 驱动的中文风格个人主页"
 url = "https://github.com/xfengyin/xfengyin.github.io"
 
 [[extra.skills]]
