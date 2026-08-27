@@ -48,6 +48,7 @@
           <div class="post-body">
             <span class="post-category">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}随笔{% endif %}</span>
             <h3 class="post-title">{{ post.title }}</h3>
+            {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
             <div class="post-meta">
               <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
               <span>{{ post.reading_time }} 分钟 · {{ post.word_count }} 字</span>

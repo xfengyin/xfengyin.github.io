@@ -11,6 +11,7 @@
   <title>.gitignore 忽略文件配置指南 | xfengyin</title>
 </head>
 <body>
+  <div class="progress-bar" id="progressBar"></div>
   <header class="toolbar" id="toolbar">
     <div class="toolbar-title">xfengyin<span>.</span></div>
     <button class="dark-toggle" id="darkToggle" title="切换深浅色">🌙</button>
@@ -218,6 +219,16 @@
 
   <script src="/js/site.js"></script>
   <script>
+    var progressBar = document.getElementById('progressBar');
+    function updateProgress() {
+      var scrollTop = window.scrollY;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      var percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = percent + '%';
+    }
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+
     var toolbar = document.getElementById('toolbar');
     function onScroll() {
       toolbar.classList.toggle('enter', window.scrollY > 30);

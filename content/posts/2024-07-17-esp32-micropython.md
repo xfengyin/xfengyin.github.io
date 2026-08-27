@@ -1,12 +1,12 @@
 +++
 title = "ESP32 MicroPython 开发入门"
 date = 2024-07-17T14:00:00+08:00
+description = "用 MicroPython 快速上手 ESP32：环境搭建、基础语法与实战项目。"
 
 [extra]
 author = "xfengyin"
 categories = ["嵌入式开发", "ESP32"]
 tags = ["esp32", "micropython", "物联网", "嵌入式"]
-
 +++
 
 ## 什么是 MicroPython？

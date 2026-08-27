@@ -1,7 +1,7 @@
 +++
 title = "Zen框架：Python模块化执行的禅意之道"
 date = 2026-04-03T12:00:00+08:00
-description = "借鉴禅宗思想的Python模块化执行框架，支持声明式任务定义、自动依赖解析和并行执行优化"
+description = "Zen：一个 Python 模块化执行框架的设计哲学与实现。"
 
 [extra]
 author = "xFeng"

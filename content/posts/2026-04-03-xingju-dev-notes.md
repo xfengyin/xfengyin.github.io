@@ -1,7 +1,7 @@
 +++
 title = "Tauri v2 + React 18 跨平台开发实战：XingJu开发手记"
 date = 2026-04-03T09:00:00+08:00
-description = "Rust + Tauri + React 技术栈实战，打造赛博朋克风格的跨平台聚合应用，对比Electron优势分析"
+description = "Tauri v2 + React 18 跨平台开发实战，XingJu 开发手记。"
 
 [extra]
 author = "xFeng"

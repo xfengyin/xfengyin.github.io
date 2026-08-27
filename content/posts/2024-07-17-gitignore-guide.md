@@ -1,12 +1,12 @@
 +++
 title = ".gitignore 忽略文件配置指南"
 date = 2024-07-17T10:00:00+08:00
+description = "掌握 .gitignore 的正确配置姿势，让仓库保持干净、避免误提交。"
 
 [extra]
 author = "xfengyin"
 categories = ["开发工具", "Git"]
 tags = ["git", "gitignore", "开发规范"]
-
 +++
 
 ## 什么是 .gitignore？

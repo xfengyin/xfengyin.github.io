@@ -1,7 +1,7 @@
 +++
 title = "Kongming微服务架构设计：从八卦到云原生"
 date = 2026-04-03T11:00:00+08:00
-description = "基于Go语言的微服务框架设计实践，融合东方智慧与现代云原生架构，包含服务注册发现、配置中心、熔断器等完整方案"
+description = "从单体到微服务，Kongming 架构设计的完整思路与实践。"
 
 [extra]
 author = "xFeng"
