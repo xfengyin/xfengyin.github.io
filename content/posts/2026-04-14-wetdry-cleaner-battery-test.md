@@ -1,13 +1,13 @@
 +++
 title = "洗地机电池续航测试方法与标准"
 date = 2026-04-14T00:00:00
+description = "洗地机电池续航测试的方法、标准与数据分析。"
 
 [extra]
 author = "xfengyin"
 categories = ["洗地机测试", "硬件测试"]
 tags = ["洗地机", "电池测试", "续航", "硬件测试"]
 image = "/assets/images/wetdry-cleaner-test.jpg"
-
 +++
 
 ## 一、测试目的

@@ -1,12 +1,12 @@
 +++
 title = "PCB设计评审 checklist 与信号完整性测试"
 date = 2024-08-01T10:00:00+08:00
+description = "PCB 设计评审清单 + 信号完整性测试要点，硬件工程师的自查手册。"
 
 [extra]
 author = "xfengyin"
 categories = ["硬件测试", "PCB设计"]
 tags = ["PCB设计", "信号完整性", "EMC", "评审checklist"]
-
 +++
 
 ## 概述
