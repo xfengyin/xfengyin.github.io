@@ -1,5 +1,5 @@
 +++
-title = "Zen框架：Python模块化执行的禅意之道"
+title = "Zen 框架：Python 模块化执行的禅意之道"
 date = 2026-04-03T12:00:00+08:00
 description = "Zen：一个 Python 模块化执行框架的设计哲学与实现。"
 
@@ -12,6 +12,10 @@ image = "/assets/img/posts/zen-workflow.png"
 +++
 
 ## 引言
+
+> 📌 导读：Zen：一个 Python 模块化执行框架的设计哲学与实现。
+
+![示意图](/assets/diagrams/zen-framework.svg)
 
 > "禅是一种生活的艺术，是通往宁静与自由的途径。" —— 铃木大拙
 

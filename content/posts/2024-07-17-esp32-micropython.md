@@ -1,5 +1,5 @@
 +++
-title = "ESP32 MicroPython 开发入门"
+title = "ESP32 MicroPython 入门：从环境搭建到实战项目"
 date = 2024-07-17T14:00:00+08:00
 description = "用 MicroPython 快速上手 ESP32：环境搭建、基础语法与实战项目。"
 
@@ -10,6 +10,10 @@ tags = ["esp32", "micropython", "物联网", "嵌入式"]
 +++
 
 ## 什么是 MicroPython？
+
+> 📌 导读：用 MicroPython 快速上手 ESP32：环境搭建、基础语法与实战项目。
+
+![示意图](/assets/diagrams/esp32-micropython.svg)
 
 MicroPython 是 Python 3 编程语言的精简高效实现，专门针对微控制器和受限环境设计。它包含了 Python 标准库的一个子集，并提供了访问底层硬件的模块。
 
@@ -230,3 +234,7 @@ web_server()
 ---
 
 *最后更新: 2024-07-17*
+
+## 总结
+
+MicroPython 让嵌入式开发的门槛大幅降低。建议从点亮一颗 LED 开始，逐步把传感器、网络和云服务串起来，完成一个完整的物联网作品。

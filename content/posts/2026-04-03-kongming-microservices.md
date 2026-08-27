@@ -1,5 +1,5 @@
 +++
-title = "Kongming微服务架构设计：从八卦到云原生"
+title = "Kongming 微服务架构设计：从单体到云原生"
 date = 2026-04-03T11:00:00+08:00
 description = "从单体到微服务，Kongming 架构设计的完整思路与实践。"
 
@@ -12,6 +12,10 @@ image = "/assets/img/posts/kongming-architecture.png"
 +++
 
 ## 前言
+
+> 📌 导读：从单体到微服务，Kongming 架构设计的完整思路与实践。
+
+![示意图](/assets/diagrams/kongming-microservices.svg)
 
 > "鞠躬尽瘁，死而后已。" —— 诸葛亮
 

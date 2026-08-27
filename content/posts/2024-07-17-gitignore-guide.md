@@ -1,5 +1,5 @@
 +++
-title = ".gitignore 忽略文件配置指南"
+title = ".gitignore 配置指南：让你的仓库保持干净"
 date = 2024-07-17T10:00:00+08:00
 description = "掌握 .gitignore 的正确配置姿势，让仓库保持干净、避免误提交。"
 
@@ -10,6 +10,10 @@ tags = ["git", "gitignore", "开发规范"]
 +++
 
 ## 什么是 .gitignore？
+
+> 📌 导读：掌握 .gitignore 的正确配置姿势，让仓库保持干净、避免误提交。
+
+![示意图](/assets/diagrams/gitignore-guide.svg)
 
 `.gitignore` 是 Git 版本控制系统中的一个配置文件，用于指定哪些文件或目录不应该被 Git 跟踪和提交到代码仓库中。
 

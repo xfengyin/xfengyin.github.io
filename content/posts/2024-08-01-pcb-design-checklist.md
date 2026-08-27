@@ -1,5 +1,5 @@
 +++
-title = "PCB设计评审 checklist 与信号完整性测试"
+title = "PCB 设计评审清单与信号完整性测试"
 date = 2024-08-01T10:00:00+08:00
 description = "PCB 设计评审清单 + 信号完整性测试要点，硬件工程师的自查手册。"
 
@@ -10,6 +10,10 @@ tags = ["PCB设计", "信号完整性", "EMC", "评审checklist"]
 +++
 
 ## 概述
+
+> 📌 导读：PCB 设计评审清单 + 信号完整性测试要点，硬件工程师的自查手册。
+
+![示意图](/assets/diagrams/pcb-design-checklist.svg)
 
 PCB设计完成后，必须进行全面的评审和测试，确保设计的可靠性和可制造性。本文提供一份完整的PCB设计评审checklist和信号完整性测试方法。
 
