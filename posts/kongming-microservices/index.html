@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
+  <meta name="author" content="xfengyin" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <title>Kongming微服务架构设计：从八卦到云原生 | xfengyin</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts/kongming-microservices.md</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/posts/">~/posts</a>
+      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <article class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">kongming-microservices.md</span>
+        <span class="status">2026-04-03</span>
+      </div>
+      <div class="window-body article">
+        <div class="comment"># Kongming微服务架构设计：从八卦到云原生</div>
+        <h1>Kongming微服务架构设计：从八卦到云原生</h1>
+        <div class="meta-line">
+          <span class="t-dim">2026-04-03</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">3 min read</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">555 words</span>
+        </div>
+        
+        <div class="meta-line" style="margin-top: 10px;">
+          <kbd>后端开发</kbd><kbd>微服务</kbd>
+          <kbd>go</kbd><kbd>microservices</kbd><kbd>architecture</kbd><kbd>kongming</kbd>
+        </div>
+        
+        <div class="article-body">
+          <h2 id="qian-yan">前言</h2>
+<blockquote>
+<p>“鞠躬尽瘁，死而后已。” —— 诸葛亮</p>
+</blockquote>
+<p>作为一名硬件产品经理，我在管理硬件项目的同时，也需要搭建配套的后端服务。Kongming（孔明）是我基于Go语言开发的微服务框架，命名源自三国时期的智慧化身诸葛亮。本文将分享Kongming的设计理念与架构实现。</p>
+<hr />
+<h2 id="wei-shen-me-xu-yao-kongming">为什么需要Kongming？</h2>
+<h3 id="chuan-tong-dan-ti-jia-gou-de-tong-dian">传统单体架构的痛点</h3>
+<p>在开发XingJu（星聚）这样的跨平台应用时，我遇到了以下问题：</p>
+<table><thead><tr><th>问题</th><th>影响</th></tr></thead><tbody>
+<tr><td>代码耦合严重</td><td>一个模块的改动影响全局</td></tr>
+<tr><td>部署困难</td><td>每次发布都是全量更新</td></tr>
+<tr><td>扩展受限</td><td>无法针对热点服务单独扩容</td></tr>
+<tr><td>技术栈固化</td><td>难以引入新技术</td></tr>
+</tbody></table>
+<h3 id="wei-fu-wu-de-you-shi">微服务的优势</h3>
+<ul>
+<li><strong>独立部署</strong>：每个服务可以独立开发、测试、部署</li>
+<li><strong>技术异构</strong>：不同服务可以选择最适合的技术栈</li>
+<li><strong>弹性伸缩</strong>：根据负载动态调整服务实例</li>
+<li><strong>故障隔离</strong>：单个服务故障不会影响整体系统</li>
+</ul>
+<hr />
+<h2 id="kongmingjia-gou-she-ji">Kongming架构设计</h2>
+<h3 id="ming-ming-zhe-xue">命名哲学</h3>
+<p>Kongming的模块命名借鉴三国文化，体现东方智慧与现代架构的结合：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>Kongming（孔明）- 框架核心</span></span>
+<span class="giallo-l"><span>├── 八卦 Bagua - 服务治理中心</span></span>
+<span class="giallo-l"><span>├── 主公 Lord - 配置管理中心</span></span>
+<span class="giallo-l"><span>├── 武将 Generals - 服务实例管理</span></span>
+<span class="giallo-l"><span>├── 虎符 TigerSeal - 认证授权中心</span></span>
+<span class="giallo-l"><span>└── 信使 Courier - 消息队列系统</span></span></code></pre><h3 id="he-xin-jia-gou-tu">核心架构图</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>┌─────────────────────────────────────────────────────────────┐</span></span>
+<span class="giallo-l"><span>│                      API Gateway                            │</span></span>
+<span class="giallo-l"><span>│                    （Nginx/Kong）                            │</span></span>
+<span class="giallo-l"><span>└───────────────────────┬─────────────────────────────────────┘</span></span>
+<span class="giallo-l"><span>                        │</span></span>
+<span class="giallo-l"><span>        ┌───────────────┼───────────────┐</span></span>
+<span class="giallo-l"><span>        │               │               │</span></span>
+<span class="giallo-l"><span>   ┌────▼────┐    ┌────▼────┐    ┌────▼────┐</span></span>
+<span class="giallo-l"><span>   │ Service │    │ Service │    │ Service │</span></span>
+<span class="giallo-l"><span>   │   A     │    │   B     │    │   C     │</span></span>
+<span class="giallo-l"><span>   └────┬────┘    └────┬────┘    └────┬────┘</span></span>
+<span class="giallo-l"><span>        │               │               │</span></span>
+<span class="giallo-l"><span>        └───────────────┼───────────────┘</span></span>
+<span class="giallo-l"><span>                        │</span></span>
+<span class="giallo-l"><span>        ┌───────────────┼───────────────┐</span></span>
+<span class="giallo-l"><span>        │               │               │</span></span>
+<span class="giallo-l"><span>   ┌────▼────┐    ┌────▼────┐    ┌────▼────┐</span></span>
+<span class="giallo-l"><span>   │  Bagua  │    │  Lord   │    │ Courier │</span></span>
+<span class="giallo-l"><span>   │服务治理 │    │配置中心 │    │消息队列 │</span></span>
+<span class="giallo-l"><span>   └─────────┘    └─────────┘    └─────────┘</span></span></code></pre>
+<hr />
+<h2 id="he-xin-mo-kuai-xiang-jie">核心模块详解</h2>
+<h3 id="1-ba-gua-bagua-fu-wu-zhi-li-zhong-xin">1. 八卦 Bagua - 服务治理中心</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #F97583;">package</span><span style="color: #B392F0;"> bagua</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// ServiceRegistry 服务注册中心</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> ServiceRegistry</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    services</span><span style="color: #F97583;"> map</span><span>[</span><span style="color: #F97583;">string</span><span>]</span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceInstance</span></span>
+<span class="giallo-l"><span>    mu</span><span style="color: #B392F0;">       sync</span><span>.</span><span style="color: #B392F0;">RWMutex</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// ServiceInstance 服务实例</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> ServiceInstance</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    ID</span><span style="color: #F97583;">       string</span></span>
+<span class="giallo-l"><span>    Name</span><span style="color: #F97583;">     string</span></span>
+<span class="giallo-l"><span>    Address</span><span style="color: #F97583;">  string</span></span>
+<span class="giallo-l"><span>    Port</span><span style="color: #F97583;">     int</span></span>
+<span class="giallo-l"><span>    Weight</span><span style="color: #F97583;">   int</span></span>
+<span class="giallo-l"><span>    Healthy</span><span style="color: #F97583;">  bool</span></span>
+<span class="giallo-l"><span>    Metadata</span><span style="color: #F97583;"> map</span><span>[</span><span style="color: #F97583;">string</span><span>]</span><span style="color: #F97583;">string</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Register 服务注册</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">r </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceRegistry</span><span>)</span><span style="color: #B392F0;"> Register</span><span>(</span><span style="color: #FFAB70;">instance</span><span style="color: #F97583;"> *</span><span style="color: #B392F0;">ServiceInstance</span><span>)</span><span style="color: #F97583;"> error</span><span> {</span></span>
+<span class="giallo-l"><span>    r.mu.</span><span style="color: #B392F0;">Lock</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    defer</span><span> r.mu.</span><span style="color: #B392F0;">Unlock</span><span>()</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    key</span><span style="color: #F97583;"> :=</span><span> fmt.</span><span style="color: #B392F0;">Sprintf</span><span>(</span><span style="color: #9ECBFF;">&quot;</span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">:</span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">&quot;</span><span>, instance.Name, instance.ID)</span></span>
+<span class="giallo-l"><span>    r.services[key]</span><span style="color: #F97583;"> =</span><span> instance</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    log.</span><span style="color: #B392F0;">Printf</span><span>(</span><span style="color: #9ECBFF;">&quot;服务注册成功: </span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">@</span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">:</span><span style="color: #79B8FF;">%d</span><span style="color: #9ECBFF;">&quot;</span><span>, instance.Name, instance.Address, instance.Port)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Discover 服务发现</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">r </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceRegistry</span><span>)</span><span style="color: #B392F0;"> Discover</span><span>(</span><span style="color: #FFAB70;">serviceName</span><span style="color: #F97583;"> string</span><span>) ([]</span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceInstance</span><span>,</span><span style="color: #F97583;"> error</span><span>) {</span></span>
+<span class="giallo-l"><span>    r.mu.</span><span style="color: #B392F0;">RLock</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    defer</span><span> r.mu.</span><span style="color: #B392F0;">RUnlock</span><span>()</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    var</span><span> instances []</span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceInstance</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    for</span><span> key, instance</span><span style="color: #F97583;"> := range</span><span> r.services {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span> strings.</span><span style="color: #B392F0;">HasPrefix</span><span>(key, serviceName</span><span style="color: #F97583;">+</span><span style="color: #9ECBFF;">&quot;:&quot;</span><span>)</span><span style="color: #F97583;"> &amp;&amp;</span><span> instance.Healthy {</span></span>
+<span class="giallo-l"><span>            instances</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> append</span><span>(instances, instance)</span></span>
+<span class="giallo-l"><span>        }</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> instances,</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="2-zhu-gong-lord-pei-zhi-guan-li-zhong-xin">2. 主公 Lord - 配置管理中心</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #F97583;">package</span><span style="color: #B392F0;"> lord</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// ConfigCenter 配置中心</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> ConfigCenter</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    provider</span><span style="color: #B392F0;"> ConfigProvider</span></span>
+<span class="giallo-l"><span>    cache</span><span style="color: #F97583;">    map</span><span>[</span><span style="color: #F97583;">string</span><span>]</span><span style="color: #F97583;">interface</span><span>{}</span></span>
+<span class="giallo-l"><span>    watchers</span><span style="color: #F97583;"> map</span><span>[</span><span style="color: #F97583;">string</span><span>][]</span><span style="color: #B392F0;">ConfigWatcher</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// ConfigProvider 配置提供者接口</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> ConfigProvider</span><span style="color: #F97583;"> interface</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Get</span><span>(</span><span style="color: #FFAB70;">key</span><span style="color: #F97583;"> string</span><span>) (</span><span style="color: #F97583;">string</span><span>,</span><span style="color: #F97583;"> error</span><span>)</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Set</span><span>(</span><span style="color: #FFAB70;">key</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> value</span><span style="color: #F97583;"> string</span><span>)</span><span style="color: #F97583;"> error</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Watch</span><span>(</span><span style="color: #FFAB70;">key</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> callback</span><span style="color: #B392F0;"> ConfigWatcher</span><span>)</span><span style="color: #F97583;"> error</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// LoadConfig 加载配置</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">cc </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ConfigCenter</span><span>)</span><span style="color: #B392F0;"> LoadConfig</span><span>(</span><span style="color: #FFAB70;">appName</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> env</span><span style="color: #F97583;"> string</span><span>) (</span><span style="color: #F97583;">*</span><span style="color: #B392F0;">AppConfig</span><span>,</span><span style="color: #F97583;"> error</span><span>) {</span></span>
+<span class="giallo-l"><span>    config</span><span style="color: #F97583;"> := &amp;</span><span style="color: #B392F0;">AppConfig</span><span>{</span></span>
+<span class="giallo-l"><span>        AppName: appName,</span></span>
+<span class="giallo-l"><span>        Env:     env,</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 从etcd/consul加载配置</span></span>
+<span class="giallo-l"><span>    dbConfigKey</span><span style="color: #F97583;"> :=</span><span> fmt.</span><span style="color: #B392F0;">Sprintf</span><span>(</span><span style="color: #9ECBFF;">&quot;/config/</span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">/</span><span style="color: #79B8FF;">%s</span><span style="color: #9ECBFF;">/database&quot;</span><span>, appName, env)</span></span>
+<span class="giallo-l"><span>    dbConfig, err</span><span style="color: #F97583;"> :=</span><span> cc.provider.</span><span style="color: #B392F0;">Get</span><span>(dbConfigKey)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> err</span><span style="color: #F97583;"> !=</span><span style="color: #79B8FF;"> nil</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        return</span><span style="color: #79B8FF;"> nil</span><span>, err</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> err</span><span style="color: #F97583;"> :=</span><span> json.</span><span style="color: #B392F0;">Unmarshal</span><span>([]</span><span style="color: #F97583;">byte</span><span>(dbConfig),</span><span style="color: #F97583;"> &amp;</span><span>config.Database); err</span><span style="color: #F97583;"> !=</span><span style="color: #79B8FF;"> nil</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        return</span><span style="color: #79B8FF;"> nil</span><span>, err</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> config,</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// HotReload 热更新配置</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">cc </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ConfigCenter</span><span>)</span><span style="color: #B392F0;"> HotReload</span><span>(</span><span style="color: #FFAB70;">key</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> newValue</span><span style="color: #F97583;"> string</span><span>)</span><span style="color: #F97583;"> error</span><span> {</span></span>
+<span class="giallo-l"><span>    cc.mu.</span><span style="color: #B392F0;">Lock</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    defer</span><span> cc.mu.</span><span style="color: #B392F0;">Unlock</span><span>()</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 更新缓存</span></span>
+<span class="giallo-l"><span>    cc.cache[key]</span><span style="color: #F97583;"> =</span><span> newValue</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 通知所有观察者</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> watchers, ok</span><span style="color: #F97583;"> :=</span><span> cc.watchers[key]; ok {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        for</span><span> _, watcher</span><span style="color: #F97583;"> := range</span><span> watchers {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">            go</span><span> watcher.</span><span style="color: #B392F0;">OnConfigChange</span><span>(key, newValue)</span></span>
+<span class="giallo-l"><span>        }</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="3-xin-shi-courier-xiao-xi-dui-lie-xi-tong">3. 信使 Courier - 消息队列系统</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #F97583;">package</span><span style="color: #B392F0;"> courier</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// MessageQueue 消息队列接口</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> MessageQueue</span><span style="color: #F97583;"> interface</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Publish</span><span>(</span><span style="color: #FFAB70;">topic</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> message</span><span style="color: #F97583;"> *</span><span style="color: #B392F0;">Message</span><span>)</span><span style="color: #F97583;"> error</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Subscribe</span><span>(</span><span style="color: #FFAB70;">topic</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> handler</span><span style="color: #B392F0;"> MessageHandler</span><span>)</span><span style="color: #F97583;"> error</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Unsubscribe</span><span>(</span><span style="color: #FFAB70;">topic</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> handler</span><span style="color: #B392F0;"> MessageHandler</span><span>)</span><span style="color: #F97583;"> error</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Courier 消息总线</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> Courier</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    broker</span><span style="color: #B392F0;"> MessageBroker</span></span>
+<span class="giallo-l"><span>    topics</span><span style="color: #F97583;"> map</span><span>[</span><span style="color: #F97583;">string</span><span>][]</span><span style="color: #B392F0;">MessageHandler</span></span>
+<span class="giallo-l"><span>    mu</span><span style="color: #B392F0;">     sync</span><span>.</span><span style="color: #B392F0;">RWMutex</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Publish 发布消息</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">c </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">Courier</span><span>)</span><span style="color: #B392F0;"> Publish</span><span>(</span><span style="color: #FFAB70;">topic</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> payload</span><span style="color: #F97583;"> interface</span><span>{})</span><span style="color: #F97583;"> error</span><span> {</span></span>
+<span class="giallo-l"><span>    message</span><span style="color: #F97583;"> := &amp;</span><span style="color: #B392F0;">Message</span><span>{</span></span>
+<span class="giallo-l"><span>        ID:        uuid.</span><span style="color: #B392F0;">New</span><span>().</span><span style="color: #B392F0;">String</span><span>(),</span></span>
+<span class="giallo-l"><span>        Topic:     topic,</span></span>
+<span class="giallo-l"><span>        Payload:   payload,</span></span>
+<span class="giallo-l"><span>        Timestamp: time.</span><span style="color: #B392F0;">Now</span><span>(),</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> c.broker.</span><span style="color: #B392F0;">Publish</span><span>(topic, message)</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Subscribe 订阅消息</span></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">c </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">Courier</span><span>)</span><span style="color: #B392F0;"> Subscribe</span><span>(</span><span style="color: #FFAB70;">topic</span><span style="color: #F97583;"> string</span><span>,</span><span style="color: #FFAB70;"> handler</span><span style="color: #B392F0;"> MessageHandler</span><span>)</span><span style="color: #F97583;"> error</span><span> {</span></span>
+<span class="giallo-l"><span>    c.mu.</span><span style="color: #B392F0;">Lock</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    defer</span><span> c.mu.</span><span style="color: #B392F0;">Unlock</span><span>()</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    c.topics[topic]</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> append</span><span>(c.topics[topic], handler)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> c.broker.</span><span style="color: #B392F0;">Subscribe</span><span>(topic, handler)</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="fu-wu-jian-tong-xin">服务间通信</h2>
+<h3 id="grpc-protocol-buffers">gRPC + Protocol Buffers</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="proto"><span class="giallo-l"><span style="color: #F97583;">syntax =</span><span style="color: #9ECBFF;"> &quot;proto3&quot;</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">package</span><span style="color: #9ECBFF;"> kongming</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">service</span><span style="color: #B392F0;"> UserService</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    rpc</span><span style="color: #B392F0;"> GetUser</span><span>(</span><span style="color: #B392F0;">GetUserRequest</span><span>) </span><span style="color: #F97583;">returns</span><span> (</span><span style="color: #B392F0;">GetUserResponse</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    rpc</span><span style="color: #B392F0;"> CreateUser</span><span>(</span><span style="color: #B392F0;">CreateUserRequest</span><span>) </span><span style="color: #F97583;">returns</span><span> (</span><span style="color: #B392F0;">CreateUserResponse</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    rpc</span><span style="color: #B392F0;"> UpdateUser</span><span>(</span><span style="color: #B392F0;">UpdateUserRequest</span><span>) </span><span style="color: #F97583;">returns</span><span> (</span><span style="color: #B392F0;">UpdateUserResponse</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    rpc</span><span style="color: #B392F0;"> DeleteUser</span><span>(</span><span style="color: #B392F0;">DeleteUserRequest</span><span>) </span><span style="color: #F97583;">returns</span><span> (</span><span style="color: #B392F0;">DeleteUserResponse</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">message</span><span style="color: #B392F0;"> GetUserRequest</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    string</span><span> user_id</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">message</span><span style="color: #B392F0;"> GetUserResponse</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    User</span><span> user</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    Error</span><span> error</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 2</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">message</span><span style="color: #B392F0;"> User</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    string</span><span> id</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    string</span><span> username</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 2</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    string</span><span> email</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 3</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    int64</span><span> created_at</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 4</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="shi-zhan-an-li-xingjuhou-duan-fu-wu">实战案例：XingJu后端服务</h2>
+<h3 id="fu-wu-chai-fen">服务拆分</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>xingju-backend/</span></span>
+<span class="giallo-l"><span>├── api-gateway/          # API网关</span></span>
+<span class="giallo-l"><span>├── user-service/         # 用户服务</span></span>
+<span class="giallo-l"><span>├── search-service/       # 搜索服务</span></span>
+<span class="giallo-l"><span>├── content-service/      # 内容服务</span></span>
+<span class="giallo-l"><span>├── notification-service/ # 通知服务</span></span>
+<span class="giallo-l"><span>└── kongming/            # 基础设施</span></span></code></pre><h3 id="fu-wu-zhu-ce-yu-fa-xian">服务注册与发现</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #F97583;">func</span><span style="color: #B392F0;"> main</span><span>() {</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 初始化Kongming</span></span>
+<span class="giallo-l"><span>    km</span><span style="color: #F97583;"> :=</span><span> kongming.</span><span style="color: #B392F0;">New</span><span>(</span></span>
+<span class="giallo-l"><span>        kongming.</span><span style="color: #B392F0;">WithEtcdEndpoints</span><span>([]</span><span style="color: #F97583;">string</span><span>{</span><span style="color: #9ECBFF;">&quot;localhost:2379&quot;</span><span>}),</span></span>
+<span class="giallo-l"><span>        kongming.</span><span style="color: #B392F0;">WithServiceName</span><span>(</span><span style="color: #9ECBFF;">&quot;search-service&quot;</span><span>),</span></span>
+<span class="giallo-l"><span>        kongming.</span><span style="color: #B392F0;">WithPort</span><span>(</span><span style="color: #79B8FF;">8080</span><span>),</span></span>
+<span class="giallo-l"><span>    )</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 注册服务</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> err</span><span style="color: #F97583;"> :=</span><span> km.</span><span style="color: #B392F0;">Register</span><span>(); err</span><span style="color: #F97583;"> !=</span><span style="color: #79B8FF;"> nil</span><span> {</span></span>
+<span class="giallo-l"><span>        log.</span><span style="color: #B392F0;">Fatal</span><span>(err)</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 启动gRPC服务</span></span>
+<span class="giallo-l"><span>    server</span><span style="color: #F97583;"> :=</span><span> grpc.</span><span style="color: #B392F0;">NewServer</span><span>()</span></span>
+<span class="giallo-l"><span>    pb.</span><span style="color: #B392F0;">RegisterSearchServiceServer</span><span>(server,</span><span style="color: #F97583;"> &amp;</span><span style="color: #B392F0;">SearchServiceImpl</span><span>{})</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 优雅关闭</span></span>
+<span class="giallo-l"><span>    km.</span><span style="color: #B392F0;">Shutdown</span><span>(</span><span style="color: #F97583;">func</span><span>() {</span></span>
+<span class="giallo-l"><span>        server.</span><span style="color: #B392F0;">GracefulStop</span><span>()</span></span>
+<span class="giallo-l"><span>    })</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="xing-neng-you-hua">性能优化</h2>
+<h3 id="1-fu-zai-jun-heng">1. 负载均衡</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #6A737D;">// WeightedRoundRobin 加权轮询</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> WeightedRoundRobin</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    instances []</span><span style="color: #F97583;">*</span><span style="color: #B392F0;">ServiceInstance</span></span>
+<span class="giallo-l"><span>    weights   []</span><span style="color: #F97583;">int</span></span>
+<span class="giallo-l"><span>    current</span><span style="color: #F97583;">   int</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">wrr </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">WeightedRoundRobin</span><span>)</span><span style="color: #B392F0;"> Next</span><span>()</span><span style="color: #F97583;"> *</span><span style="color: #B392F0;">ServiceInstance</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span style="color: #B392F0;"> len</span><span>(wrr.instances)</span><span style="color: #F97583;"> ==</span><span style="color: #79B8FF;"> 0</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        return</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    instance</span><span style="color: #F97583;"> :=</span><span> wrr.instances[wrr.current]</span></span>
+<span class="giallo-l"><span>    wrr.current</span><span style="color: #F97583;"> =</span><span> (wrr.current</span><span style="color: #F97583;"> +</span><span style="color: #79B8FF;"> 1</span><span>)</span><span style="color: #F97583;"> %</span><span style="color: #B392F0;"> len</span><span>(wrr.instances)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> instance</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="2-rong-duan-qi">2. 熔断器</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #6A737D;">// CircuitBreaker 熔断器</span></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> CircuitBreaker</span><span style="color: #F97583;"> struct</span><span> {</span></span>
+<span class="giallo-l"><span>    failureThreshold</span><span style="color: #F97583;"> int</span></span>
+<span class="giallo-l"><span>    successThreshold</span><span style="color: #F97583;"> int</span></span>
+<span class="giallo-l"><span>    timeout</span><span style="color: #B392F0;">          time</span><span>.</span><span style="color: #B392F0;">Duration</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    failures</span><span style="color: #F97583;">   int</span></span>
+<span class="giallo-l"><span>    successes</span><span style="color: #F97583;">  int</span></span>
+<span class="giallo-l"><span>    lastFailure</span><span style="color: #B392F0;"> time</span><span>.</span><span style="color: #B392F0;">Time</span></span>
+<span class="giallo-l"><span>    state</span><span style="color: #B392F0;">      State</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">type</span><span style="color: #B392F0;"> State</span><span style="color: #F97583;"> int</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">const</span><span> (</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    StateClosed</span><span style="color: #B392F0;"> State</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> iota</span><span style="color: #6A737D;">    // 关闭 - 正常</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    StateOpen</span><span style="color: #6A737D;">                   // 开启 - 熔断</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    StateHalfOpen</span><span style="color: #6A737D;">               // 半开 - 试探</span></span>
+<span class="giallo-l"><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span> (</span><span style="color: #FFAB70;">cb </span><span style="color: #F97583;">*</span><span style="color: #B392F0;">CircuitBreaker</span><span>)</span><span style="color: #B392F0;"> Call</span><span>(</span><span style="color: #FFAB70;">fn</span><span style="color: #F97583;"> func</span><span>()</span><span style="color: #F97583;"> error</span><span>)</span><span style="color: #F97583;"> error</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> cb.state</span><span style="color: #F97583;"> ==</span><span> StateOpen {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span> time.</span><span style="color: #B392F0;">Since</span><span>(cb.lastFailure)</span><span style="color: #F97583;"> &lt;</span><span> cb.timeout {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">            return</span><span> ErrCircuitOpen</span></span>
+<span class="giallo-l"><span>        }</span></span>
+<span class="giallo-l"><span>        cb.state</span><span style="color: #F97583;"> =</span><span> StateHalfOpen</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    err</span><span style="color: #F97583;"> :=</span><span style="color: #B392F0;"> fn</span><span>()</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> err</span><span style="color: #F97583;"> !=</span><span style="color: #79B8FF;"> nil</span><span> {</span></span>
+<span class="giallo-l"><span>        cb.</span><span style="color: #B392F0;">recordFailure</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        return</span><span> err</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    cb.</span><span style="color: #B392F0;">recordSuccess</span><span>()</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span style="color: #79B8FF;"> nil</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="jian-kong-yu-gao-jing">监控与告警</h2>
+<h3 id="prometheus-grafana">Prometheus + Grafana</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="go"><span class="giallo-l"><span style="color: #F97583;">package</span><span style="color: #B392F0;"> observatory</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">var</span><span> (</span></span>
+<span class="giallo-l"><span>    RequestDuration</span><span style="color: #F97583;"> =</span><span> prometheus.</span><span style="color: #B392F0;">NewHistogramVec</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        prometheus</span><span>.</span><span style="color: #B392F0;">HistogramOpts</span><span>{</span></span>
+<span class="giallo-l"><span>            Name:</span><span style="color: #9ECBFF;">    &quot;kongming_request_duration_seconds&quot;</span><span>,</span></span>
+<span class="giallo-l"><span>            Help:</span><span style="color: #9ECBFF;">    &quot;Request duration in seconds&quot;</span><span>,</span></span>
+<span class="giallo-l"><span>            Buckets: prometheus.DefBuckets,</span></span>
+<span class="giallo-l"><span>        },</span></span>
+<span class="giallo-l"><span>        []</span><span style="color: #F97583;">string</span><span>{</span><span style="color: #9ECBFF;">&quot;service&quot;</span><span>,</span><span style="color: #9ECBFF;"> &quot;method&quot;</span><span>},</span></span>
+<span class="giallo-l"><span>    )</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    RequestCount</span><span style="color: #F97583;"> =</span><span> prometheus.</span><span style="color: #B392F0;">NewCounterVec</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        prometheus</span><span>.</span><span style="color: #B392F0;">CounterOpts</span><span>{</span></span>
+<span class="giallo-l"><span>            Name:</span><span style="color: #9ECBFF;"> &quot;kongming_request_total&quot;</span><span>,</span></span>
+<span class="giallo-l"><span>            Help:</span><span style="color: #9ECBFF;"> &quot;Total number of requests&quot;</span><span>,</span></span>
+<span class="giallo-l"><span>        },</span></span>
+<span class="giallo-l"><span>        []</span><span style="color: #F97583;">string</span><span>{</span><span style="color: #9ECBFF;">&quot;service&quot;</span><span>,</span><span style="color: #9ECBFF;"> &quot;method&quot;</span><span>,</span><span style="color: #9ECBFF;"> &quot;status&quot;</span><span>},</span></span>
+<span class="giallo-l"><span>    )</span></span>
+<span class="giallo-l"><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">func</span><span style="color: #B392F0;"> init</span><span>() {</span></span>
+<span class="giallo-l"><span>    prometheus.</span><span style="color: #B392F0;">MustRegister</span><span>(RequestDuration)</span></span>
+<span class="giallo-l"><span>    prometheus.</span><span style="color: #B392F0;">MustRegister</span><span>(RequestCount)</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<hr />
+<h2 id="zong-jie">总结</h2>
+<p>Kongming框架的设计理念：</p>
+<ol>
+<li><strong>简洁优雅</strong>：Go语言的简洁哲学贯穿始终</li>
+<li><strong>东方智慧</strong>：三国文化命名，易于理解和记忆</li>
+<li><strong>生产就绪</strong>：包含服务治理、监控、告警等完整功能</li>
+<li><strong>易于扩展</strong>：模块化设计，方便二次开发</li>
+</ol>
+<h3 id="xia-yi-bu-ji-hua">下一步计划</h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+支持Kubernetes原生部署</li>
+<li><input disabled="" type="checkbox"/>
+集成Istio服务网格</li>
+<li><input disabled="" type="checkbox"/>
+完善分布式链路追踪</li>
+<li><input disabled="" type="checkbox"/>
+开源发布v1.0版本</li>
+</ul>
+<hr />
+<h2 id="xiang-guan-xiang-mu">相关项目</h2>
+<ul>
+<li><a rel="external" href="https://github.com/xfengyin/XingJu">XingJu 星聚</a> - 跨平台聚合应用</li>
+<li><a rel="external" href="https://github.com/xfengyin/zen">Zen</a> - Python模块化执行框架</li>
+</ul>
+<hr />
+<p><em>最后更新：2026年4月3日</em></p>
+
+        </div>
+        <div class="article-footer">
+          <a href="/posts/">← cd ~/posts</a>
+          <a href="/">cd ~</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> kongming-microservices.md</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

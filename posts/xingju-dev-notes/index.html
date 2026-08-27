@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
+  <meta name="author" content="xfengyin" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <title>Tauri v2 + React 18 跨平台开发实战：XingJu开发手记 | xfengyin</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts/xingju-dev-notes.md</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/posts/">~/posts</a>
+      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <article class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">xingju-dev-notes.md</span>
+        <span class="status">2026-04-03</span>
+      </div>
+      <div class="window-body article">
+        <div class="comment"># Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</div>
+        <h1>Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</h1>
+        <div class="meta-line">
+          <span class="t-dim">2026-04-03</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">3 min read</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">549 words</span>
+        </div>
+        
+        <div class="meta-line" style="margin-top: 10px;">
+          <kbd>技术实践</kbd><kbd>Rust</kbd>
+          <kbd>tauri</kbd><kbd>rust</kbd><kbd>react</kbd><kbd>桌面开发</kbd><kbd>跨平台</kbd>
+        </div>
+        
+        <div class="article-body">
+          <h2 id="xiang-mu-bei-jing">项目背景</h2>
+<p><a rel="external" href="https://github.com/xfengyin/XingJu">XingJu 星聚</a> 是我最近开发的一款跨平台聚合应用，支持音乐、视频、小说、漫画的多源搜索。本文记录开发过程中的技术选型和实战经验。</p>
+<h2 id="ji-shu-zhan-xuan-xing">技术栈选型</h2>
+<h3 id="wei-shen-me-xuan-ze-tauri">为什么选择 Tauri？</h3>
+<p>在 Electron 和 Tauri 之间，我最终选择了 Tauri v2：</p>
+<table><thead><tr><th>维度</th><th>Electron</th><th>Tauri v2</th></tr></thead><tbody>
+<tr><td>包大小</td><td>150MB+</td><td>5-10MB</td></tr>
+<tr><td>内存占用</td><td>高</td><td>低</td></tr>
+<tr><td>启动速度</td><td>慢</td><td>快</td></tr>
+<tr><td>后端语言</td><td>Node.js</td><td>Rust</td></tr>
+<tr><td>安全性</td><td>一般</td><td>优秀</td></tr>
+<tr><td>前端框架</td><td>任意</td><td>任意</td></tr>
+</tbody></table>
+<p><strong>Tauri 的核心优势</strong>：</p>
+<ul>
+<li>✅ 使用系统原生 WebView，无需打包 Chromium</li>
+<li>✅ Rust 后端，性能和安全性兼备</li>
+<li>✅ 极小的应用体积</li>
+<li>✅ 现代的前端开发体验</li>
+</ul>
+<h3 id="qian-duan-ji-shu-zhan">前端技术栈</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>XingJu 前端架构</span></span>
+<span class="giallo-l"><span>├── React 18 + TypeScript</span></span>
+<span class="giallo-l"><span>├── Tailwind CSS (样式)</span></span>
+<span class="giallo-l"><span>├── Zustand (状态管理)</span></span>
+<span class="giallo-l"><span>├── Vitest (测试)</span></span>
+<span class="giallo-l"><span>└── Vite (构建)</span></span></code></pre><h2 id="xiang-mu-jia-gou">项目架构</h2>
+<h3 id="mu-lu-jie-gou">目录结构</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>XingJu/</span></span>
+<span class="giallo-l"><span>├── src/                    # 前端源码</span></span>
+<span class="giallo-l"><span>│   ├── components/         # React组件</span></span>
+<span class="giallo-l"><span>│   ├── hooks/             # 自定义Hooks</span></span>
+<span class="giallo-l"><span>│   ├── services/          # API服务</span></span>
+<span class="giallo-l"><span>│   ├── store/             # Zustand状态</span></span>
+<span class="giallo-l"><span>│   ├── styles/            # CSS样式</span></span>
+<span class="giallo-l"><span>│   └── test/              # 测试文件</span></span>
+<span class="giallo-l"><span>├── src-tauri/             # Rust后端</span></span>
+<span class="giallo-l"><span>│   ├── src/</span></span>
+<span class="giallo-l"><span>│   │   ├── main.rs        # 主程序</span></span>
+<span class="giallo-l"><span>│   │   ├── lib.rs         # 库入口</span></span>
+<span class="giallo-l"><span>│   │   └── database.rs    # SQLite数据库</span></span>
+<span class="giallo-l"><span>│   └── Cargo.toml         # Rust依赖</span></span>
+<span class="giallo-l"><span>├── docs/                  # 文档</span></span>
+<span class="giallo-l"><span>└── scripts/               # 构建脚本</span></span></code></pre><h3 id="he-xin-jia-gou-tu">核心架构图</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>┌─────────────────────────────────────────┐</span></span>
+<span class="giallo-l"><span>│              XingJu 星聚                 │</span></span>
+<span class="giallo-l"><span>├─────────────────────────────────────────┤</span></span>
+<span class="giallo-l"><span>│  ┌─────────────┐    ┌─────────────────┐ │</span></span>
+<span class="giallo-l"><span>│  │   Frontend  │    │     Backend     │ │</span></span>
+<span class="giallo-l"><span>│  │  (React 18) │ ←→ │     (Rust)      │ │</span></span>
+<span class="giallo-l"><span>│  ├─────────────┤    ├─────────────────┤ │</span></span>
+<span class="giallo-l"><span>│  │ • UI组件    │    │ • SQLite数据库  │ │</span></span>
+<span class="giallo-l"><span>│  │ • 状态管理  │    │ • API聚合      │ │</span></span>
+<span class="giallo-l"><span>│  │ • 路由控制  │    │ • 缓存管理     │ │</span></span>
+<span class="giallo-l"><span>│  │ • 搜索逻辑  │    │ • 配置持久化   │ │</span></span>
+<span class="giallo-l"><span>│  └─────────────┘    └─────────────────┘ │</span></span>
+<span class="giallo-l"><span>│           ↑↓ Tauri IPC                  │</span></span>
+<span class="giallo-l"><span>│  ┌─────────────────────────────────────┐│</span></span>
+<span class="giallo-l"><span>│  │       WebView (系统原生)             ││</span></span>
+<span class="giallo-l"><span>│  └─────────────────────────────────────┘│</span></span>
+<span class="giallo-l"><span>└─────────────────────────────────────────┘</span></span></code></pre><h2 id="he-xin-shi-xian">核心实现</h2>
+<h3 id="1-tauri-ming-ling-qian-hou-duan-tong-xin">1. Tauri 命令（前后端通信）</h3>
+<p><strong>Rust 后端定义</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #6A737D;">// src-tauri/src/lib.rs</span></span>
+<span class="giallo-l"><span style="color: #F97583;">use</span><span style="color: #B392F0;"> tauri</span><span style="color: #F97583;">::</span><span>command;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>#[command]</span></span>
+<span class="giallo-l"><span style="color: #F97583;">async fn</span><span style="color: #B392F0;"> search_music</span><span>(</span></span>
+<span class="giallo-l"><span>    keyword</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> String</span><span>,</span></span>
+<span class="giallo-l"><span>    source</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> String</span><span>,</span></span>
+<span class="giallo-l"><span>)</span><span style="color: #F97583;"> -&gt;</span><span style="color: #B392F0;"> Result</span><span>&lt;</span><span style="color: #B392F0;">String</span><span>,</span><span style="color: #B392F0;"> String</span><span>&gt; {</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 调用Python API或本地搜索</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    let</span><span> result</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> music_api</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">search</span><span>(</span><span style="color: #F97583;">&amp;</span><span>keyword,</span><span style="color: #F97583;"> &amp;</span><span>source)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .await</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">map_err</span><span>(</span><span style="color: #F97583;">|</span><span>e</span><span style="color: #F97583;">|</span><span> e</span><span style="color: #F97583;">.</span><span style="color: #B392F0;">to_string</span><span>())</span><span style="color: #F97583;">?</span><span>;</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    Ok</span><span>(result)</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>#[command]</span></span>
+<span class="giallo-l"><span style="color: #F97583;">async fn</span><span style="color: #B392F0;"> save_history</span><span>(record</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> HistoryRecord</span><span>)</span><span style="color: #F97583;"> -&gt;</span><span style="color: #B392F0;"> Result</span><span>&lt;(),</span><span style="color: #B392F0;"> String</span><span>&gt; {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    let</span><span> db</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> DatabaseManager</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">new</span><span>()</span><span style="color: #F97583;">?</span><span>;</span></span>
+<span class="giallo-l"><span>    db</span><span style="color: #F97583;">.</span><span style="color: #B392F0;">insert_history</span><span>(</span><span style="color: #F97583;">&amp;</span><span>record)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">map_err</span><span>(</span><span style="color: #F97583;">|</span><span>e</span><span style="color: #F97583;">|</span><span> e</span><span style="color: #F97583;">.</span><span style="color: #B392F0;">to_string</span><span>())</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>前端调用</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="typescript"><span class="giallo-l"><span style="color: #6A737D;">// src/services/musicService.ts</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> { invoke }</span><span style="color: #F97583;"> from</span><span style="color: #9ECBFF;"> &#39;@tauri-apps/api/core&#39;</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">export async function</span><span style="color: #B392F0;"> searchMusic</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  keyword</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> string</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  source</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> string</span></span>
+<span class="giallo-l"><span>)</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> Promise</span><span>&lt;</span><span style="color: #B392F0;">SearchResult</span><span>[]&gt; {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  const</span><span style="color: #79B8FF;"> result</span><span style="color: #F97583;"> = await</span><span style="color: #B392F0;"> invoke</span><span>&lt;</span><span style="color: #79B8FF;">string</span><span>&gt;(</span><span style="color: #9ECBFF;">&#39;search_music&#39;</span><span>, {</span></span>
+<span class="giallo-l"><span>    keyword,</span></span>
+<span class="giallo-l"><span>    source,</span></span>
+<span class="giallo-l"><span>  });</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  return</span><span style="color: #79B8FF;"> JSON</span><span>.</span><span style="color: #B392F0;">parse</span><span>(result);</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="2-shu-ju-ku-she-ji-sqlite">2. 数据库设计（SQLite）</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="rust"><span class="giallo-l"><span style="color: #6A737D;">// src-tauri/src/database.rs</span></span>
+<span class="giallo-l"><span style="color: #F97583;">use</span><span style="color: #B392F0;"> sqlx</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">sqlite</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">SqlitePool</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">pub struct</span><span style="color: #B392F0;"> DatabaseManager</span><span> {</span></span>
+<span class="giallo-l"><span>    pool</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> SqlitePool</span><span>,</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">impl</span><span style="color: #B392F0;"> DatabaseManager</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    pub async fn</span><span style="color: #B392F0;"> new</span><span>()</span><span style="color: #F97583;"> -&gt;</span><span style="color: #B392F0;"> Result</span><span>&lt;</span><span style="color: #79B8FF;">Self</span><span>, sqlx</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">Error</span><span>&gt; {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        let</span><span> pool</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> SqlitePool</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">connect</span><span>(</span><span style="color: #9ECBFF;">&quot;sqlite:data.db&quot;</span><span>)</span><span style="color: #F97583;">.await?</span><span>;</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        // 初始化表</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        sqlx</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">query</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">            r#&quot;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">            CREATE TABLE IF NOT EXISTS history (</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">                id INTEGER PRIMARY KEY AUTOINCREMENT,</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">                title TEXT NOT NULL,</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">                url TEXT NOT NULL,</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">                source TEXT NOT NULL,</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">                created_at DATETIME DEFAULT CURRENT_TIMESTAMP</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">            )</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">            &quot;#</span></span>
+<span class="giallo-l"><span>        )</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">execute</span><span>(</span><span style="color: #F97583;">&amp;</span><span>pool)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .await?</span><span>;</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        Ok</span><span>(</span><span style="color: #79B8FF;">Self</span><span> { pool })</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    pub async fn</span><span style="color: #B392F0;"> insert_history</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        &amp;</span><span style="color: #79B8FF;">self</span><span>,</span></span>
+<span class="giallo-l"><span>        record</span><span style="color: #F97583;">: &amp;</span><span style="color: #B392F0;">HistoryRecord</span><span>,</span></span>
+<span class="giallo-l"><span>    )</span><span style="color: #F97583;"> -&gt;</span><span style="color: #B392F0;"> Result</span><span>&lt;</span><span style="color: #B392F0;">i64</span><span>, sqlx</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">Error</span><span>&gt; {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        let</span><span> id</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> sqlx</span><span style="color: #F97583;">::</span><span style="color: #B392F0;">query</span><span>(</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">            r#&quot;INSERT INTO history (title, url, source) VALUES (?1, ?2, ?3)&quot;#</span></span>
+<span class="giallo-l"><span>        )</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">bind</span><span>(</span><span style="color: #F97583;">&amp;</span><span>record</span><span style="color: #F97583;">.</span><span>title)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">bind</span><span>(</span><span style="color: #F97583;">&amp;</span><span>record</span><span style="color: #F97583;">.</span><span>url)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">bind</span><span>(</span><span style="color: #F97583;">&amp;</span><span>record</span><span style="color: #F97583;">.</span><span>source)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">execute</span><span>(</span><span style="color: #F97583;">&amp;</span><span style="color: #79B8FF;">self</span><span style="color: #F97583;">.</span><span>pool)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .await?</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        .</span><span style="color: #B392F0;">last_insert_rowid</span><span>();</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        Ok</span><span>(id)</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="3-sai-bo-peng-ke-uishe-ji">3. 赛博朋克UI设计</h3>
+<p><strong>设计系统</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="css"><span class="giallo-l"><span style="color: #6A737D;">/* styles/design-system.css */</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">:root</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">  /* 赛博朋克配色 */</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-blue</span><span>:</span><span style="color: #79B8FF;"> #00f3ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-pink</span><span>:</span><span style="color: #79B8FF;"> #ff00ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-yellow</span><span>:</span><span style="color: #79B8FF;"> #ffff00</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-bg</span><span>:</span><span style="color: #79B8FF;"> #0a0a0f</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-surface</span><span>:</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">18</span><span>,</span><span style="color: #79B8FF;"> 18</span><span>,</span><span style="color: #79B8FF;"> 26</span><span>,</span><span style="color: #79B8FF;"> 0.8</span><span>);</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">  /* 阴影系统 */</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --glow-blue</span><span>:</span><span style="color: #79B8FF;"> 0 0 10</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> #00f3ff</span><span>,</span><span style="color: #79B8FF;"> 0 0 20</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> #00f3ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --glow-pink</span><span>:</span><span style="color: #79B8FF;"> 0 0 10</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> #ff00ff</span><span>,</span><span style="color: #79B8FF;"> 0 0 20</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> #ff00ff</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">/* 玻璃态面板 */</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">.glass-panel</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  background</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-surface</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  backdrop-filter</span><span>:</span><span style="color: #79B8FF;"> blur</span><span>(</span><span style="color: #79B8FF;">10</span><span style="color: #F97583;">px</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border</span><span>:</span><span style="color: #79B8FF;"> 1</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 243</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.3</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border-radius</span><span>:</span><span style="color: #79B8FF;"> 12</span><span style="color: #F97583;">px</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  box-shadow</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--glow-blue</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">/* 霓虹文字 */</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">.neon-text</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  color</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-blue</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  text-shadow</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--glow-blue</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">/* 动画 */</span></span>
+<span class="giallo-l"><span style="color: #F97583;">@keyframes</span><span style="color: #FFAB70;"> pulse-neon</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  0%</span><span>, </span><span style="color: #B392F0;">100%</span><span> {</span><span style="color: #79B8FF;"> opacity</span><span>:</span><span style="color: #79B8FF;"> 1</span><span>; }</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  50%</span><span> {</span><span style="color: #79B8FF;"> opacity</span><span>:</span><span style="color: #79B8FF;"> 0.6</span><span>; }</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #B392F0;">.pulse-animation</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  animation</span><span>: pulse-neon </span><span style="color: #79B8FF;">2</span><span style="color: #F97583;">s</span><span style="color: #79B8FF;"> infinite</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>粒子背景组件</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="tsx"><span class="giallo-l"><span style="color: #6A737D;">// src/components/ParticleBackground.tsx</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> { useEffect, useRef }</span><span style="color: #F97583;"> from</span><span style="color: #9ECBFF;"> &#39;react&#39;</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">interface</span><span style="color: #B392F0;"> Particle</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  x</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  y</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  vx</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  vy</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  size</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">export function</span><span style="color: #B392F0;"> ParticleBackground</span><span>() {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  const</span><span style="color: #79B8FF;"> canvasRef</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> useRef</span><span>&lt;</span><span style="color: #B392F0;">HTMLCanvasElement</span><span>&gt;(</span><span style="color: #79B8FF;">null</span><span>);</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  useEffect</span><span>(()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #79B8FF;"> canvas</span><span style="color: #F97583;"> =</span><span> canvasRef.current;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> (</span><span style="color: #F97583;">!</span><span>canvas)</span><span style="color: #F97583;"> return</span><span>;</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #79B8FF;"> ctx</span><span style="color: #F97583;"> =</span><span> canvas.</span><span style="color: #B392F0;">getContext</span><span>(</span><span style="color: #9ECBFF;">&#39;2d&#39;</span><span>)</span><span style="color: #F97583;">!</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    let</span><span> particles</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> Particle</span><span>[]</span><span style="color: #F97583;"> =</span><span> [];</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    let</span><span> animationId</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> number</span><span>;</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    // 根据设备性能调整粒子数量</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #79B8FF;"> isMobile</span><span style="color: #F97583;"> =</span><span> window.</span><span style="color: #B392F0;">matchMedia</span><span>(</span><span style="color: #9ECBFF;">&#39;(pointer: coarse)&#39;</span><span>).matches;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #79B8FF;"> particleCount</span><span style="color: #F97583;"> =</span><span> isMobile</span><span style="color: #F97583;"> ?</span><span style="color: #79B8FF;"> 8</span><span style="color: #F97583;"> :</span><span style="color: #79B8FF;"> 20</span><span>;</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #B392F0;"> resize</span><span style="color: #F97583;"> =</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span>      canvas.width</span><span style="color: #F97583;"> =</span><span> window.innerWidth;</span></span>
+<span class="giallo-l"><span>      canvas.height</span><span style="color: #F97583;"> =</span><span> window.innerHeight;</span></span>
+<span class="giallo-l"><span>    };</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #B392F0;"> createParticles</span><span style="color: #F97583;"> =</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span>      particles</span><span style="color: #F97583;"> =</span><span> [];</span></span>
+<span class="giallo-l"><span style="color: #F97583;">      for</span><span> (</span><span style="color: #F97583;">let</span><span> i</span><span style="color: #F97583;"> =</span><span style="color: #79B8FF;"> 0</span><span>; i</span><span style="color: #F97583;"> &lt;</span><span> particleCount; i</span><span style="color: #F97583;">++</span><span>) {</span></span>
+<span class="giallo-l"><span>        particles.</span><span style="color: #B392F0;">push</span><span>({</span></span>
+<span class="giallo-l"><span>          x: Math.</span><span style="color: #B392F0;">random</span><span>()</span><span style="color: #F97583;"> *</span><span> canvas.width,</span></span>
+<span class="giallo-l"><span>          y: Math.</span><span style="color: #B392F0;">random</span><span>()</span><span style="color: #F97583;"> *</span><span> canvas.height,</span></span>
+<span class="giallo-l"><span>          vx: (Math.</span><span style="color: #B392F0;">random</span><span>()</span><span style="color: #F97583;"> -</span><span style="color: #79B8FF;"> 0.5</span><span>)</span><span style="color: #F97583;"> *</span><span style="color: #79B8FF;"> 0.5</span><span>,</span></span>
+<span class="giallo-l"><span>          vy: (Math.</span><span style="color: #B392F0;">random</span><span>()</span><span style="color: #F97583;"> -</span><span style="color: #79B8FF;"> 0.5</span><span>)</span><span style="color: #F97583;"> *</span><span style="color: #79B8FF;"> 0.5</span><span>,</span></span>
+<span class="giallo-l"><span>          size: Math.</span><span style="color: #B392F0;">random</span><span>()</span><span style="color: #F97583;"> *</span><span style="color: #79B8FF;"> 2</span><span style="color: #F97583;"> +</span><span style="color: #79B8FF;"> 1</span><span>,</span></span>
+<span class="giallo-l"><span>        });</span></span>
+<span class="giallo-l"><span>      }</span></span>
+<span class="giallo-l"><span>    };</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #B392F0;"> animate</span><span style="color: #F97583;"> =</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span>      ctx.</span><span style="color: #B392F0;">clearRect</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 0</span><span>, canvas.width, canvas.height);</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      particles.</span><span style="color: #B392F0;">forEach</span><span>(</span><span style="color: #FFAB70;">p</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        // 更新位置</span></span>
+<span class="giallo-l"><span>        p.x</span><span style="color: #F97583;"> +=</span><span> p.vx;</span></span>
+<span class="giallo-l"><span>        p.y</span><span style="color: #F97583;"> +=</span><span> p.vy;</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        // 边界反弹</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span> (p.x</span><span style="color: #F97583;"> &lt;</span><span style="color: #79B8FF;"> 0</span><span style="color: #F97583;"> ||</span><span> p.x</span><span style="color: #F97583;"> &gt;</span><span> canvas.width) p.vx</span><span style="color: #F97583;"> *= -</span><span style="color: #79B8FF;">1</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span> (p.y</span><span style="color: #F97583;"> &lt;</span><span style="color: #79B8FF;"> 0</span><span style="color: #F97583;"> ||</span><span> p.y</span><span style="color: #F97583;"> &gt;</span><span> canvas.height) p.vy</span><span style="color: #F97583;"> *= -</span><span style="color: #79B8FF;">1</span><span>;</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        // 绘制粒子</span></span>
+<span class="giallo-l"><span>        ctx.</span><span style="color: #B392F0;">beginPath</span><span>();</span></span>
+<span class="giallo-l"><span>        ctx.</span><span style="color: #B392F0;">arc</span><span>(p.x, p.y, p.size,</span><span style="color: #79B8FF;"> 0</span><span>, Math.</span><span style="color: #79B8FF;">PI</span><span style="color: #F97583;"> *</span><span style="color: #79B8FF;"> 2</span><span>);</span></span>
+<span class="giallo-l"><span>        ctx.fillStyle</span><span style="color: #F97583;"> =</span><span style="color: #9ECBFF;"> &#39;#00f3ff&#39;</span><span>;</span></span>
+<span class="giallo-l"><span>        ctx.</span><span style="color: #B392F0;">fill</span><span>();</span></span>
+<span class="giallo-l"><span>      });</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">      // 绘制连线</span></span>
+<span class="giallo-l"><span>      particles.</span><span style="color: #B392F0;">forEach</span><span>((</span><span style="color: #FFAB70;">p1</span><span>,</span><span style="color: #FFAB70;"> i</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span>        particles.</span><span style="color: #B392F0;">slice</span><span>(i</span><span style="color: #F97583;"> +</span><span style="color: #79B8FF;"> 1</span><span>).</span><span style="color: #B392F0;">forEach</span><span>(</span><span style="color: #FFAB70;">p2</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">          const</span><span style="color: #79B8FF;"> dx</span><span style="color: #F97583;"> =</span><span> p1.x</span><span style="color: #F97583;"> -</span><span> p2.x;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">          const</span><span style="color: #79B8FF;"> dy</span><span style="color: #F97583;"> =</span><span> p1.y</span><span style="color: #F97583;"> -</span><span> p2.y;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">          const</span><span style="color: #79B8FF;"> dist</span><span style="color: #F97583;"> =</span><span> Math.</span><span style="color: #B392F0;">sqrt</span><span>(dx</span><span style="color: #F97583;"> *</span><span> dx</span><span style="color: #F97583;"> +</span><span> dy</span><span style="color: #F97583;"> *</span><span> dy);</span></span>
+<span class="giallo-l"><span>          </span></span>
+<span class="giallo-l"><span style="color: #F97583;">          if</span><span> (dist</span><span style="color: #F97583;"> &lt;</span><span style="color: #79B8FF;"> 100</span><span>) {</span></span>
+<span class="giallo-l"><span>            ctx.</span><span style="color: #B392F0;">beginPath</span><span>();</span></span>
+<span class="giallo-l"><span>            ctx.</span><span style="color: #B392F0;">moveTo</span><span>(p1.x, p1.y);</span></span>
+<span class="giallo-l"><span>            ctx.</span><span style="color: #B392F0;">lineTo</span><span>(p2.x, p2.y);</span></span>
+<span class="giallo-l"><span>            ctx.strokeStyle</span><span style="color: #F97583;"> =</span><span style="color: #9ECBFF;"> `rgba(0, 243, 255, ${</span><span style="color: #79B8FF;">1</span><span style="color: #F97583;"> -</span><span> dist</span><span style="color: #F97583;"> /</span><span style="color: #79B8FF;"> 100</span><span style="color: #9ECBFF;">})`</span><span>;</span></span>
+<span class="giallo-l"><span>            ctx.</span><span style="color: #B392F0;">stroke</span><span>();</span></span>
+<span class="giallo-l"><span>          }</span></span>
+<span class="giallo-l"><span>        });</span></span>
+<span class="giallo-l"><span>      });</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      animationId</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> requestAnimationFrame</span><span>(animate);</span></span>
+<span class="giallo-l"><span>    };</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    resize</span><span>();</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    createParticles</span><span>();</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">    animate</span><span>();</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    window.</span><span style="color: #B392F0;">addEventListener</span><span>(</span><span style="color: #9ECBFF;">&#39;resize&#39;</span><span>, ()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      resize</span><span>();</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      createParticles</span><span>();</span></span>
+<span class="giallo-l"><span>    });</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      cancelAnimationFrame</span><span>(animationId);</span></span>
+<span class="giallo-l"><span>    };</span></span>
+<span class="giallo-l"><span>  }, []);</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #F97583;">  return</span><span> (</span></span>
+<span class="giallo-l"><span>    &lt;</span><span style="color: #85E89D;">canvas</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      ref</span><span style="color: #F97583;">=</span><span>{canvasRef}</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      className</span><span style="color: #F97583;">=</span><span style="color: #9ECBFF;">&quot;fixed inset-0 pointer-events-none&quot;</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      style</span><span style="color: #F97583;">=</span><span>{{ zIndex:</span><span style="color: #F97583;"> -</span><span style="color: #79B8FF;">1</span><span> }}</span></span>
+<span class="giallo-l"><span>    /&gt;</span></span>
+<span class="giallo-l"><span>  );</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="4-xing-neng-you-hua">4. 性能优化</h3>
+<h4 id="tu-pian-lan-jia-zai">图片懒加载</h4>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="tsx"><span class="giallo-l"><span style="color: #6A737D;">// src/components/LazyImage.tsx</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> { useEffect, useRef, useState }</span><span style="color: #F97583;"> from</span><span style="color: #9ECBFF;"> &#39;react&#39;</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">interface</span><span style="color: #B392F0;"> LazyImageProps</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  src</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> string</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  alt</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> string</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  className</span><span style="color: #F97583;">?:</span><span style="color: #79B8FF;"> string</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">export function</span><span style="color: #B392F0;"> LazyImage</span><span>({</span><span style="color: #FFAB70;"> src</span><span>,</span><span style="color: #FFAB70;"> alt</span><span>,</span><span style="color: #FFAB70;"> className</span><span> }</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> LazyImageProps</span><span>) {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  const</span><span> [</span><span style="color: #79B8FF;">isLoaded</span><span>,</span><span style="color: #79B8FF;"> setIsLoaded</span><span>]</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> useState</span><span>(</span><span style="color: #79B8FF;">false</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  const</span><span> [</span><span style="color: #79B8FF;">isInView</span><span>,</span><span style="color: #79B8FF;"> setIsInView</span><span>]</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> useState</span><span>(</span><span style="color: #79B8FF;">false</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #F97583;">  const</span><span style="color: #79B8FF;"> imgRef</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> useRef</span><span>&lt;</span><span style="color: #B392F0;">HTMLImageElement</span><span>&gt;(</span><span style="color: #79B8FF;">null</span><span>);</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  useEffect</span><span>(()</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    const</span><span style="color: #79B8FF;"> observer</span><span style="color: #F97583;"> = new</span><span style="color: #B392F0;"> IntersectionObserver</span><span>(</span></span>
+<span class="giallo-l"><span>      ([</span><span style="color: #FFAB70;">entry</span><span>])</span><span style="color: #F97583;"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span> (entry.isIntersecting) {</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">          setIsInView</span><span>(</span><span style="color: #79B8FF;">true</span><span>);</span></span>
+<span class="giallo-l"><span>          observer.</span><span style="color: #B392F0;">disconnect</span><span>();</span></span>
+<span class="giallo-l"><span>        }</span></span>
+<span class="giallo-l"><span>      },</span></span>
+<span class="giallo-l"><span>      { rootMargin:</span><span style="color: #9ECBFF;"> &#39;50px&#39;</span><span> }</span></span>
+<span class="giallo-l"><span>    );</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    if</span><span> (imgRef.current) {</span></span>
+<span class="giallo-l"><span>      observer.</span><span style="color: #B392F0;">observe</span><span>(imgRef.current);</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    return</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span> observer.</span><span style="color: #B392F0;">disconnect</span><span>();</span></span>
+<span class="giallo-l"><span>  }, []);</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #F97583;">  return</span><span> (</span></span>
+<span class="giallo-l"><span>    &lt;</span><span style="color: #85E89D;">div</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      ref</span><span style="color: #F97583;">=</span><span>{imgRef}</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      className</span><span style="color: #F97583;">=</span><span>{</span><span style="color: #9ECBFF;">`relative overflow-hidden ${</span><span>className</span><span style="color: #9ECBFF;">}`</span><span>}</span></span>
+<span class="giallo-l"><span>    &gt;</span></span>
+<span class="giallo-l"><span>      {</span><span style="color: #F97583;">!</span><span>isLoaded</span><span style="color: #F97583;"> &amp;&amp;</span><span> (</span></span>
+<span class="giallo-l"><span>        &lt;</span><span style="color: #85E89D;">div</span><span style="color: #B392F0;"> className</span><span style="color: #F97583;">=</span><span style="color: #9ECBFF;">&quot;absolute inset-0 bg-gray-800 animate-pulse&quot;</span><span> /&gt;</span></span>
+<span class="giallo-l"><span>      )}</span></span>
+<span class="giallo-l"><span>      {isInView</span><span style="color: #F97583;"> &amp;&amp;</span><span> (</span></span>
+<span class="giallo-l"><span>        &lt;</span><span style="color: #85E89D;">img</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">          src</span><span style="color: #F97583;">=</span><span>{src}</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">          alt</span><span style="color: #F97583;">=</span><span>{alt}</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">          className</span><span style="color: #F97583;">=</span><span>{</span><span style="color: #9ECBFF;">`w-full h-full object-cover transition-opacity duration-300 ${</span></span>
+<span class="giallo-l"><span>            isLoaded</span><span style="color: #F97583;"> ?</span><span style="color: #9ECBFF;"> &#39;opacity-100&#39;</span><span style="color: #F97583;"> :</span><span style="color: #9ECBFF;"> &#39;opacity-0&#39;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">          }`</span><span>}</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">          onLoad</span><span style="color: #F97583;">=</span><span>{()</span><span style="color: #F97583;"> =&gt;</span><span style="color: #B392F0;"> setIsLoaded</span><span>(</span><span style="color: #79B8FF;">true</span><span>)}</span></span>
+<span class="giallo-l"><span>        /&gt;</span></span>
+<span class="giallo-l"><span>      )}</span></span>
+<span class="giallo-l"><span>    &lt;/</span><span style="color: #85E89D;">div</span><span>&gt;</span></span>
+<span class="giallo-l"><span>  );</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h4 id="zhuang-tai-guan-li-zustand">状态管理（Zustand）</h4>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="typescript"><span class="giallo-l"><span style="color: #6A737D;">// src/store/appStore.ts</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> { create }</span><span style="color: #F97583;"> from</span><span style="color: #9ECBFF;"> &#39;zustand&#39;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> { persist }</span><span style="color: #F97583;"> from</span><span style="color: #9ECBFF;"> &#39;zustand/middleware&#39;</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">interface</span><span style="color: #B392F0;"> AppState</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  theme</span><span style="color: #F97583;">:</span><span style="color: #9ECBFF;"> &#39;cyberpunk&#39;</span><span style="color: #F97583;"> |</span><span style="color: #9ECBFF;"> &#39;light&#39;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  sidebarCollapsed</span><span style="color: #F97583;">:</span><span style="color: #79B8FF;"> boolean</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  activeModule</span><span style="color: #F97583;">:</span><span style="color: #9ECBFF;"> &#39;music&#39;</span><span style="color: #F97583;"> |</span><span style="color: #9ECBFF;"> &#39;video&#39;</span><span style="color: #F97583;"> |</span><span style="color: #9ECBFF;"> &#39;novel&#39;</span><span style="color: #F97583;"> |</span><span style="color: #9ECBFF;"> &#39;manga&#39;</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  setTheme</span><span style="color: #F97583;">:</span><span> (</span><span style="color: #FFAB70;">theme</span><span style="color: #F97583;">:</span><span style="color: #9ECBFF;"> &#39;cyberpunk&#39;</span><span style="color: #F97583;"> |</span><span style="color: #9ECBFF;"> &#39;light&#39;</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span style="color: #79B8FF;"> void</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  toggleSidebar</span><span style="color: #F97583;">:</span><span> ()</span><span style="color: #F97583;"> =&gt;</span><span style="color: #79B8FF;"> void</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  setActiveModule</span><span style="color: #F97583;">:</span><span> (</span><span style="color: #FFAB70;">module</span><span style="color: #F97583;">:</span><span style="color: #B392F0;"> AppState</span><span>[</span><span style="color: #9ECBFF;">&#39;activeModule&#39;</span><span>])</span><span style="color: #F97583;"> =&gt;</span><span style="color: #79B8FF;"> void</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">export const</span><span style="color: #79B8FF;"> useAppStore</span><span style="color: #F97583;"> =</span><span style="color: #B392F0;"> create</span><span>&lt;</span><span style="color: #B392F0;">AppState</span><span>&gt;()(</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">  persist</span><span>(</span></span>
+<span class="giallo-l"><span>    (</span><span style="color: #FFAB70;">set</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span> ({</span></span>
+<span class="giallo-l"><span>      theme:</span><span style="color: #9ECBFF;"> &#39;cyberpunk&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>      sidebarCollapsed:</span><span style="color: #79B8FF;"> false</span><span>,</span></span>
+<span class="giallo-l"><span>      activeModule:</span><span style="color: #9ECBFF;"> &#39;music&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      setTheme</span><span>: (</span><span style="color: #FFAB70;">theme</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span style="color: #B392F0;"> set</span><span>({ theme }),</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      toggleSidebar</span><span>: ()</span><span style="color: #F97583;"> =&gt;</span><span> </span></span>
+<span class="giallo-l"><span style="color: #B392F0;">        set</span><span>((</span><span style="color: #FFAB70;">state</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span> ({ sidebarCollapsed:</span><span style="color: #F97583;"> !</span><span>state.sidebarCollapsed })),</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">      setActiveModule</span><span>: (</span><span style="color: #FFAB70;">activeModule</span><span>)</span><span style="color: #F97583;"> =&gt;</span><span style="color: #B392F0;"> set</span><span>({ activeModule }),</span></span>
+<span class="giallo-l"><span>    }),</span></span>
+<span class="giallo-l"><span>    {</span></span>
+<span class="giallo-l"><span>      name:</span><span style="color: #9ECBFF;"> &#39;xingju-storage&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>  )</span></span>
+<span class="giallo-l"><span>);</span></span></code></pre><h2 id="kai-fa-jing-yan-zong-jie">开发经验总结</h2>
+<h3 id="1-tauri-kai-fa-ji-qiao">1. Tauri 开发技巧</h3>
+<table><thead><tr><th>技巧</th><th>说明</th></tr></thead><tbody>
+<tr><td>命令返回值</td><td>使用 <code>Result&lt;T, String&gt;</code> 统一错误处理</td></tr>
+<tr><td>异步命令</td><td>使用 <code>async fn</code> 支持异步操作</td></tr>
+<tr><td>窗口控制</td><td>通过 <code>tauri::Window</code> API 控制窗口行为</td></tr>
+<tr><td>事件通信</td><td>使用 <code>emit</code> 和 <code>listen</code> 实现双向事件</td></tr>
+</tbody></table>
+<h3 id="2-diao-shi-ji-qiao">2. 调试技巧</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: #6A737D;"># 开发模式（热更新）</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">npm</span><span style="color: #9ECBFF;"> run tauri dev</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 前端独立调试</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">npm</span><span style="color: #9ECBFF;"> run dev</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 构建生产版本</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">npm</span><span style="color: #9ECBFF;"> run tauri build</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 查看Rust日志</span></span>
+<span class="giallo-l"><span>RUST_BACKTRACE</span><span style="color: #F97583;">=</span><span style="color: #9ECBFF;">1</span><span style="color: #B392F0;"> npm</span><span style="color: #9ECBFF;"> run tauri dev</span></span></code></pre><h3 id="3-chang-jian-wen-ti">3. 常见问题</h3>
+<p><strong>问题1：窗口无法拖动</strong></p>
+<p>解决：在 <code>tauri.conf.json</code> 中启用装饰边框</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="json"><span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  &quot;app&quot;</span><span>: {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    &quot;windows&quot;</span><span>: [</span></span>
+<span class="giallo-l"><span>      {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">        &quot;decorations&quot;</span><span>:</span><span style="color: #79B8FF;"> true</span></span>
+<span class="giallo-l"><span>      }</span></span>
+<span class="giallo-l"><span>    ]</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>问题2：API调用失败</strong></p>
+<p>解决：检查 <code>tauri.conf.json</code> 权限配置</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="json"><span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  &quot;permissions&quot;</span><span>: [</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">    &quot;core:default&quot;</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">    &quot;shell:allow-open&quot;</span></span>
+<span class="giallo-l"><span>  ]</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>问题3：构建体积过大</strong></p>
+<p>解决：优化依赖，使用 <code>cargo bloat</code> 分析</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: #B392F0;">cargo</span><span style="color: #9ECBFF;"> install cargo-bloat</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">cargo</span><span style="color: #9ECBFF;"> bloat</span><span style="color: #79B8FF;"> --release -n 20</span></span></code></pre><h2 id="fa-bu-liu-cheng">发布流程</h2>
+<h3 id="zi-dong-hua-gou-jian-github-actions">自动化构建（GitHub Actions）</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="yaml"><span class="giallo-l"><span style="color: #6A737D;"># .github/workflows/release.yml</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">name</span><span>:</span><span style="color: #9ECBFF;"> Release</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;">on</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  push</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    tags</span><span>:</span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #9ECBFF;"> &#39;v*&#39;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #85E89D;">jobs</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  build</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    strategy</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">      matrix</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        platform</span><span>: [</span><span style="color: #9ECBFF;">ubuntu-20.04</span><span>,</span><span style="color: #9ECBFF;"> windows-latest</span><span>]</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    runs-on</span><span>:</span><span style="color: #9ECBFF;"> ${{ matrix.platform }}</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    steps</span><span>:</span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> uses</span><span>:</span><span style="color: #9ECBFF;"> actions/checkout@v4</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> name</span><span>:</span><span style="color: #9ECBFF;"> Setup Node</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        uses</span><span>:</span><span style="color: #9ECBFF;"> actions/setup-node@v4</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        with</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">          node-version</span><span>:</span><span style="color: #79B8FF;"> 20</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> name</span><span>:</span><span style="color: #9ECBFF;"> Setup Rust</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        uses</span><span>:</span><span style="color: #9ECBFF;"> dtolnay/rust-action@stable</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> name</span><span>:</span><span style="color: #9ECBFF;"> Install dependencies</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        run</span><span>:</span><span style="color: #9ECBFF;"> npm install</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> name</span><span>:</span><span style="color: #9ECBFF;"> Build Tauri</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        run</span><span>:</span><span style="color: #9ECBFF;"> npm run tauri build</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span>      -</span><span style="color: #85E89D;"> name</span><span>:</span><span style="color: #9ECBFF;"> Upload artifacts</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        uses</span><span>:</span><span style="color: #9ECBFF;"> actions/upload-artifact@v4</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">        with</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">          name</span><span>:</span><span style="color: #9ECBFF;"> xingju-${{ matrix.platform }}</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">          path</span><span>:</span><span style="color: #9ECBFF;"> src-tauri/target/release/bundle/**</span></span></code></pre><h2 id="cheng-guo-zhan-shi">成果展示</h2>
+<table><thead><tr><th>指标</th><th>数据</th></tr></thead><tbody>
+<tr><td>应用体积</td><td>~8MB (Windows)</td></tr>
+<tr><td>启动时间</td><td>&lt; 2秒</td></tr>
+<tr><td>内存占用</td><td>~80MB</td></tr>
+<tr><td>代码行数</td><td>~5000行 (Rust+TS)</td></tr>
+<tr><td>测试覆盖率</td><td>~70%</td></tr>
+</tbody></table>
+<h2 id="zong-jie">总结</h2>
+<p>Tauri v2 是一个非常优秀的跨平台桌面应用开发框架，特别适合：</p>
+<ul>
+<li>对应用体积敏感的项目</li>
+<li>需要高性能后端的项目</li>
+<li>熟悉前端技术的开发者</li>
+</ul>
+<p>XingJu 项目验证了 Tauri 在生产环境中的可行性，推荐给大家尝试！</p>
+<hr />
+<p><strong>项目地址</strong>: <a rel="external" href="https://github.com/xfengyin/XingJu">https://github.com/xfengyin/XingJu</a></p>
+<p><em>最后更新: 2026-04-03</em></p>
+
+        </div>
+        <div class="article-footer">
+          <a href="/posts/">← cd ~/posts</a>
+          <a href="/">cd ~</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> xingju-dev-notes.md</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
