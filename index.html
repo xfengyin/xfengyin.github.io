@@ -14,6 +14,7 @@
   <!-- 顶部导航：透明 -> 滚动白底毛玻璃 -->
   <header class="toolbar" id="toolbar">
     <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="dark-toggle" id="darkToggle" title="切换深浅色">🌙</button>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
       <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
@@ -35,7 +36,21 @@
         <div class="stat"><div class="num">8</div><div class="label">项目</div></div>
         <div class="stat"><div class="num">4</div><div class="label">技能</div></div>
       </div>
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off" />
+        <button id="searchBtn">搜索</button>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </section>
+
+  <!-- 弹幕墙 -->
+  <section class="danmaku-wall" aria-label="弹幕墙">
+    <div class="row"><span>大佬666，这个主页太有感觉了！</span></div>
+    <div class="row"><span>「荣耀存于心，而非留于形」写得真好。</span></div>
+    <div class="row"><span>硬件 + 嵌入式 + Rust，方向很硬核！</span></div>
+    <div class="row"><span>已 Star，期待更多文章。</span></div>
+    <div class="row"><span>中文风 + 诗意布局，爱了爱了。</span></div>
   </section>
 
   <!-- 主体 -->
@@ -56,13 +71,13 @@
 
       <div class="card">
         <div class="card-title">分类</div>
-        <div class="tag-cloud">
+        <div class="cloud">
           <a href="/posts/">全部</a>
           <a href="/posts/">硬件测试</a>
-          <a href="/posts/">嵌入式开发</a>
+          <a href="/posts/">嵌入式</a>
           <a href="/posts/">电路设计</a>
-          <a href="/posts/">后端开发</a>
-          <a href="/posts/">前端开发</a>
+          <a href="/posts/">后端</a>
+          <a href="/posts/">前端</a>
           <a href="/posts/">Python</a>
           <a href="/posts/">Rust</a>
         </div>
@@ -123,7 +138,7 @@
           <a class="post-card" href="https://xfengyin.github.io/posts/blog-optimization-notes/">
             <div class="post-cover">
               
-              文
+              <img src="/assets/covers/blog-optimization-notes.svg" alt="博客优化手记：从部署到赛博朋克UI改造" loading="lazy" />
               
             </div>
             <div class="post-body">
@@ -141,7 +156,7 @@
           <a class="post-card" href="https://xfengyin.github.io/posts/cyberpunk-ui-design/">
             <div class="post-cover">
               
-              文
+              <img src="/assets/covers/cyberpunk-ui-design.svg" alt="赛博朋克UI设计：XingJu的视觉实现" loading="lazy" />
               
             </div>
             <div class="post-body">
@@ -319,6 +334,8 @@
     <p>© <span id="year">2026</span> xfengyin · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub Pages</a></p>
   </footer>
 
+  <script src="/js/search-data.js"></script>
+  <script src="/js/site.js"></script>
   <script>
     var toolbar = document.getElementById('toolbar');
     function onScroll() {

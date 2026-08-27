@@ -13,6 +13,7 @@
 <body>
   <header class="toolbar" id="toolbar">
     <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="dark-toggle" id="darkToggle" title="切换深浅色">🌙</button>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
       <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
@@ -55,7 +56,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/blog-optimization-notes/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/blog-optimization-notes.svg" alt="博客优化手记：从部署到赛博朋克UI改造" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -71,7 +72,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/cyberpunk-ui-design/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/cyberpunk-ui-design.svg" alt="赛博朋克UI设计：XingJu的视觉实现" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -135,7 +136,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/blog-guide-index/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/blog-guide-index.svg" alt="博客导航：全站文章索引与分类导读" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -151,7 +152,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/sensor-calibration/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/sensor-calibration.svg" alt="传感器标定与测试：从原理到工程实践" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -167,7 +168,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/power-integrity/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/power-integrity.svg" alt="电源完整性测试：PDN设计与噪声分析实战" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -183,7 +184,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/oscilloscope-guide/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/oscilloscope-guide.svg" alt="示波器使用指南：从入门到硬件调试实战" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -199,7 +200,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/pcb-design-checklist/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/pcb-design-checklist.svg" alt="PCB设计评审 checklist 与信号完整性测试" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -215,7 +216,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/mos-gate-resistor/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/mos-gate-resistor.svg" alt="为什么MOS管的栅极要串接电阻？" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -231,7 +232,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/esp32-micropython/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/esp32-micropython.svg" alt="ESP32 MicroPython 开发入门" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -247,7 +248,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/qs03b-test/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/qs03b-test.svg" alt="QS03B 硬件及软件逻辑测试" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -263,7 +264,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/gitignore-guide/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/gitignore-guide.svg" alt=".gitignore 忽略文件配置指南" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -279,7 +280,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/electric-bike/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/electric-bike.svg" alt="电动两轮车技术解析" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -295,7 +296,7 @@
         <a class="post-card" href="https://xfengyin.github.io/posts/hardware-test-battery/">
           <div class="post-cover">
             
-            文
+            <img src="/assets/covers/hardware-test-battery.svg" alt="硬件测试--电池充放电测试方法" loading="lazy" />
             
           </div>
           <div class="post-body">
@@ -316,6 +317,7 @@
     <p>© <span id="year">2026</span> xfengyin</p>
   </footer>
 
+  <script src="/js/site.js"></script>
   <script>
     var toolbar = document.getElementById('toolbar');
     function onScroll() {
