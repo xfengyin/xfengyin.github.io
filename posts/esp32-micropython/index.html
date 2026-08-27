@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
+  <meta name="author" content="xfengyin" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <title>ESP32 MicroPython 开发入门 | xfengyin</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts/esp32-micropython.md</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/posts/">~/posts</a>
+      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <article class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">esp32-micropython.md</span>
+        <span class="status">2024-07-17</span>
+      </div>
+      <div class="window-body article">
+        <div class="comment"># ESP32 MicroPython 开发入门</div>
+        <h1>ESP32 MicroPython 开发入门</h1>
+        <div class="meta-line">
+          <span class="t-dim">2024-07-17</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">3 min read</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">542 words</span>
+        </div>
+        
+        <div class="meta-line" style="margin-top: 10px;">
+          <kbd>嵌入式开发</kbd><kbd>ESP32</kbd>
+          <kbd>esp32</kbd><kbd>micropython</kbd><kbd>物联网</kbd><kbd>嵌入式</kbd>
+        </div>
+        
+        <div class="article-body">
+          <h2 id="shen-me-shi-micropython">什么是 MicroPython？</h2>
+<p>MicroPython 是 Python 3 编程语言的精简高效实现，专门针对微控制器和受限环境设计。它包含了 Python 标准库的一个子集，并提供了访问底层硬件的模块。</p>
+<h2 id="esp32-jian-jie">ESP32 简介</h2>
+<p>ESP32 是乐鑫科技推出的一款低功耗、高集成度的 Wi-Fi + 蓝牙双模芯片，广泛应用于物联网设备开发。</p>
+<h3 id="esp32-zhu-yao-te-xing">ESP32 主要特性</h3>
+<ul>
+<li><strong>双核处理器</strong>: Xtensa LX6 双核，主频高达 240MHz</li>
+<li><strong>内存</strong>: 520KB SRAM</li>
+<li><strong>无线连接</strong>: 802.11 b/g/n Wi-Fi + 蓝牙 4.2/BLE</li>
+<li><strong>外设接口</strong>: GPIO、ADC、DAC、SPI、I2C、UART、PWM 等</li>
+<li><strong>功耗</strong>: 支持多种低功耗模式</li>
+</ul>
+<h2 id="huan-jing-da-jian">环境搭建</h2>
+<h3 id="1-ying-jian-zhun-bei">1. 硬件准备</h3>
+<ul>
+<li>ESP32 开发板（推荐 ESP32-DevKitC）</li>
+<li>USB 数据线</li>
+<li>电脑（Windows/macOS/Linux）</li>
+</ul>
+<h3 id="2-an-zhuang-qu-dong">2. 安装驱动</h3>
+<p>根据开发板使用的 USB 转串口芯片安装相应驱动：</p>
+<ul>
+<li><strong>CP2102</strong>: <a rel="external" href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers">Silicon Labs 驱动</a></li>
+<li><strong>CH340</strong>: <a rel="external" href="http://www.wch.cn/downloads/CH341SER_ZIP.html">沁恒微电子驱动</a></li>
+</ul>
+<h3 id="3-shao-lu-micropython-gu-jian">3. 烧录 MicroPython 固件</h3>
+<h4 id="shi-yong-esptool-gong-ju">使用 esptool 工具</h4>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: #6A737D;"># 安装 esptool</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">pip</span><span style="color: #9ECBFF;"> install esptool</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 擦除闪存</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">esptool.py</span><span style="color: #79B8FF;"> --port</span><span style="color: #9ECBFF;"> /dev/ttyUSB0 erase_flash</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 烧录固件（替换为实际固件文件）</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">esptool.py</span><span style="color: #79B8FF;"> --port</span><span style="color: #9ECBFF;"> /dev/ttyUSB0</span><span style="color: #79B8FF;"> --baud 460800</span><span style="color: #9ECBFF;"> write_flash</span><span style="color: #79B8FF;"> -z 0x1000</span><span style="color: #9ECBFF;"> esp32-20210902-v1.17.bin</span></span></code></pre><h4 id="windows-shi-yong-thonny-ide-tui-jian-chu-xue-zhe">Windows 使用 Thonny IDE（推荐初学者）</h4>
+<ol>
+<li>下载安装 <a rel="external" href="https://thonny.org/">Thonny IDE</a></li>
+<li>工具 → 设置 → 解释器 → MicroPython (ESP32)</li>
+<li>选择端口，点击安装或更新固件</li>
+</ol>
+<h2 id="ji-chu-bian-cheng">基础编程</h2>
+<h3 id="lian-jie-wi-fi">连接 Wi-Fi</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="python"><span class="giallo-l"><span style="color: #F97583;">import</span><span> network</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> time</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 创建 WLAN 对象</span></span>
+<span class="giallo-l"><span>wlan</span><span style="color: #F97583;"> =</span><span> network.WLAN(network.</span><span style="color: #79B8FF;">STA_IF</span><span>)</span></span>
+<span class="giallo-l"><span>wlan.active(</span><span style="color: #79B8FF;">True</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 连接到 Wi-Fi</span></span>
+<span class="giallo-l"><span>wlan.connect(</span><span style="color: #9ECBFF;">&#39;你的WiFi名称&#39;</span><span>,</span><span style="color: #9ECBFF;"> &#39;你的WiFi密码&#39;</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 等待连接</span></span>
+<span class="giallo-l"><span style="color: #F97583;">while not</span><span> wlan.isconnected():</span></span>
+<span class="giallo-l"><span>    time.sleep(</span><span style="color: #79B8FF;">1</span><span>)</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    print</span><span>(</span><span style="color: #9ECBFF;">&#39;连接中...&#39;</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;">print</span><span>(</span><span style="color: #9ECBFF;">&#39;已连接:&#39;</span><span>, wlan.ifconfig())</span></span></code></pre><h3 id="gpio-kong-zhi-led">GPIO 控制 LED</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="python"><span class="giallo-l"><span style="color: #F97583;">from</span><span> machine</span><span style="color: #F97583;"> import</span><span> Pin</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> time</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 设置 GPIO2 为输出（大多数 ESP32 开发板的板载 LED）</span></span>
+<span class="giallo-l"><span>led</span><span style="color: #F97583;"> =</span><span> Pin(</span><span style="color: #79B8FF;">2</span><span>, Pin.</span><span style="color: #79B8FF;">OUT</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 闪烁 LED</span></span>
+<span class="giallo-l"><span style="color: #F97583;">while</span><span style="color: #79B8FF;"> True</span><span>:</span></span>
+<span class="giallo-l"><span>    led.value(</span><span style="color: #79B8FF;">1</span><span>)</span><span style="color: #6A737D;">  # 点亮</span></span>
+<span class="giallo-l"><span>    time.sleep(</span><span style="color: #79B8FF;">0.5</span><span>)</span></span>
+<span class="giallo-l"><span>    led.value(</span><span style="color: #79B8FF;">0</span><span>)</span><span style="color: #6A737D;">  # 熄灭</span></span>
+<span class="giallo-l"><span>    time.sleep(</span><span style="color: #79B8FF;">0.5</span><span>)</span></span></code></pre><h3 id="pwm-diao-guang">PWM 调光</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="python"><span class="giallo-l"><span style="color: #F97583;">from</span><span> machine</span><span style="color: #F97583;"> import</span><span> Pin,</span><span style="color: #79B8FF;"> PWM</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> time</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 创建 PWM 对象</span></span>
+<span class="giallo-l"><span>led_pwm</span><span style="color: #F97583;"> =</span><span> PWM(Pin(</span><span style="color: #79B8FF;">2</span><span>))</span></span>
+<span class="giallo-l"><span>led_pwm.freq(</span><span style="color: #79B8FF;">1000</span><span>)</span><span style="color: #6A737D;">  # 设置频率 1kHz</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 渐变效果</span></span>
+<span class="giallo-l"><span style="color: #F97583;">while</span><span style="color: #79B8FF;"> True</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    # 渐亮</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    for</span><span> duty</span><span style="color: #F97583;"> in</span><span style="color: #79B8FF;"> range</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 1024</span><span>,</span><span style="color: #79B8FF;"> 10</span><span>):</span></span>
+<span class="giallo-l"><span>        led_pwm.duty(duty)</span></span>
+<span class="giallo-l"><span>        time.sleep(</span><span style="color: #79B8FF;">0.01</span><span>)</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    # 渐暗</span></span>
+<span class="giallo-l"><span style="color: #F97583;">    for</span><span> duty</span><span style="color: #F97583;"> in</span><span style="color: #79B8FF;"> range</span><span>(</span><span style="color: #79B8FF;">1023</span><span>,</span><span style="color: #F97583;"> -</span><span style="color: #79B8FF;">1</span><span>,</span><span style="color: #F97583;"> -</span><span style="color: #79B8FF;">10</span><span>):</span></span>
+<span class="giallo-l"><span>        led_pwm.duty(duty)</span></span>
+<span class="giallo-l"><span>        time.sleep(</span><span style="color: #79B8FF;">0.01</span><span>)</span></span></code></pre><h3 id="adc-du-qu-mo-ni-xin-hao">ADC 读取模拟信号</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="python"><span class="giallo-l"><span style="color: #F97583;">from</span><span> machine</span><span style="color: #F97583;"> import</span><span style="color: #79B8FF;"> ADC</span><span>, Pin</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> time</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 创建 ADC 对象</span></span>
+<span class="giallo-l"><span>adc</span><span style="color: #F97583;"> =</span><span> ADC(Pin(</span><span style="color: #79B8FF;">34</span><span>))</span></span>
+<span class="giallo-l"><span>adc.atten(</span><span style="color: #79B8FF;">ADC</span><span>.</span><span style="color: #79B8FF;">ATTN_11DB</span><span>)</span><span style="color: #6A737D;">  # 设置衰减，全量程 0-3.3V</span></span>
+<span class="giallo-l"><span>adc.width(</span><span style="color: #79B8FF;">ADC</span><span>.</span><span style="color: #79B8FF;">WIDTH_12BIT</span><span>)</span><span style="color: #6A737D;">  # 12位分辨率 (0-4095)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #F97583;">while</span><span style="color: #79B8FF;"> True</span><span>:</span></span>
+<span class="giallo-l"><span>    value</span><span style="color: #F97583;"> =</span><span> adc.read()</span></span>
+<span class="giallo-l"><span>    voltage</span><span style="color: #F97583;"> =</span><span> value</span><span style="color: #F97583;"> /</span><span style="color: #79B8FF;"> 4095</span><span style="color: #F97583;"> *</span><span style="color: #79B8FF;"> 3.3</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    print</span><span>(</span><span style="color: #F97583;">f</span><span style="color: #9ECBFF;">&#39;ADC值: </span><span style="color: #79B8FF;">{</span><span>value</span><span style="color: #79B8FF;">}</span><span style="color: #9ECBFF;">, 电压: </span><span style="color: #79B8FF;">{</span><span>voltage</span><span style="color: #F97583;">:.2f</span><span style="color: #79B8FF;">}</span><span style="color: #9ECBFF;">V&#39;</span><span>)</span></span>
+<span class="giallo-l"><span>    time.sleep(</span><span style="color: #79B8FF;">1</span><span>)</span></span></code></pre><h2 id="jin-jie-ying-yong">进阶应用</h2>
+<h3 id="web-fu-wu-qi">Web 服务器</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="python"><span class="giallo-l"><span style="color: #F97583;">import</span><span> network</span></span>
+<span class="giallo-l"><span style="color: #F97583;">import</span><span> socket</span></span>
+<span class="giallo-l"><span style="color: #F97583;">from</span><span> machine</span><span style="color: #F97583;"> import</span><span> Pin</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 连接 Wi-Fi（代码同上）...</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 创建 Web 服务器</span></span>
+<span class="giallo-l"><span style="color: #F97583;">def</span><span style="color: #B392F0;"> web_server</span><span>():</span></span>
+<span class="giallo-l"><span>    addr</span><span style="color: #F97583;"> =</span><span> socket.getaddrinfo(</span><span style="color: #9ECBFF;">&#39;0.0.0.0&#39;</span><span>,</span><span style="color: #79B8FF;"> 80</span><span>)[</span><span style="color: #79B8FF;">0</span><span>][</span><span style="color: #F97583;">-</span><span style="color: #79B8FF;">1</span><span>]</span></span>
+<span class="giallo-l"><span>    s</span><span style="color: #F97583;"> =</span><span> socket.socket()</span></span>
+<span class="giallo-l"><span>    s.bind(addr)</span></span>
+<span class="giallo-l"><span>    s.listen(</span><span style="color: #79B8FF;">1</span><span>)</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    print</span><span>(</span><span style="color: #9ECBFF;">&#39;Web 服务器运行在:&#39;</span><span>, addr)</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span>    led</span><span style="color: #F97583;"> =</span><span> Pin(</span><span style="color: #79B8FF;">2</span><span>, Pin.</span><span style="color: #79B8FF;">OUT</span><span>)</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #F97583;">    while</span><span style="color: #79B8FF;"> True</span><span>:</span></span>
+<span class="giallo-l"><span>        cl, addr</span><span style="color: #F97583;"> =</span><span> s.accept()</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">        print</span><span>(</span><span style="color: #9ECBFF;">&#39;客户端连接:&#39;</span><span>, addr)</span></span>
+<span class="giallo-l"><span>        request</span><span style="color: #F97583;"> =</span><span> cl.recv(</span><span style="color: #79B8FF;">1024</span><span>).decode()</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        # 解析请求</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        if</span><span style="color: #9ECBFF;"> &#39;GET /?led=on&#39;</span><span style="color: #F97583;"> in</span><span> request:</span></span>
+<span class="giallo-l"><span>            led.value(</span><span style="color: #79B8FF;">1</span><span>)</span></span>
+<span class="giallo-l"><span style="color: #F97583;">        elif</span><span style="color: #9ECBFF;"> &#39;GET /?led=off&#39;</span><span style="color: #F97583;"> in</span><span> request:</span></span>
+<span class="giallo-l"><span>            led.value(</span><span style="color: #79B8FF;">0</span><span>)</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        # 发送响应</span></span>
+<span class="giallo-l"><span>        response</span><span style="color: #F97583;"> =</span><span style="color: #9ECBFF;"> &quot;&quot;&quot;HTTP/1.0 200 OK</span><span style="color: #79B8FF;">\r\n</span><span style="color: #9ECBFF;">Content-type: text/html</span><span style="color: #79B8FF;">\r\n\r\n</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;html&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;head&gt;&lt;title&gt;ESP32 Web Server&lt;/title&gt;&lt;/head&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;body&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;h1&gt;ESP32 Web Server&lt;/h1&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;p&gt;LED 控制:&lt;/p&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;a href=&quot;/?led=on&quot;&gt;&lt;button&gt;ON&lt;/button&gt;&lt;/a&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;a href=&quot;/?led=off&quot;&gt;&lt;button&gt;OFF&lt;/button&gt;&lt;/a&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;/body&gt;</span></span>
+<span class="giallo-l"><span style="color: #9ECBFF;">        &lt;/html&gt;&quot;&quot;&quot;</span></span>
+<span class="giallo-l"><span>        </span></span>
+<span class="giallo-l"><span>        cl.send(response.encode())</span></span>
+<span class="giallo-l"><span>        cl.close()</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>web_server()</span></span></code></pre><h2 id="kai-fa-gong-ju-tui-jian">开发工具推荐</h2>
+<table><thead><tr><th>工具</th><th>特点</th><th>适用场景</th></tr></thead><tbody>
+<tr><td><strong>Thonny</strong></td><td>简单易用，内置固件烧录</td><td>初学者</td></tr>
+<tr><td><strong>VS Code + Pymakr</strong></td><td>功能强大，代码补全</td><td>专业开发</td></tr>
+<tr><td><strong>uPyCraft</strong></td><td>国产工具，中文界面</td><td>中文用户</td></tr>
+<tr><td><strong>ampy</strong></td><td>命令行工具，轻量</td><td>自动化脚本</td></tr>
+</tbody></table>
+<h2 id="chang-jian-wen-ti">常见问题</h2>
+<h3 id="1-shao-lu-shi-bai">1. 烧录失败</h3>
+<ul>
+<li>按住 BOOT 键再点击烧录</li>
+<li>降低波特率重试</li>
+<li>检查 USB 驱动是否正确安装</li>
+</ul>
+<h3 id="2-wu-fa-lian-jie-wi-fi">2. 无法连接 Wi-Fi</h3>
+<ul>
+<li>检查 Wi-Fi 名称和密码是否正确</li>
+<li>确认 Wi-Fi 是 2.4GHz 频段（ESP32 不支持 5GHz）</li>
+<li>尝试重启开发板</li>
+</ul>
+<h3 id="3-nei-cun-bu-zu">3. 内存不足</h3>
+<ul>
+<li>使用 <code>gc.collect()</code> 手动回收内存</li>
+<li>优化代码，避免创建大对象</li>
+<li>考虑使用 ESP32-S3 等内存更大的型号</li>
+</ul>
+<h2 id="xue-xi-zi-yuan">学习资源</h2>
+<ul>
+<li><a rel="external" href="https://docs.micropython.org/">MicroPython 官方文档</a></li>
+<li><a rel="external" href="https://docs.espressif.com/projects/esp-idf/">ESP32 MicroPython 教程</a></li>
+<li><a rel="external" href="https://randomnerdtutorials.com/">随机波动教程</a></li>
+</ul>
+<hr />
+<p><em>最后更新: 2024-07-17</em></p>
+
+        </div>
+        <div class="article-footer">
+          <a href="/posts/">← cd ~/posts</a>
+          <a href="/">cd ~</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> esp32-micropython.md</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

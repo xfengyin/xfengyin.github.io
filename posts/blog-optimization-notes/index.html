@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
+  <meta name="author" content="xfengyin" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <title>博客优化手记：从部署到赛博朋克UI改造 | xfengyin</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts/blog-optimization-notes.md</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/posts/">~/posts</a>
+      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <article class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">blog-optimization-notes.md</span>
+        <span class="status">2026-04-03</span>
+      </div>
+      <div class="window-body article">
+        <div class="comment"># 博客优化手记：从部署到赛博朋克UI改造</div>
+        <h1>博客优化手记：从部署到赛博朋克UI改造</h1>
+        <div class="meta-line">
+          <span class="t-dim">2026-04-03</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">6 min read</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">1197 words</span>
+        </div>
+        
+        <div class="meta-line" style="margin-top: 10px;">
+          <kbd>博客建设</kbd><kbd>前端开发</kbd>
+          <kbd>jekyll</kbd><kbd>chirpy</kbd><kbd>cyberpunk</kbd><kbd>ui</kbd><kbd>github-pages</kbd>
+        </div>
+        
+        <div class="article-body">
+          <h2 id="qian-yan">前言</h2>
+<blockquote>
+<p>“工欲善其事，必先利其器。” —— 《论语》</p>
+</blockquote>
+<p>建立个人技术博客是每位开发者的必修课。本文记录了我在部署和优化博客过程中的完整历程，包括遇到的问题、解决方案，以及最终采用的赛博朋克UI风格改造。</p>
+<hr />
+<h2 id="bo-ke-da-jian-li-cheng">博客搭建历程</h2>
+<h3 id="di-yi-jie-duan-ji-chu-bu-shu">第一阶段：基础部署</h3>
+<p><strong>选择技术栈</strong></p>
+<table><thead><tr><th>组件</th><th>选择</th><th>原因</th></tr></thead><tbody>
+<tr><td>静态生成器</td><td>Jekyll</td><td>GitHub Pages原生支持</td></tr>
+<tr><td>主题</td><td>Chirpy</td><td>现代化、功能完善</td></tr>
+<tr><td>托管</td><td>GitHub Pages</td><td>免费、稳定、自动部署</td></tr>
+<tr><td>评论</td><td>Giscus</td><td>基于GitHub Discussions</td></tr>
+</tbody></table>
+<p><strong>遇到的问题与解决</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>问题1：GitHub Actions部署失败</span></span>
+<span class="giallo-l"><span>原因：缺少Chirpy主题必需的_data目录和本地化文件</span></span>
+<span class="giallo-l"><span>解决：添加_data/locales/目录和contact.yml、share.yml等配置文件</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>问题2：缺少必要文件</span></span>
+<span class="giallo-l"><span>原因：缺少favicon配置和浏览器配置文件</span></span>
+<span class="giallo-l"><span>解决：添加site.webmanifest和browserconfig.xml</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>问题3：推送超时</span></span>
+<span class="giallo-l"><span>原因：网络波动</span></span>
+<span class="giallo-l"><span>解决：使用GitHub Token进行身份验证后重试</span></span></code></pre><h3 id="di-er-jie-duan-nei-rong-tian-chong">第二阶段：内容填充</h3>
+<p><strong>文章规划</strong></p>
+<table><thead><tr><th>序号</th><th>文章标题</th><th>分类</th><th>字数</th></tr></thead><tbody>
+<tr><td>1</td><td>Tauri v2 + React跨平台开发实战</td><td>技术实践</td><td>7,923</td></tr>
+<tr><td>2</td><td>Kongming微服务架构设计</td><td>后端开发</td><td>11,178</td></tr>
+<tr><td>3</td><td>Zen框架：Python模块化执行</td><td>Python</td><td>13,351</td></tr>
+<tr><td>4</td><td>赛博朋克UI设计实现</td><td>前端/UI</td><td>14,445</td></tr>
+</tbody></table>
+<p><strong>内容策略</strong></p>
+<ul>
+<li>每周发布1-2篇技术文章</li>
+<li>系列化内容（XingJu开发手记、架构设计系列）</li>
+<li>实战为主，理论结合代码</li>
+</ul>
+<hr />
+<h2 id="sai-bo-peng-ke-uigai-zao">赛博朋克UI改造</h2>
+<h3 id="she-ji-li-nian">设计理念</h3>
+<p><strong>为什么选择赛博朋克？</strong></p>
+<ol>
+<li><strong>契合项目风格</strong>：XingJu（星聚）本身就是赛博朋克风格</li>
+<li><strong>技术感强烈</strong>：深色背景+霓虹高光，符合技术博客定位</li>
+<li><strong>视觉冲击力</strong>：在众多博客中脱颖而出</li>
+<li><strong>暗色友好</strong>：长时间阅读不疲劳</li>
+</ol>
+<h3 id="pei-se-fang-an">配色方案</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="css"><span class="giallo-l"><span style="color: #B392F0;">:root</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">  /* 背景色 - 深邃的暗色调 */</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-dark</span><span>:</span><span style="color: #79B8FF;"> #0a0a0f</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-darker</span><span>:</span><span style="color: #79B8FF;"> #050508</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-panel</span><span>:</span><span style="color: #79B8FF;"> #12121a</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --cyber-border</span><span>:</span><span style="color: #79B8FF;"> #2a2a3e</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">  /* 霓虹色 - 赛博朋克标志性色彩 */</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --neon-cyan</span><span>:</span><span style="color: #79B8FF;"> #00f0ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --neon-magenta</span><span>:</span><span style="color: #79B8FF;"> #ff00ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --neon-purple</span><span>:</span><span style="color: #79B8FF;"> #9d00ff</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">  --neon-yellow</span><span>:</span><span style="color: #79B8FF;"> #ffff00</span><span>;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="he-xin-yang-shi-shi-xian">核心样式实现</h3>
+<p><strong>1. 侧边栏发光效果</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="scss"><span class="giallo-l"><span style="color: #B392F0;">#sidebar</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  background</span><span>:</span><span style="color: #79B8FF;"> linear-gradient</span><span>(</span><span style="color: #79B8FF;">180</span><span style="color: #F97583;">deg</span><span>,</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-dark</span><span>)</span><span style="color: #79B8FF;"> 0</span><span style="color: #F97583;">%</span><span>,</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-darker</span><span>)</span><span style="color: #79B8FF;"> 100</span><span style="color: #F97583;">%</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border-right</span><span>:</span><span style="color: #79B8FF;"> 1</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid var</span><span>(</span><span style="color: #FFAB70;">--cyber-border</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  box-shadow</span><span>:</span><span style="color: #79B8FF;"> inset -1</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> 0 0 rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.1</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #B392F0;">#sidebar .site-title</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  color</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  text-shadow</span><span>:</span><span style="color: #79B8FF;"> 0 0 10</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.5</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #B392F0;">#sidebar .profile-wrapper</span><span style="color: #85E89D;"> img</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border</span><span>:</span><span style="color: #79B8FF;"> 2</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  box-shadow</span><span>:</span><span style="color: #79B8FF;"> 0 0 15</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.4</span><span>);</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>2. 文章卡片悬浮效果</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="scss"><span class="giallo-l"><span style="color: #B392F0;">.post-preview</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  background</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-dark</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border</span><span>:</span><span style="color: #79B8FF;"> 1</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid var</span><span>(</span><span style="color: #FFAB70;">--cyber-border</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  transition</span><span>:</span><span style="color: #79B8FF;"> all 0.3</span><span style="color: #F97583;">s</span><span style="color: #79B8FF;"> ease</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  &amp;</span><span style="color: #B392F0;">::before</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    content</span><span>:</span><span style="color: #9ECBFF;"> &#39;&#39;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    position</span><span>:</span><span style="color: #79B8FF;"> absolute</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    top</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    left</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    right</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    height</span><span>:</span><span style="color: #79B8FF;"> 2</span><span style="color: #F97583;">px</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    background</span><span>:</span><span style="color: #79B8FF;"> linear-gradient</span><span>(</span><span style="color: #79B8FF;">90</span><span style="color: #F97583;">deg</span><span>,</span><span style="color: #79B8FF;"> transparent</span><span>,</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>),</span><span style="color: #79B8FF;"> transparent</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    opacity</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  &amp;</span><span style="color: #B392F0;">:hover</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    border-color</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    box-shadow</span><span>:</span><span style="color: #79B8FF;"> 0 0 20</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.15</span><span>);</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    &amp;</span><span style="color: #B392F0;">::before</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">      opacity</span><span>:</span><span style="color: #79B8FF;"> 1</span><span>;</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>3. 代码块顶部霓虹条</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="scss"><span class="giallo-l"><span style="color: #B392F0;">.post</span><span style="color: #85E89D;"> pre</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  background</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--cyber-darker</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border</span><span>:</span><span style="color: #79B8FF;"> 1</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid var</span><span>(</span><span style="color: #FFAB70;">--cyber-border</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  position</span><span>:</span><span style="color: #79B8FF;"> relative</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  &amp;</span><span style="color: #B392F0;">::before</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    content</span><span>:</span><span style="color: #9ECBFF;"> &#39;&#39;</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    position</span><span>:</span><span style="color: #79B8FF;"> absolute</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    top</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    left</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    right</span><span>:</span><span style="color: #79B8FF;"> 0</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    height</span><span>:</span><span style="color: #79B8FF;"> 1</span><span style="color: #F97583;">px</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    background</span><span>:</span><span style="color: #79B8FF;"> linear-gradient</span><span>(</span><span style="color: #79B8FF;">90</span><span style="color: #F97583;">deg</span><span>,</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>),</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-magenta</span><span>));</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>4. 导航链接发光效果</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="scss"><span class="giallo-l"><span style="color: #B392F0;">#sidebar .nav-link</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  border-left</span><span>:</span><span style="color: #79B8FF;"> 2</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> solid transparent</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">  transition</span><span>:</span><span style="color: #79B8FF;"> all 0.3</span><span style="color: #F97583;">s</span><span style="color: #79B8FF;"> ease</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  &amp;</span><span style="color: #B392F0;">:hover</span><span>, </span><span style="color: #85E89D;">&amp;</span><span style="color: #B392F0;">.active</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    color</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    border-left-color</span><span>:</span><span style="color: #79B8FF;"> var</span><span>(</span><span style="color: #FFAB70;">--neon-cyan</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    background</span><span>:</span><span style="color: #79B8FF;"> linear-gradient</span><span>(</span><span style="color: #79B8FF;">90</span><span style="color: #F97583;">deg</span><span>,</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.1</span><span>)</span><span style="color: #79B8FF;"> 0</span><span style="color: #F97583;">%</span><span>,</span><span style="color: #79B8FF;"> transparent 100</span><span style="color: #F97583;">%</span><span>);</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">    text-shadow</span><span>:</span><span style="color: #79B8FF;"> 0 0 8</span><span style="color: #F97583;">px</span><span style="color: #79B8FF;"> rgba</span><span>(</span><span style="color: #79B8FF;">0</span><span>,</span><span style="color: #79B8FF;"> 240</span><span>,</span><span style="color: #79B8FF;"> 255</span><span>,</span><span style="color: #79B8FF;"> 0.3</span><span>);</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="shi-jue-yuan-su-qing-dan">视觉元素清单</h3>
+<table><thead><tr><th>元素</th><th>效果</th><th>实现方式</th></tr></thead><tbody>
+<tr><td>侧边栏标题</td><td>青色发光文字</td><td>text-shadow</td></tr>
+<tr><td>头像边框</td><td>青色发光边框</td><td>border + box-shadow</td></tr>
+<tr><td>文章卡片</td><td>悬浮发光边框</td><td>hover + box-shadow</td></tr>
+<tr><td>代码块</td><td>顶部渐变色条</td><td>::before伪元素</td></tr>
+<tr><td>标签</td><td>半透明青色背景</td><td>rgba背景色</td></tr>
+<tr><td>链接</td><td>悬停变色发光</td><td>transition + text-shadow</td></tr>
+<tr><td>滚动条</td><td>青色悬停效果</td><td>::-webkit-scrollbar</td></tr>
+<tr><td>选中文字</td><td>青色半透明背景</td><td>::selection</td></tr>
+</tbody></table>
+<hr />
+<h2 id="gong-neng-pei-zhi-you-hua">功能配置优化</h2>
+<h3 id="ping-lun-xi-tong-giscus">评论系统（Giscus）</h3>
+<p><strong>配置要点</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="yaml"><span class="giallo-l"><span style="color: #85E89D;">comments</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  active</span><span>:</span><span style="color: #9ECBFF;"> giscus</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  giscus</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    repo</span><span>:</span><span style="color: #9ECBFF;"> xfengyin/xfengyin.github.io</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    repo_id</span><span>:</span><span style="color: #9ECBFF;"> R_kgDOLa_5-g</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    category</span><span>:</span><span style="color: #9ECBFF;"> General</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    category_id</span><span>:</span><span style="color: #9ECBFF;"> DIC_kwDOLa_5-s4CdxD_</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    mapping</span><span>:</span><span style="color: #9ECBFF;"> pathname</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    lang</span><span>:</span><span style="color: #9ECBFF;"> zh-CN</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    reactions_enabled</span><span>:</span><span style="color: #79B8FF;"> 1</span></span></code></pre>
+<p><strong>开启步骤</strong></p>
+<ol>
+<li>在GitHub仓库中启用Discussions功能</li>
+<li>访问 https://giscus.app 获取配置信息</li>
+<li>更新 <code>_config.yml</code> 中的giscus配置</li>
+<li>重新部署后评论功能生效</li>
+</ol>
+<h3 id="seoyou-hua">SEO优化</h3>
+<p><strong>已配置项目</strong></p>
+<ul>
+<li>✅ sitemap自动生成（jekyll-sitemap）</li>
+<li>✅ RSS订阅（jekyll-feed）</li>
+<li>✅ 结构化数据（jekyll-seo-tag）</li>
+<li>✅ 语义化HTML标签</li>
+<li>✅ Open Graph meta标签</li>
+</ul>
+<p><strong>待完善项目</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Google Search Console验证</li>
+<li><input disabled="" type="checkbox"/>
+Baidu站长平台验证</li>
+<li><input disabled="" type="checkbox"/>
+关键词优化</li>
+<li><input disabled="" type="checkbox"/>
+外链建设</li>
+</ul>
+<h3 id="xing-neng-you-hua">性能优化</h3>
+<p><strong>图片优化</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="yaml"><span class="giallo-l"><span style="color: #6A737D;"># _config.yml</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">img_cdn</span><span>:</span><span style="color: #6A737D;">  # 可配置CDN加速图片</span></span></code></pre>
+<p><strong>懒加载</strong></p>
+<ul>
+<li>文章图片采用懒加载</li>
+<li>减少首屏加载时间</li>
+</ul>
+<p><strong>PWA支持</strong></p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="yaml"><span class="giallo-l"><span style="color: #85E89D;">pwa</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  enabled</span><span>:</span><span style="color: #79B8FF;"> true</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">  cache</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #85E89D;">    enabled</span><span>:</span><span style="color: #79B8FF;"> true</span></span></code></pre>
+<hr />
+<h2 id="bu-shu-liu-cheng-zong-jie">部署流程总结</h2>
+<h3 id="wan-zheng-bu-shu-bu-zou">完整部署步骤</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="shellscript"><span class="giallo-l"><span style="color: #6A737D;"># 1. 克隆仓库</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">git</span><span style="color: #9ECBFF;"> clone https://github.com/xfengyin/xfengyin.github.io.git</span></span>
+<span class="giallo-l"><span style="color: #79B8FF;">cd</span><span style="color: #9ECBFF;"> xfengyin.github.io</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 2. 本地预览（可选）</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">bundle</span><span style="color: #9ECBFF;"> install</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">bundle</span><span style="color: #9ECBFF;"> exec jekyll serve</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 3. 内容更新</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># - 添加文章到 _posts/</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># - 修改配置文件 _config.yml</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># - 更新样式 assets/css/</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 4. 提交并推送</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">git</span><span style="color: #9ECBFF;"> add .</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">git</span><span style="color: #9ECBFF;"> commit</span><span style="color: #79B8FF;"> -m</span><span style="color: #9ECBFF;"> &quot;更新内容&quot;</span></span>
+<span class="giallo-l"><span style="color: #B392F0;">git</span><span style="color: #9ECBFF;"> push origin main</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 5. 自动部署</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># GitHub Actions会自动构建并部署到GitHub Pages</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"># 约2-3分钟后访问 https://xfengyin.github.io</span></span></code></pre><h3 id="bu-shu-wen-ti-jie-jue">部署问题解决</h3>
+<table><thead><tr><th>问题</th><th>原因</th><th>解决</th></tr></thead><tbody>
+<tr><td>Actions失败</td><td>缺少必要文件</td><td>添加_data/、favicon等配置</td></tr>
+<tr><td>推送超时</td><td>网络问题</td><td>使用Token身份验证</td></tr>
+<tr><td>样式不生效</td><td>缓存问题</td><td>清除浏览器缓存或强制刷新</td></tr>
+<tr><td>评论不显示</td><td>Giscus未配置</td><td>检查repo_id和category_id</td></tr>
+</tbody></table>
+<hr />
+<h2 id="hou-xu-you-hua-ji-hua">后续优化计划</h2>
+<h3 id="nei-rong-ceng-mian">内容层面</h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+每周1-2篇技术文章</li>
+<li><input disabled="" type="checkbox"/>
+建立文章系列（XingJu系列、架构设计系列）</li>
+<li><input disabled="" type="checkbox"/>
+增加图文教程和视频链接</li>
+<li><input disabled="" type="checkbox"/>
+整理技术资源索引页</li>
+</ul>
+<h3 id="gong-neng-ceng-mian">功能层面</h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+添加站内搜索功能</li>
+<li><input disabled="" type="checkbox"/>
+优化移动端阅读体验</li>
+<li><input disabled="" type="checkbox"/>
+增加文章阅读时间估算</li>
+<li><input disabled="" type="checkbox"/>
+添加相关文章推荐</li>
+</ul>
+<h3 id="tui-yan-ceng-mian">推广层面</h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+提交到搜索引擎</li>
+<li><input disabled="" type="checkbox"/>
+技术社区分享（知乎、掘金、CSDN）</li>
+<li><input disabled="" type="checkbox"/>
+社交媒体同步（Twitter/X）</li>
+<li><input disabled="" type="checkbox"/>
+RSS订阅推广</li>
+</ul>
+<hr />
+<h2 id="ji-shu-shou-huo">技术收获</h2>
+<p>通过这次博客搭建，我深入学习了：</p>
+<ol>
+<li><strong>Jekyll静态站点生成器</strong>：Liquid模板语法、插件系统</li>
+<li><strong>GitHub Pages</strong>：自动化部署、自定义域名</li>
+<li><strong>SCSS/CSS高级技巧</strong>：变量、嵌套、伪元素、动画</li>
+<li><strong>赛博朋克UI设计</strong>：配色理论、视觉层次、动效设计</li>
+<li><strong>SEO基础</strong>：meta标签、结构化数据、sitemap</li>
+</ol>
+<hr />
+<h2 id="can-kao-zi-yuan">参考资源</h2>
+<ul>
+<li><a rel="external" href="https://chirpy.cotes.page/">Chirpy主题文档</a></li>
+<li><a rel="external" href="https://jekyllrb.com/docs/">Jekyll官方文档</a></li>
+<li><a rel="external" href="https://docs.github.com/en/pages">GitHub Pages文档</a></li>
+<li><a rel="external" href="https://giscus.app/">Giscus配置指南</a></li>
+</ul>
+<hr />
+<h2 id="zong-jie">总结</h2>
+<p>搭建一个专业的技术博客需要考虑的方面很多：</p>
+<ol>
+<li><strong>技术选型</strong>：根据需求选择合适的工具链</li>
+<li><strong>内容规划</strong>：持续输出有价值的内容</li>
+<li><strong>视觉设计</strong>：打造独特的个人品牌</li>
+<li><strong>功能完善</strong>：评论、搜索、SEO一个都不能少</li>
+<li><strong>持续优化</strong>：根据反馈不断改进</li>
+</ol>
+<p>赛博朋克风格的UI改造让博客更具个性，也符合我作为硬件+软件工程师的技术形象。希望这个博客能成为记录成长、分享知识、连接同好的平台。</p>
+<hr />
+<p><em>最后更新：2026年4月3日</em></p>
+
+        </div>
+        <div class="article-footer">
+          <a href="/posts/">← cd ~/posts</a>
+          <a href="/">cd ~</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> blog-optimization-notes.md</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

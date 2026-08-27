@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
+  <meta name="author" content="xfengyin" />
+  <meta name="theme-color" content="#0a0c10" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <title>硬件测试--电池充放电测试方法 | xfengyin</title>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="traffic"><i></i><i></i><i></i></div>
+    <div class="path"><b>xfengyin</b>@github: <span>~/posts/hardware-test-battery.md</span></div>
+    <nav>
+      <a href="/">~/home</a>
+      <a href="/posts/">~/posts</a>
+      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
+    </nav>
+  </header>
+
+  <main class="wrap" style="padding-top: 10px;">
+    <article class="window">
+      <div class="window-bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="file">hardware-test-battery.md</span>
+        <span class="status">2024-07-13</span>
+      </div>
+      <div class="window-body article">
+        <div class="comment"># 硬件测试--电池充放电测试方法</div>
+        <h1>硬件测试--电池充放电测试方法</h1>
+        <div class="meta-line">
+          <span class="t-dim">2024-07-13</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">5 min read</span>
+          <span class="t-dim">·</span>
+          <span class="t-dim">1059 words</span>
+        </div>
+        
+        <div class="meta-line" style="margin-top: 10px;">
+          <kbd>硬件测试</kbd><kbd>电源</kbd>
+          <kbd>电池测试</kbd><kbd>充放电</kbd><kbd>电源管理</kbd><kbd>测试方法</kbd>
+        </div>
+        
+        <div class="article-body">
+          <h2 id="gai-shu">概述</h2>
+<p>电池是电子产品的核心部件，其性能直接影响产品的续航和安全性。本文介绍电池充放电测试的标准方法和注意事项。</p>
+<h2 id="ce-shi-she-bei">测试设备</h2>
+<h3 id="bi-bei-she-bei">必备设备</h3>
+<table><thead><tr><th>设备名称</th><th>规格要求</th><th>用途</th></tr></thead><tbody>
+<tr><td>电池充放电测试仪</td><td>电压0-20V, 电流0-10A</td><td>精确控制充放电过程</td></tr>
+<tr><td>数字万用表</td><td>4位半以上精度</td><td>电压、电流测量</td></tr>
+<tr><td>红外测温仪</td><td>精度±1°C</td><td>温度监测</td></tr>
+<tr><td>数据记录仪</td><td>多通道</td><td>连续数据记录</td></tr>
+<tr><td>电子负载</td><td>恒流/恒压/恒阻模式</td><td>放电测试</td></tr>
+</tbody></table>
+<h3 id="an-quan-she-bei">安全设备</h3>
+<ul>
+<li>防爆箱</li>
+<li>灭火器（CO2或干粉）</li>
+<li>绝缘手套</li>
+<li>护目镜</li>
+</ul>
+<h2 id="ce-shi-xiang-mu">测试项目</h2>
+<h3 id="1-rong-liang-ce-shi">1. 容量测试</h3>
+<h4 id="1-1-biao-zhun-chong-fang-dian-ce-shi">1.1 标准充放电测试</h4>
+<p><strong>测试条件</strong>：</p>
+<ul>
+<li>充电：CC/CV模式，0.5C充电至4.2V，截止电流0.05C</li>
+<li>静置：30分钟</li>
+<li>放电：CC模式，0.2C放电至3.0V</li>
+</ul>
+<p><strong>测试步骤</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>1. 将电池放入防爆箱</span></span>
+<span class="giallo-l"><span>2. 连接测试夹具（注意正负极）</span></span>
+<span class="giallo-l"><span>3. 设置充电参数：CC 0.5C → CV 4.2V → 截止0.05C</span></span>
+<span class="giallo-l"><span>4. 开始充电，记录充电曲线</span></span>
+<span class="giallo-l"><span>5. 静置30分钟</span></span>
+<span class="giallo-l"><span>6. 设置放电参数：CC 0.2C，截止电压3.0V</span></span>
+<span class="giallo-l"><span>7. 开始放电，记录放电曲线</span></span>
+<span class="giallo-l"><span>8. 计算放电容量</span></span></code></pre>
+<p><strong>计算公式</strong>：</p>
+<p>$$Capacity(mAh) = I_{discharge}(mA) \times T_{discharge}(h)$$</p>
+<p><strong>判定标准</strong>：</p>
+<ul>
+<li>标称容量：2000mAh</li>
+<li>实测容量 ≥ 标称容量的95%</li>
+<li>实测容量：≥ 1900mAh 为合格</li>
+</ul>
+<h4 id="1-2-bu-tong-bei-lu-fang-dian-ce-shi">1.2 不同倍率放电测试</h4>
+<table><thead><tr><th>放电倍率</th><th>放电电流</th><th>理论放电时间</th><th>容量要求</th></tr></thead><tbody>
+<tr><td>0.2C</td><td>400mA</td><td>5小时</td><td>≥ 95%标称容量</td></tr>
+<tr><td>0.5C</td><td>1000mA</td><td>2小时</td><td>≥ 90%标称容量</td></tr>
+<tr><td>1C</td><td>2000mA</td><td>1小时</td><td>≥ 85%标称容量</td></tr>
+<tr><td>2C</td><td>4000mA</td><td>30分钟</td><td>≥ 80%标称容量</td></tr>
+</tbody></table>
+<h3 id="2-chong-fang-dian-xiao-lu-ce-shi">2. 充放电效率测试</h3>
+<p><strong>测试方法</strong>：</p>
+<ol>
+<li>完全放电至3.0V</li>
+<li>记录充电总电量 Q_in</li>
+<li>静置30分钟</li>
+<li>放电至3.0V，记录放电电量 Q_out</li>
+</ol>
+<p><strong>效率计算</strong>：</p>
+<p>$$\eta = \frac{Q_{out}}{Q_{in}} \times 100%$$</p>
+<p><strong>标准要求</strong>：充电效率 ≥ 90%</p>
+<h3 id="3-xun-huan-shou-ming-ce-shi">3. 循环寿命测试</h3>
+<p><strong>测试流程</strong>：</p>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>标准充放电循环</span></span>
+<span class="giallo-l"><span>    ↓</span></span>
+<span class="giallo-l"><span>记录每次循环容量</span></span>
+<span class="giallo-l"><span>    ↓</span></span>
+<span class="giallo-l"><span>循环500次</span></span>
+<span class="giallo-l"><span>    ↓</span></span>
+<span class="giallo-l"><span>计算容量保持率</span></span></code></pre>
+<p><strong>判定标准</strong>：</p>
+<ul>
+<li>300次循环后，容量保持率 ≥ 80%</li>
+<li>500次循环后，容量保持率 ≥ 70%</li>
+</ul>
+<h3 id="4-wen-du-te-xing-ce-shi">4. 温度特性测试</h3>
+<h4 id="4-1-bu-tong-wen-du-fang-dian-ce-shi">4.1 不同温度放电测试</h4>
+<table><thead><tr><th>测试温度</th><th>放电容量要求</th><th>内阻变化</th></tr></thead><tbody>
+<tr><td>-20°C</td><td>≥ 70%标称容量</td><td>增加50-100%</td></tr>
+<tr><td>0°C</td><td>≥ 85%标称容量</td><td>增加20-30%</td></tr>
+<tr><td>25°C</td><td>100%（基准）</td><td>基准值</td></tr>
+<tr><td>45°C</td><td>≥ 95%标称容量</td><td>降低10-15%</td></tr>
+<tr><td>60°C</td><td>≥ 90%标称容量</td><td>降低20-25%</td></tr>
+</tbody></table>
+<h4 id="4-2-wen-sheng-ce-shi">4.2 温升测试</h4>
+<p><strong>测试条件</strong>：1C充放电循环</p>
+<p><strong>监测点</strong>：</p>
+<ul>
+<li>电池表面温度</li>
+<li>环境温度</li>
+<li>充电MOSFET温度</li>
+<li>放电MOSFET温度</li>
+</ul>
+<p><strong>安全标准</strong>：</p>
+<ul>
+<li>正常充放电：温度升高 ≤ 10°C</li>
+<li>异常情况下：温度不超过60°C</li>
+</ul>
+<h3 id="5-an-quan-ce-shi">5. 安全测试</h3>
+<h4 id="5-1-guo-chong-ce-shi">5.1 过充测试</h4>
+<p><strong>测试条件</strong>：</p>
+<ul>
+<li>充电电流：1C</li>
+<li>充电截止电压：1.5倍标称电压（6.3V for 4.2V电池）</li>
+<li>观察时间：7小时</li>
+</ul>
+<p><strong>安全要求</strong>：</p>
+<ul>
+<li>不起火</li>
+<li>不爆炸</li>
+<li>温度不超过150°C</li>
+</ul>
+<h4 id="5-2-guo-fang-ce-shi">5.2 过放测试</h4>
+<p><strong>测试条件</strong>：</p>
+<ul>
+<li>放电至0V</li>
+<li>静置1小时</li>
+<li>尝试充电</li>
+</ul>
+<p><strong>安全要求</strong>：</p>
+<ul>
+<li>不起火、不爆炸</li>
+<li>可恢复充电（容量可能降低）</li>
+</ul>
+<h4 id="5-3-duan-lu-ce-shi">5.3 短路测试</h4>
+<p><strong>测试条件</strong>：</p>
+<ul>
+<li>使用80±20mΩ电阻短路</li>
+<li>观察10分钟</li>
+</ul>
+<p><strong>安全要求</strong>：</p>
+<ul>
+<li>不起火、不爆炸</li>
+<li>外壳温度不超过150°C</li>
+</ul>
+<h4 id="5-4-zhen-ci-ce-shi">5.4 针刺测试</h4>
+<p><strong>测试条件</strong>：</p>
+<ul>
+<li>使用Φ3mm钢针</li>
+<li>穿刺速度：80mm/s</li>
+<li>贯穿电池</li>
+</ul>
+<p><strong>安全要求</strong>：不起火、不爆炸</p>
+<h2 id="ce-shi-shu-ju-fen-xi">测试数据分析</h2>
+<h3 id="dian-xing-chong-fang-dian-qu-xian">典型充放电曲线</h3>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="plain"><span class="giallo-l"><span>电压</span></span>
+<span class="giallo-l"><span> 4.2V ┤          ┌────────┐</span></span>
+<span class="giallo-l"><span>      │         /          \</span></span>
+<span class="giallo-l"><span> 4.0V ┤        /            \</span></span>
+<span class="giallo-l"><span>      │       /              \</span></span>
+<span class="giallo-l"><span> 3.7V ┤──────┘                └──────</span></span>
+<span class="giallo-l"><span>      │                              \</span></span>
+<span class="giallo-l"><span> 3.0V ┤                               \</span></span>
+<span class="giallo-l"><span>      └────────────────────────────────</span></span>
+<span class="giallo-l"><span>        充电              放电    时间</span></span></code></pre><h3 id="guan-jian-can-shu-ti-qu">关键参数提取</h3>
+<table><thead><tr><th>参数</th><th>说明</th><th>典型值</th></tr></thead><tbody>
+<tr><td>平台电压</td><td>放电曲线平稳段电压</td><td>3.6-3.7V</td></tr>
+<tr><td>内阻</td><td>DCIR，直流内阻</td><td>30-50mΩ</td></tr>
+<tr><td>自放电率</td><td>每月容量损失</td><td>2-5%</td></tr>
+<tr><td>能量密度</td><td>Wh/kg</td><td>150-250</td></tr>
+</tbody></table>
+<h2 id="ce-shi-bao-gao-mo-ban">测试报告模板</h2>
+<pre class="giallo" style="color: #E1E4E8; background-color: #24292E;" ><code data-lang="markdown"><span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;"># 电池测试报告</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">## 基本信息</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 电池型号：</span><span style="font-style: italic;">__</span><span>______</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 标称容量：</span><span style="font-style: italic;">__</span><span>______</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 标称电压：</span><span style="font-style: italic;">__</span><span>______</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 测试日期：</span><span style="font-style: italic;">__</span><span>______</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 测试人员：</span><span style="font-style: italic;">__</span><span>______</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">## 测试结果</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">### 1. 容量测试</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 0.2C放电容量：____mAh (___%)</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 判定：□ 合格  □ 不合格</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">### 2. 循环寿命</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 测试循环数：____次</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 容量保持率：</span><span style="font-style: italic;">__</span><span>__%</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 判定：□ 合格  □ 不合格</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">### 3. 温度特性</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> -20°C容量：</span><span style="font-style: italic;">__</span><span>__%</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 60°C容量：</span><span style="font-style: italic;">__</span><span>__%</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 判定：□ 合格  □ 不合格</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">### 4. 安全测试</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 过充：□ 通过  □ 失败</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 过放：□ 通过  □ 失败</span></span>
+<span class="giallo-l"><span style="color: #FFAB70;">-</span><span> 短路：□ 通过  □ 失败</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #79B8FF;font-weight: bold;">## 结论</span></span>
+<span class="giallo-l"><span>□ 合格，可以量产</span></span>
+<span class="giallo-l"><span>□ 不合格，需要改进</span></span></code></pre><h2 id="zhu-yi-shi-xiang">注意事项</h2>
+<h3 id="an-quan-jing-gao">安全警告</h3>
+<p>⚠️ <strong>电池测试存在危险，务必注意：</strong></p>
+<ol>
+<li><strong>始终在防爆箱中进行测试</strong></li>
+<li><strong>准备灭火器和沙桶</strong></li>
+<li><strong>不要离开正在测试的电池</strong></li>
+<li><strong>出现异常立即切断电源</strong></li>
+<li><strong>佩戴防护装备</strong></li>
+</ol>
+<h3 id="chang-jian-cuo-wu">常见错误</h3>
+<table><thead><tr><th>错误</th><th>后果</th><th>预防</th></tr></thead><tbody>
+<tr><td>反接</td><td>电池损坏、起火</td><td>使用防反接夹具</td></tr>
+<tr><td>过充</td><td>电池鼓包、起火</td><td>设置双重保护</td></tr>
+<tr><td>过热</td><td>容量衰减、安全问题</td><td>加强散热监控</td></tr>
+<tr><td>接触不良</td><td>数据不准、电弧</td><td>定期检查夹具</td></tr>
+</tbody></table>
+<h2 id="tui-jian-ce-shi-she-bei">推荐测试设备</h2>
+<table><thead><tr><th>品牌</th><th>型号</th><th>特点</th><th>价格区间</th></tr></thead><tbody>
+<tr><td>新威</td><td>CT-4008</td><td>功能全面，性价比高</td><td>¥5000-10000</td></tr>
+<tr><td>蓝电</td><td>CT2001A</td><td>精度高，适合研发</td><td>¥8000-15000</td></tr>
+<tr><td>MACCOR</td><td>4000系列</td><td>进口品牌，精度最高</td><td>$10000+</td></tr>
+<tr><td>Chroma</td><td>17011</td><td>大功率，适合pack测试</td><td>¥50000+</td></tr>
+</tbody></table>
+<hr />
+<p><em>最后更新: 2024-07-13</em></p>
+
+        </div>
+        <div class="article-footer">
+          <a href="/posts/">← cd ~/posts</a>
+          <a href="/">cd ~</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="statusbar">
+    <span class="item"><span class="dot"></span> hardware-test-battery.md</span>
+    <span class="spacer"></span>
+    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
