@@ -1,5 +1,5 @@
 +++
-title = "博客优化手记：从部署到赛博朋克UI改造"
+title = "博客优化手记：从 Jekyll 部署到中文风格改造"
 date = 2026-04-03T14:00:00+08:00
 description = "记录博客从 Jekyll 部署到中文风格改造的完整过程。"
 
@@ -10,6 +10,10 @@ tags = ["jekyll", "chirpy", "cyberpunk", "ui", "github-pages"]
 +++
 
 ## 前言
+
+> 📌 导读：记录博客从 Jekyll 部署到中文风格改造的完整过程。
+
+![示意图](/assets/diagrams/blog-optimization-notes.svg)
 
 > "工欲善其事，必先利其器。" —— 《论语》
 

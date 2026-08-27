@@ -1,5 +1,5 @@
 +++
-title = "赛博朋克UI设计：XingJu的视觉实现"
+title = "赛博朋克 UI 设计：XingJu 的视觉实现"
 date = 2026-04-03T13:00:00+08:00
 description = "赛博朋克美学如何落地为 XingJu 的界面设计。"
 
@@ -10,6 +10,10 @@ tags = ["cyberpunk", "ui", "design", "tailwind", "react"]
 +++
 
 ## 前言
+
+> 📌 导读：赛博朋克美学如何落地为 XingJu 的界面设计。
+
+![示意图](/assets/diagrams/cyberpunk-ui-design.svg)
 
 > "未来已至，只是尚未均匀分布。" —— 威廉·吉布森
 

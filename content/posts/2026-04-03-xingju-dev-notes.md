@@ -1,5 +1,5 @@
 +++
-title = "Tauri v2 + React 18 跨平台开发实战：XingJu开发手记"
+title = "Tauri v2 + React 18 跨平台开发实战：XingJu 开发手记"
 date = 2026-04-03T09:00:00+08:00
 description = "Tauri v2 + React 18 跨平台开发实战，XingJu 开发手记。"
 
@@ -12,6 +12,10 @@ image = "/assets/img/posts/xingju-cyberpunk.png"
 +++
 
 ## 项目背景
+
+> 📌 导读：Tauri v2 + React 18 跨平台开发实战，XingJu 开发手记。
+
+![示意图](/assets/diagrams/xingju-dev-notes.svg)
 
 [XingJu 星聚](https://github.com/xfengyin/XingJu) 是我最近开发的一款跨平台聚合应用，支持音乐、视频、小说、漫画的多源搜索。本文记录开发过程中的技术选型和实战经验。
 

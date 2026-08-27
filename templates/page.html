@@ -51,6 +51,17 @@
       </div>
       {% endif %}
 
+      {% if page.toc %}
+      <div class="toc">
+        <div class="toc-title">📑 目录</div>
+        <ul>
+          {% for h in page.toc %}
+          <li><a href="{{ h.permalink }}">{{ h.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
       <div class="article-content">
         {{ page.content | safe }}
       </div>
@@ -66,6 +77,21 @@
         {% else %}
         <span class="next disabled">已经是最后一篇</span>
         {% endif %}
+      </div>
+
+      <div class="related">
+        <div class="related-title">📖 推荐阅读</div>
+        <div class="related-grid">
+          {% set posts = get_section(path="posts/_index.md") %}
+          {% for rel in posts.pages %}
+            {% if rel.permalink != page.permalink and loop.index0 < 4 %}
+            <a class="related-item" href="{{ rel.permalink }}">
+              <span class="rel-cat">{% if rel.extra.categories %}{{ rel.extra.categories[0] }}{% else %}文章{% endif %}</span>
+              <span class="rel-title">{{ rel.title }}</span>
+            </a>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
 
       <div class="article-footer">

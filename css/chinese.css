@@ -605,3 +605,38 @@ body.dark .search-box input { background: #18181e; color: #d8d3c8; }
   background: linear-gradient(90deg, var(--themeBackground), var(--lightGreen));
   z-index: 999;
 }
+
+/* ---------- 文章目录 TOC ---------- */
+.toc {
+  background: #faf9f6;
+  border: 1px solid var(--lightGray);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 22px 0;
+}
+body.dark .toc { background: #1d1d24; }
+.toc-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc ul li { margin: 4px 0; }
+.toc ul li a { font-size: 13px; color: var(--greyFont); }
+.toc ul li a:hover { color: var(--themeBackground); }
+
+/* ---------- 相关推荐 ---------- */
+.related { margin-top: 40px; }
+.related-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (max-width: 640px) { .related-grid { grid-template-columns: 1fr; } }
+.related-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: #faf9f6;
+  border: 1px solid var(--lightGray);
+  border-radius: 8px;
+  transition: all .2s;
+}
+body.dark .related-item { background: #1d1d24; }
+.related-item:hover { border-color: var(--themeBackground); transform: translateY(-2px); }
+.related-item .rel-cat { font-size: 12px; color: var(--themeBackground); }
+.related-item .rel-title { font-size: 14px; color: var(--fontColor); }
