@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#faf9f6" />
+  <meta name="theme-color" content="#1b3b46" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
   <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
   <title>博客导航：全站文章索引与分类导读 | xfengyin</title>
 </head>
 <body>
-  <header class="toolbar">
+  <header class="toolbar" id="toolbar">
     <div class="toolbar-title">xfengyin<span>.</span></div>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
-      <li><a href="/">首页</a></li>
-      <li><a href="/posts/">文章</a></li>
-      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
+      <li><a href="/posts/"><span class="my-menu">📒 文章</span></a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener"><span class="my-menu">GitHub</span></a></li>
     </ul>
   </header>
 
-  <section class="signature-wall" style="min-height: 200px; padding: 36px 20px;">
+  <section class="signature-wall" style="height: 240px;">
     <div class="signature-inner">
-      <h1 style="font-size: 26px;">博客导航：全站文章索引与分类导读</h1>
+      <h1 style="font-size: 28px;">博客导航：全站文章索引与分类导读</h1>
     </div>
   </section>
 
-  <div class="page-wrap" style="grid-template-columns: 1fr;">
-    <article class="article-card">
+  <div class="page-wrap" style="justify-content: center;">
+    <article class="article-card" style="margin-top: -10px;">
       <div class="article-meta">
         <span>2024-12-01</span>
         <span>6 分钟 · 1199 字</span>
@@ -243,7 +243,14 @@
   <footer class="footer">
     <p>© <span id="year">2026</span> xfengyin</p>
   </footer>
+
   <script>
+    var toolbar = document.getElementById('toolbar');
+    function onScroll() {
+      toolbar.classList.toggle('enter', window.scrollY > 30);
+    }
+    window.addEventListener('scroll', onScroll);
+    onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
     document.getElementById('menuToggle').addEventListener('click', function () {
       document.getElementById('scrollMenu').classList.toggle('open');

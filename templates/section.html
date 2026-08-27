@@ -5,32 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="{{ config.description }}" />
   <meta name="author" content="{{ config.extra.author }}" />
-  <meta name="theme-color" content="#faf9f6" />
+  <meta name="theme-color" content="#1b3b46" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
   <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false) }}" />
   <title>{{ section.title }} | {{ config.title }}</title>
 </head>
 <body>
-  <header class="toolbar">
+  <header class="toolbar" id="toolbar">
     <div class="toolbar-title">{{ config.extra.author }}<span>.</span></div>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
-      <li><a href="/">首页</a></li>
-      <li><a href="/posts/">文章</a></li>
-      <li><a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
+      <li><a href="/posts/"><span class="my-menu">📒 文章</span></a></li>
+      <li><a href="{{ config.extra.github }}" target="_blank" rel="noopener"><span class="my-menu">GitHub</span></a></li>
     </ul>
   </header>
 
-  <section class="signature-wall" style="min-height: 240px; padding: 40px 20px;">
+  <section class="signature-wall" style="height: 300px;">
     <div class="signature-inner">
-      <h1 style="font-size: 32px;">{{ section.title }}</h1>
+      <h1 style="font-size: 34px;">{{ section.title }}</h1>
       <p class="subtitle">共 {{ section.pages | length }} 篇文章</p>
     </div>
   </section>
 
-  <div class="page-wrap">
-    <main>
-      <div class="section-label">// 全部文章</div>
+  <div class="page-wrap" style="flex-direction: column;">
+    <main class="main" style="width: 100%;">
+      <div class="section-head">
+        <span class="title">📖 全部文章</span>
+        <a class="more" href="/">MORE →</a>
+      </div>
       <div class="post-list">
         {% for post in section.pages %}
         <a class="post-card" href="{{ post.permalink }}">
@@ -43,7 +46,7 @@
           </div>
           <div class="post-body">
             <span class="post-category">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}随笔{% endif %}</span>
-            <div class="post-title">{{ post.title }}</div>
+            <h3 class="post-title">{{ post.title }}</h3>
             <div class="post-meta">
               <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
               <span>{{ post.reading_time }} 分钟 · {{ post.word_count }} 字</span>
@@ -53,38 +56,19 @@
         {% endfor %}
       </div>
     </main>
-
-    <aside>
-      <div class="card">
-        <div class="card-title">关于</div>
-        <p style="color: var(--muted); font-size: 14px;">{{ config.extra.role }}</p>
-      </div>
-      <div class="card">
-        <div class="card-title">分类</div>
-        <div class="tag-cloud">
-          <span>硬件测试</span>
-          <span>嵌入式开发</span>
-          <span>电路设计</span>
-          <span>后端开发</span>
-          <span>前端开发</span>
-          <span>Python</span>
-          <span>Rust</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">返回</div>
-        <div class="aside-links">
-          <a href="/">← 回到首页</a>
-          <a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub</a>
-        </div>
-      </div>
-    </aside>
   </div>
 
   <footer class="footer">
     <p>© <span id="year">2026</span> {{ config.extra.author }}</p>
   </footer>
+
   <script>
+    var toolbar = document.getElementById('toolbar');
+    function onScroll() {
+      toolbar.classList.toggle('enter', window.scrollY > 30);
+    }
+    window.addEventListener('scroll', onScroll);
+    onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
     document.getElementById('menuToggle').addEventListener('click', function () {
       document.getElementById('scrollMenu').classList.toggle('open');
