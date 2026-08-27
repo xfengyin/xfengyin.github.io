@@ -22,14 +22,23 @@
     </ul>
   </header>
 
-  <section class="signature-wall" style="height: 240px;">
+  <section class="signature-wall" style="height: 260px;">
     <div class="signature-inner">
-      <h1 style="font-size: 28px;">{{ page.title }}</h1>
+      <h1 style="font-size: 30px;">{{ page.title }}</h1>
     </div>
   </section>
 
   <div class="page-wrap" style="justify-content: center;">
     <article class="article-card" style="margin-top: -10px;">
+      <div class="article-cover">
+        {% if page.extra.image %}
+        <img src="{{ page.extra.image }}" alt="{{ page.title }}" />
+        {% else %}
+        <img src="/assets/covers/{{ page.slug }}.svg" alt="{{ page.title }}" />
+        {% endif %}
+      </div>
+
+      <h1>{{ page.title }}</h1>
       <div class="article-meta">
         <span>{{ page.date | date(format="%Y-%m-%d") }}</span>
         <span>{{ page.reading_time }} 分钟 · {{ page.word_count }} 字</span>
@@ -40,9 +49,24 @@
         {% for t in page.extra.tags %}<kbd>{{ t }}</kbd>{% endfor %}
       </div>
       {% endif %}
+
       <div class="article-content">
         {{ page.content | safe }}
       </div>
+
+      <div class="article-nav">
+        {% if page.earlier %}
+        <a class="prev" href="{{ page.earlier.permalink }}">← {{ page.earlier.title }}</a>
+        {% else %}
+        <span class="prev disabled">已经是第一篇</span>
+        {% endif %}
+        {% if page.later %}
+        <a class="next" href="{{ page.later.permalink }}">{{ page.later.title }} →</a>
+        {% else %}
+        <span class="next disabled">已经是最后一篇</span>
+        {% endif %}
+      </div>
+
       <div class="article-footer">
         <a href="/posts/">← 返回文章列表</a>
         <a href="/">回到首页</a>

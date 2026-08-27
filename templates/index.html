@@ -19,8 +19,7 @@
     <ul class="scroll-menu" id="scrollMenu">
       <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
       <li><a href="/posts/"><span class="my-menu">📒 文章</span></a></li>
-      <li><a href="#projects"><span class="my-menu">🧰 项目</span></a></li>
-      <li><a href="#about"><span class="my-menu">💖 关于</span></a></li>
+            <li><a href="#about"><span class="my-menu">💖 关于</span></a></li>
       <li><a href="{{ config.extra.github }}" target="_blank" rel="noopener"><span class="my-menu">GitHub</span></a></li>
     </ul>
   </header>
@@ -33,8 +32,8 @@
       <p class="subtitle">{{ section.extra.hero_role }}</p>
       <div class="stats">
         <div class="stat"><div class="num">{{ section.extra.posts_count }}</div><div class="label">文章</div></div>
-        <div class="stat"><div class="num">{{ section.extra.projects | length }}</div><div class="label">项目</div></div>
-        <div class="stat"><div class="num">{{ section.extra.skills | length }}</div><div class="label">技能</div></div>
+        <div class="stat"><div class="num">{{ section.extra.category_count }}</div><div class="label">分类</div></div>
+        <div class="stat"><div class="num">{{ section.extra.tag_count }}</div><div class="label">标签</div></div>
       </div>
       <div class="search-box">
         <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off" />
@@ -63,9 +62,9 @@
         <div class="role">{{ section.extra.hero_role }}</div>
         <p class="bio">{{ section.extra.hero_quote_en }}</p>
         <div class="profile-stats">
-          <div><div class="num">17</div><div class="label">文章</div></div>
-          <div><div class="num">8</div><div class="label">项目</div></div>
-          <div><div class="num">4</div><div class="label">方向</div></div>
+          <div><div class="num">{{ section.extra.posts_count }}</div><div class="label">文章</div></div>
+          <div><div class="num">{{ section.extra.category_count }}</div><div class="label">分类</div></div>
+          <div><div class="num">{{ section.extra.tag_count }}</div><div class="label">标签</div></div>
         </div>
       </div>
 
@@ -83,14 +82,6 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">项目</div>
-        <div class="aside-links">
-          {% for p in section.extra.projects %}
-          <a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }} · {{ p.lang }}</a>
-          {% endfor %}
-        </div>
-      </div>
     </aside>
 
     <!-- 右侧内容 -->
@@ -102,7 +93,7 @@
       <div class="post-grid">
         {% set posts = get_section(path="posts/_index.md") %}
         {% for post in posts.pages %}
-          {% if loop.index0 < 6 %}
+          {% if loop.index0 < 12 %}
           <a class="post-card" href="{{ post.permalink }}">
             <div class="post-cover">
               {% if post.extra.image %}
@@ -124,22 +115,6 @@
         {% endfor %}
       </div>
 
-      <div class="section-head" id="projects">
-        <span class="title">🧰 项目</span>
-        <a class="more" href="{{ config.extra.github }}" target="_blank" rel="noopener">MORE →</a>
-      </div>
-      <div class="post-grid">
-        {% for p in section.extra.projects %}
-        <a class="post-card" href="{{ p.url }}" target="_blank" rel="noopener">
-          <div class="post-cover">项目</div>
-          <div class="post-body">
-            <span class="post-category">{{ p.lang }}</span>
-            <h3 class="post-title">{{ p.name }}</h3>
-            <div class="post-meta"><span>{{ p.desc }}</span></div>
-          </div>
-        </a>
-        {% endfor %}
-      </div>
     </main>
   </div>
 
