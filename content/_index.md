@@ -9,6 +9,7 @@ hero_whoami = "xfengyin"
 hero_role = "Hardware Engineer / Embedded Developer / Tech Blogger"
 hero_quote = "荣耀存于心，而非留于形。"
 hero_quote_en = "\"The glory lies in the heart, not in the form.\""
+posts_count = 17
 
 [[extra.projects]]
 name = "kongming-agent"

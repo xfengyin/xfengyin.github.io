@@ -5,47 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#0a0c10" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
-  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
   <title>赛博朋克UI设计：XingJu的视觉实现 | xfengyin</title>
 </head>
 <body>
-  <header class="titlebar">
-    <div class="traffic"><i></i><i></i><i></i></div>
-    <div class="path"><b>xfengyin</b>@github: <span>~/posts/cyberpunk-ui-design.md</span></div>
-    <nav>
-      <a href="/">~/home</a>
-      <a href="/posts/">~/posts</a>
-      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
-    </nav>
+  <header class="toolbar">
+    <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="menu-toggle" id="menuToggle">菜单</button>
+    <ul class="scroll-menu" id="scrollMenu">
+      <li><a href="/">首页</a></li>
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </header>
 
-  <main class="wrap" style="padding-top: 10px;">
-    <article class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">cyberpunk-ui-design.md</span>
-        <span class="status">2026-04-03</span>
+  <section class="signature-wall" style="min-height: 200px; padding: 36px 20px;">
+    <div class="signature-inner">
+      <h1 style="font-size: 26px;">赛博朋克UI设计：XingJu的视觉实现</h1>
+    </div>
+  </section>
+
+  <div class="page-wrap" style="grid-template-columns: 1fr;">
+    <article class="article-card">
+      <div class="article-meta">
+        <span>2026-04-03</span>
+        <span>2 分钟 · 435 字</span>
       </div>
-      <div class="window-body article">
-        <div class="comment"># 赛博朋克UI设计：XingJu的视觉实现</div>
-        <h1>赛博朋克UI设计：XingJu的视觉实现</h1>
-        <div class="meta-line">
-          <span class="t-dim">2026-04-03</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">2 min read</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">435 words</span>
-        </div>
-        
-        <div class="meta-line" style="margin-top: 10px;">
-          <kbd>前端开发</kbd><kbd>UI设计</kbd>
-          <kbd>cyberpunk</kbd><kbd>ui</kbd><kbd>design</kbd><kbd>tailwind</kbd><kbd>react</kbd>
-        </div>
-        
-        <div class="article-body">
-          <h2 id="qian-yan">前言</h2>
+      
+      <div class="article-meta">
+        <kbd>前端开发</kbd><kbd>UI设计</kbd>
+        <kbd>cyberpunk</kbd><kbd>ui</kbd><kbd>design</kbd><kbd>tailwind</kbd><kbd>react</kbd>
+      </div>
+      
+      <div class="article-content">
+        <h2 id="qian-yan">前言</h2>
 <blockquote>
 <p>“未来已至，只是尚未均匀分布。” —— 威廉·吉布森</p>
 </blockquote>
@@ -491,20 +486,22 @@
 <hr />
 <p><em>最后更新：2026年4月3日</em></p>
 
-        </div>
-        <div class="article-footer">
-          <a href="/posts/">← cd ~/posts</a>
-          <a href="/">cd ~</a>
-        </div>
+      </div>
+      <div class="article-footer">
+        <a href="/posts/">← 返回文章列表</a>
+        <a href="/">回到首页</a>
       </div>
     </article>
-  </main>
+  </div>
 
-  <footer class="statusbar">
-    <span class="item"><span class="dot"></span> cyberpunk-ui-design.md</span>
-    <span class="spacer"></span>
-    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  <footer class="footer">
+    <p>© <span id="year">2026</span> xfengyin</p>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('scrollMenu').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

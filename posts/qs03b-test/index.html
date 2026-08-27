@@ -5,47 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#0a0c10" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
-  <link rel="stylesheet" href="https://xfengyin.github.io/css/codex.css" />
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
   <title>QS03B 硬件及软件逻辑测试 | xfengyin</title>
 </head>
 <body>
-  <header class="titlebar">
-    <div class="traffic"><i></i><i></i><i></i></div>
-    <div class="path"><b>xfengyin</b>@github: <span>~/posts/qs03b-test.md</span></div>
-    <nav>
-      <a href="/">~/home</a>
-      <a href="/posts/">~/posts</a>
-      <a href="https://github.com/xfengyin" target="_blank" rel="noopener">~/github</a>
-    </nav>
+  <header class="toolbar">
+    <div class="toolbar-title">xfengyin<span>.</span></div>
+    <button class="menu-toggle" id="menuToggle">菜单</button>
+    <ul class="scroll-menu" id="scrollMenu">
+      <li><a href="/">首页</a></li>
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </header>
 
-  <main class="wrap" style="padding-top: 10px;">
-    <article class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">qs03b-test.md</span>
-        <span class="status">2024-07-17</span>
+  <section class="signature-wall" style="min-height: 200px; padding: 36px 20px;">
+    <div class="signature-inner">
+      <h1 style="font-size: 26px;">QS03B 硬件及软件逻辑测试</h1>
+    </div>
+  </section>
+
+  <div class="page-wrap" style="grid-template-columns: 1fr;">
+    <article class="article-card">
+      <div class="article-meta">
+        <span>2024-07-17</span>
+        <span>4 分钟 · 941 字</span>
       </div>
-      <div class="window-body article">
-        <div class="comment"># QS03B 硬件及软件逻辑测试</div>
-        <h1>QS03B 硬件及软件逻辑测试</h1>
-        <div class="meta-line">
-          <span class="t-dim">2024-07-17</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">4 min read</span>
-          <span class="t-dim">·</span>
-          <span class="t-dim">941 words</span>
-        </div>
-        
-        <div class="meta-line" style="margin-top: 10px;">
-          <kbd>硬件测试</kbd><kbd>项目实战</kbd>
-          <kbd>硬件测试</kbd><kbd>qs03b</kbd><kbd>测试报告</kbd><kbd>嵌入式</kbd>
-        </div>
-        
-        <div class="article-body">
-          <h2 id="xiang-mu-gai-shu">项目概述</h2>
+      
+      <div class="article-meta">
+        <kbd>硬件测试</kbd><kbd>项目实战</kbd>
+        <kbd>硬件测试</kbd><kbd>qs03b</kbd><kbd>测试报告</kbd><kbd>嵌入式</kbd>
+      </div>
+      
+      <div class="article-content">
+        <h2 id="xiang-mu-gai-shu">项目概述</h2>
 <p>QS03B 是一款硬件模块的测试项目，本文记录了该模块的硬件及软件逻辑测试过程和结果。</p>
 <h2 id="ying-jian-ce-shi-xiang-mu">硬件测试项目</h2>
 <h3 id="1-dian-yuan-ce-shi">1. 电源测试</h3>
@@ -219,20 +214,22 @@
 <em>测试工程师: xFeng</em><br />
 <em>审核状态: 已通过</em></p>
 
-        </div>
-        <div class="article-footer">
-          <a href="/posts/">← cd ~/posts</a>
-          <a href="/">cd ~</a>
-        </div>
+      </div>
+      <div class="article-footer">
+        <a href="/posts/">← 返回文章列表</a>
+        <a href="/">回到首页</a>
       </div>
     </article>
-  </main>
+  </div>
 
-  <footer class="statusbar">
-    <span class="item"><span class="dot"></span> qs03b-test.md</span>
-    <span class="spacer"></span>
-    <span class="item optional">© <span id="year">2026</span> xfengyin</span>
+  <footer class="footer">
+    <p>© <span id="year">2026</span> xfengyin</p>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('scrollMenu').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

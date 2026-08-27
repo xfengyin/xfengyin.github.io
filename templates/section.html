@@ -5,49 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="{{ config.description }}" />
   <meta name="author" content="{{ config.extra.author }}" />
-  <meta name="theme-color" content="#0a0c10" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
-  <link rel="stylesheet" href="{{ get_url(path='css/codex.css', trailing_slash=false) }}" />
+  <meta name="theme-color" content="#faf9f6" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false) }}" />
   <title>{{ section.title }} | {{ config.title }}</title>
 </head>
 <body>
-  <header class="titlebar">
-    <div class="traffic"><i></i><i></i><i></i></div>
-    <div class="path"><b>xfengyin</b>@github: <span>~/posts</span></div>
-    <nav>
-      <a href="/">~/home</a>
-      <a href="/#projects">~/projects</a>
-      <a href="/#skills">~/skills</a>
-    </nav>
+  <header class="toolbar">
+    <div class="toolbar-title">{{ config.extra.author }}<span>.</span></div>
+    <button class="menu-toggle" id="menuToggle">菜单</button>
+    <ul class="scroll-menu" id="scrollMenu">
+      <li><a href="/">首页</a></li>
+      <li><a href="/posts/">文章</a></li>
+      <li><a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
   </header>
 
-  <main class="wrap" style="padding-top: 10px;">
-    <div class="section-label">{{ section.title | lower }}.log</div>
-    <section class="window">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">all-posts.txt</span>
-        <span class="status">{{ section.pages | length }} posts</span>
+  <section class="signature-wall" style="min-height: 240px; padding: 40px 20px;">
+    <div class="signature-inner">
+      <h1 style="font-size: 32px;">{{ section.title }}</h1>
+      <p class="subtitle">共 {{ section.pages | length }} 篇文章</p>
+    </div>
+  </section>
+
+  <div class="page-wrap">
+    <main>
+      <div class="section-label">// 全部文章</div>
+      <div class="post-list">
+        {% for post in section.pages %}
+        <a class="post-card" href="{{ post.permalink }}">
+          <div class="post-cover">
+            {% if post.extra.image %}
+            <img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" />
+            {% else %}
+            {% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}文{% endif %}
+            {% endif %}
+          </div>
+          <div class="post-body">
+            <span class="post-category">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}随笔{% endif %}</span>
+            <div class="post-title">{{ post.title }}</div>
+            <div class="post-meta">
+              <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
+              <span>{{ post.reading_time }} 分钟 · {{ post.word_count }} 字</span>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
       </div>
-      <div class="window-body">
-        <div class="posts">
-          {% for post in section.pages %}
-          <a class="post" href="{{ post.permalink }}">
-            <span class="tag">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}post{% endif %}</span>
-            <div class="title">{{ post.title }}</div>
-            <div class="meta">{{ post.date | date(format="%Y-%m-%d") }} · {{ post.word_count }} words</div>
-          </a>
-          {% endfor %}
+    </main>
+
+    <aside>
+      <div class="card">
+        <div class="card-title">关于</div>
+        <p style="color: var(--muted); font-size: 14px;">{{ config.extra.role }}</p>
+      </div>
+      <div class="card">
+        <div class="card-title">分类</div>
+        <div class="tag-cloud">
+          <span>硬件测试</span>
+          <span>嵌入式开发</span>
+          <span>电路设计</span>
+          <span>后端开发</span>
+          <span>前端开发</span>
+          <span>Python</span>
+          <span>Rust</span>
         </div>
       </div>
-    </section>
-  </main>
+      <div class="card">
+        <div class="card-title">返回</div>
+        <div class="aside-links">
+          <a href="/">← 回到首页</a>
+          <a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </aside>
+  </div>
 
-  <footer class="statusbar">
-    <span class="item"><span class="dot"></span> posts</span>
-    <span class="spacer"></span>
-    <span class="item optional">© <span id="year">2026</span> {{ config.extra.author }}</span>
+  <footer class="footer">
+    <p>© <span id="year">2026</span> {{ config.extra.author }}</p>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('menuToggle').addEventListener('click', function () {
+      document.getElementById('scrollMenu').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>

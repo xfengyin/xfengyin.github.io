@@ -3,24 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="{{ get_url(path='css/codex.css', trailing_slash=false) }}" />
+  <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false) }}" />
   <title>404 | {{ config.title }}</title>
 </head>
 <body>
-  <main class="wrap" style="padding-top: 10px;">
-    <div class="terminal">
-      <div class="window-bar">
-        <div class="dots"><i></i><i></i><i></i></div>
-        <span class="file">404.md</span>
-        <span class="status">not found</span>
-      </div>
-      <div class="term-body" style="min-height: 300px;">
-        <div class="term-line"><span class="term-prompt"><span class="path">xfengyin@github</span>:~$</span> <span class="t-cmd">cat 404.md</span></div>
-        <div class="term-line"><span class="t-red">Error 404: page not found</span></div>
-        <div class="term-line"><span class="t-dim">The requested file does not exist in this repository.</span></div>
-        <div class="term-line"><span class="t-dim">Try <a href="/">cd ~</a> or <a href="/posts/">cd ~/posts</a>.</span></div>
-      </div>
+  <section class="signature-wall" style="min-height: 100vh;">
+    <div class="signature-inner">
+      <div class="seal">失</div>
+      <h1>页面未寻得</h1>
+      <p class="subtitle">「只在此山中，云深不知处。」</p>
+      <p style="margin-top: 20px;"><a href="/" style="color: var(--red);">← 回到首页</a></p>
     </div>
-  </main>
+  </section>
 </body>
 </html>
