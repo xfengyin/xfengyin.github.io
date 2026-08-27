@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主" />
   <meta name="author" content="xfengyin" />
-  <meta name="theme-color" content="#faf9f6" />
+  <meta name="theme-color" content="#1b3b46" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
   <link rel="stylesheet" href="https://xfengyin.github.io/css/chinese.css" />
   <title>xfengyin | xfengyin</title>
 </head>
 <body>
-  <!-- 顶部导航 -->
-  <header class="toolbar">
+  <!-- 顶部导航：透明 -> 滚动白底毛玻璃 -->
+  <header class="toolbar" id="toolbar">
     <div class="toolbar-title">xfengyin<span>.</span></div>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
-      <li><a href="/">首页</a></li>
-      <li><a href="/posts/">文章</a></li>
-      <li><a href="#projects">项目</a></li>
-      <li><a href="#about">关于</a></li>
-      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>
+      <li><a href="/posts/"><span class="my-menu">📒 文章</span></a></li>
+      <li><a href="#projects"><span class="my-menu">🧰 项目</span></a></li>
+      <li><a href="#about"><span class="my-menu">💖 关于</span></a></li>
+      <li><a href="https://github.com/xfengyin" target="_blank" rel="noopener"><span class="my-menu">GitHub</span></a></li>
     </ul>
   </header>
 
@@ -41,7 +41,7 @@
   <!-- 主体 -->
   <div class="page-wrap">
     <!-- 左侧栏 -->
-    <aside>
+    <aside class="aside">
       <div class="card profile-card" id="about">
         <img class="avatar" src="https://github.com/xfengyin.png" alt="avatar" />
         <div class="name">xfengyin</div>
@@ -92,9 +92,12 @@
       </div>
     </aside>
 
-    <!-- 右侧文章区 -->
-    <main>
-      <div class="section-label">// 最新文章</div>
+    <!-- 右侧内容 -->
+    <main class="main">
+      <div class="section-head">
+        <span class="title">📖 最新文章</span>
+        <a class="more" href="/posts/">MORE →</a>
+      </div>
       <div class="post-grid">
         
         
@@ -107,7 +110,7 @@
             </div>
             <div class="post-body">
               <span class="post-category">洗地机测试</span>
-              <div class="post-title">洗地机电池续航测试方法与标准</div>
+              <h3 class="post-title">洗地机电池续航测试方法与标准</h3>
               <div class="post-meta">
                 <span>2026-04-14</span>
                 <span>3 分钟</span>
@@ -120,12 +123,12 @@
           <a class="post-card" href="https://xfengyin.github.io/posts/blog-optimization-notes/">
             <div class="post-cover">
               
-              博客建设
+              文
               
             </div>
             <div class="post-body">
               <span class="post-category">博客建设</span>
-              <div class="post-title">博客优化手记：从部署到赛博朋克UI改造</div>
+              <h3 class="post-title">博客优化手记：从部署到赛博朋克UI改造</h3>
               <div class="post-meta">
                 <span>2026-04-03</span>
                 <span>6 分钟</span>
@@ -138,12 +141,12 @@
           <a class="post-card" href="https://xfengyin.github.io/posts/cyberpunk-ui-design/">
             <div class="post-cover">
               
-              前端开发
+              文
               
             </div>
             <div class="post-body">
               <span class="post-category">前端开发</span>
-              <div class="post-title">赛博朋克UI设计：XingJu的视觉实现</div>
+              <h3 class="post-title">赛博朋克UI设计：XingJu的视觉实现</h3>
               <div class="post-meta">
                 <span>2026-04-03</span>
                 <span>2 分钟</span>
@@ -161,7 +164,7 @@
             </div>
             <div class="post-body">
               <span class="post-category">Python</span>
-              <div class="post-title">Zen框架：Python模块化执行的禅意之道</div>
+              <h3 class="post-title">Zen框架：Python模块化执行的禅意之道</h3>
               <div class="post-meta">
                 <span>2026-04-03</span>
                 <span>3 分钟</span>
@@ -179,7 +182,7 @@
             </div>
             <div class="post-body">
               <span class="post-category">后端开发</span>
-              <div class="post-title">Kongming微服务架构设计：从八卦到云原生</div>
+              <h3 class="post-title">Kongming微服务架构设计：从八卦到云原生</h3>
               <div class="post-meta">
                 <span>2026-04-03</span>
                 <span>3 分钟</span>
@@ -197,7 +200,7 @@
             </div>
             <div class="post-body">
               <span class="post-category">技术实践</span>
-              <div class="post-title">Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</div>
+              <h3 class="post-title">Tauri v2 + React 18 跨平台开发实战：XingJu开发手记</h3>
               <div class="post-meta">
                 <span>2026-04-03</span>
                 <span>3 分钟</span>
@@ -230,78 +233,81 @@
         
       </div>
 
-      <div class="section-label" id="projects" style="margin-top: 34px;">// 项目</div>
+      <div class="section-head" id="projects">
+        <span class="title">🧰 项目</span>
+        <a class="more" href="https://github.com/xfengyin" target="_blank" rel="noopener">MORE →</a>
+      </div>
       <div class="post-grid">
         
         <a class="post-card" href="https://github.com/xfengyin/kongming-agent" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Go</span>
-            <div class="post-title">kongming-agent</div>
-            <p class="post-meta"><span>孔明军师 AI 系统：融合三国智慧与现代 Agent 架构（LLM + RAG + Tool Use）</span></p>
+            <h3 class="post-title">kongming-agent</h3>
+            <div class="post-meta"><span>孔明军师 AI 系统：融合三国智慧与现代 Agent 架构（LLM + RAG + Tool Use）</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/zhihu-salt-novel-downloader" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Python</span>
-            <div class="post-title">zhihu-salt-novel-downloader</div>
-            <p class="post-meta"><span>知乎盐选小说下载器：CLI + GUI 双模式，多线程、断点续传</span></p>
+            <h3 class="post-title">zhihu-salt-novel-downloader</h3>
+            <div class="post-meta"><span>知乎盐选小说下载器：CLI + GUI 双模式，多线程、断点续传</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/youth-weekly" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Python</span>
-            <div class="post-title">youth-weekly</div>
-            <p class="post-meta"><span>青年周刊：科技 / 人文 / 动漫 / 游戏的 Z 世代内容聚合平台</span></p>
+            <h3 class="post-title">youth-weekly</h3>
+            <div class="post-meta"><span>青年周刊：科技 / 人文 / 动漫 / 游戏的 Z 世代内容聚合平台</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/jciyuan-spider" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Go</span>
-            <div class="post-title">jciyuan-spider</div>
-            <p class="post-meta"><span>Go Web 爬虫：jciyuan 动漫站数据抓取</span></p>
+            <h3 class="post-title">jciyuan-spider</h3>
+            <div class="post-meta"><span>Go Web 爬虫：jciyuan 动漫站数据抓取</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/orangepi-debug-tool" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Rust</span>
-            <div class="post-title">orangepi-debug-tool</div>
-            <p class="post-meta"><span>OrangePi 上位机调试工具</span></p>
+            <h3 class="post-title">orangepi-debug-tool</h3>
+            <div class="post-meta"><span>OrangePi 上位机调试工具</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/Protocol-algorithm" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Python</span>
-            <div class="post-title">Protocol-algorithm</div>
-            <p class="post-meta"><span>网络协议与算法学习笔记</span></p>
+            <h3 class="post-title">Protocol-algorithm</h3>
+            <div class="post-meta"><span>网络协议与算法学习笔记</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/XingJu" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">TypeScript</span>
-            <div class="post-title">XingJu</div>
-            <p class="post-meta"><span>星聚：Windows 多元内容聚合工具（Music / Video / Novel / Manga）</span></p>
+            <h3 class="post-title">XingJu</h3>
+            <div class="post-meta"><span>星聚：Windows 多元内容聚合工具（Music / Video / Novel / Manga）</span></div>
           </div>
         </a>
         
         <a class="post-card" href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">
-          <div class="post-cover" style="background: linear-gradient(135deg, #3d352f 0%, #6d5a4c 50%, #a33b2e 100%);">项目</div>
+          <div class="post-cover">项目</div>
           <div class="post-body">
             <span class="post-category">Rust</span>
-            <div class="post-title">xfengyin.github.io</div>
-            <p class="post-meta"><span>本站源码：Zola 驱动的中文风格个人主页</span></p>
+            <h3 class="post-title">xfengyin.github.io</h3>
+            <div class="post-meta"><span>本站源码：Zola 驱动的中文风格个人主页</span></div>
           </div>
         </a>
         
@@ -310,10 +316,20 @@
   </div>
 
   <footer class="footer">
-    <p>© <span id="year">2026</span> xfengyin · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="https://github.com/xfengyin/xfengyin.github.io" target="_blank" rel="noopener">GitHub Pages</a></p>
+    <p>© <span id="year">2026</span> xfengyin · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="https://github.com/xfengyin" target="_blank" rel="noopener">GitHub Pages</a></p>
   </footer>
 
   <script>
+    var toolbar = document.getElementById('toolbar');
+    function onScroll() {
+      if (window.scrollY > 30) {
+        toolbar.classList.add('enter');
+      } else {
+        toolbar.classList.remove('enter');
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
     document.getElementById('menuToggle').addEventListener('click', function () {
       document.getElementById('scrollMenu').classList.toggle('open');
