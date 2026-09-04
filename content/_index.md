@@ -1,14 +1,14 @@
 +++
 title = "xfengyin"
-description = "xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主"
+description = "xfengyin | AI Systems Engineer / AI Agent Engineer"
 
 [extra]
 hero_title = "xfengyin"
-hero_comment = "// 中文风格个人主页"
+hero_comment = "// AI Systems Engineer Portfolio"
 hero_whoami = "xfengyin"
-hero_role = "Hardware Engineer / Embedded Developer / Tech Blogger"
-hero_quote = "荣耀存于心，而非留于形。"
-hero_quote_en = "\"The glory lies in the heart, not in the form.\""
+hero_role = "AI Systems Engineer / AI Agent Engineer"
+hero_quote = "从云端到边缘，让 AI 真正跑起来。"
+hero_quote_en = "\"From cloud to edge, build AI systems that actually run.\""
 posts_count = 17
 category_count = 25
 tag_count = 64

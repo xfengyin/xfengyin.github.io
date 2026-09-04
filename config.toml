@@ -1,7 +1,7 @@
 # Zola site configuration
 title = "xfengyin"
-base_url = "https://xfengyin.github.io"
-description = "xfengyin | 硬件工程师 / 嵌入式开发者 / 技术博主"
+base_url = "https://xfengyin.github.io/"
+description = "xfengyin | AI Systems Engineer / AI Agent Engineer"
 compile_sass = false
 minify_html = false
 build_search_index = false
@@ -15,7 +15,7 @@ theme = "github-dark"
 
 [extra]
 author = "xfengyin"
-role = "Hardware Engineer / Embedded Developer / Tech Blogger"
+role = "AI Systems Engineer / AI Agent Engineer"
 site_url = "https://xfengyin.github.io"
 github = "https://github.com/xfengyin"
 email = "hi@xfengyin.github.io"
