@@ -7,7 +7,7 @@ description = "Zen：一个 Python 模块化执行框架的设计哲学与实现
 author = "xFeng"
 categories = ["Python", "架构设计"]
 tags = ["python", "framework", "architecture", "modular", "zen"]
-image = "/assets/img/posts/zen-workflow.png"
+image = "/assets/img/posts/zen-workflow.jpg"
 
 +++
 

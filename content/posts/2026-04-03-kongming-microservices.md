@@ -7,7 +7,7 @@ description = "从单体到微服务，Kongming 架构设计的完整思路与�
 author = "xFeng"
 categories = ["后端开发", "微服务"]
 tags = ["go", "microservices", "architecture", "kongming"]
-image = "/assets/img/posts/kongming-architecture.png"
+image = "/assets/img/posts/kongming-architecture.jpg"
 
 +++
 

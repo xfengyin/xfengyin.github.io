@@ -7,7 +7,7 @@ description = "Tauri v2 + React 18 跨平台开发实战，XingJu 开发手记�
 author = "xFeng"
 categories = ["技术实践", "Rust"]
 tags = ["tauri", "rust", "react", "桌面开发", "跨平台"]
-image = "/assets/img/posts/xingju-cyberpunk.png"
+image = "/assets/img/posts/xingju-cyberpunk.jpg"
 
 +++
 
