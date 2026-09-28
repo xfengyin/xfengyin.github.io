@@ -640,3 +640,14 @@ body.dark .related-item { background: #1d1d24; }
 .related-item:hover { border-color: var(--themeBackground); transform: translateY(-2px); }
 .related-item .rel-cat { font-size: 12px; color: var(--themeBackground); }
 .related-item .rel-title { font-size: 14px; color: var(--fontColor); }
+
+/* ============ 模板修饰类（替代原内联样式） ============ */
+.signature-wall--compact { height: 280px; }
+.signature-wall--compact h1 { font-size: 32px; }
+.signature-wall--full { height: 100vh; }
+.signature-back { margin-top: 20px; }
+.signature-wall a.back-home { color: #fff; text-decoration: underline; }
+.page-wrap--column { flex-direction: column; }
+.page-wrap--center { justify-content: center; }
+.main--full { width: 100%; }
+.article-card { margin-top: -10px; }
