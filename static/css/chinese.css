@@ -651,3 +651,75 @@ body.dark .related-item { background: #1d1d24; }
 .page-wrap--center { justify-content: center; }
 .main--full { width: 100%; }
 .article-card { margin-top: -10px; }
+
+/* ============================================================
+   设计令牌精修层（2026 重构）
+   保留国风身份（青瓷山水 + 朱砂 + 宋体），统一现代化令牌：
+   分层柔和阴影、统一圆角、克制的悬停动效、可达性焦点态。
+   本层规则位于文件末尾，同优先级覆盖前文。
+   ============================================================ */
+:root {
+  /* 语义化主色：朱砂（原 orange #ffa500 过亮，白底对比度不足） */
+  --themeBackground: #e8590c;
+  --themeHover: #d9480f;
+  --themeSoft: rgba(232, 89, 12, .08);
+  /* 统一圆角 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  /* 分层柔和阴影 */
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, .05), 0 1px 3px rgba(16, 24, 40, .06);
+  --shadow-2: 0 4px 12px rgba(16, 24, 40, .08), 0 2px 4px rgba(16, 24, 40, .05);
+  --shadow-3: 0 12px 32px rgba(16, 24, 40, .12), 0 4px 8px rgba(16, 24, 40, .06);
+}
+
+/* ---------- 卡片：柔影 + 轻浮起 ---------- */
+.card, .post-card, .article-card {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+}
+.card:hover, .post-card:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-3px);
+}
+.post-cover img { transition: transform .6s ease; }
+.post-card:hover .post-cover img { transform: scale(1.05); }
+
+/* ---------- 标签云/分类云：收敛缩放动效 ---------- */
+.tag-cloud a:hover, .tag-cloud span:hover { transform: translateY(-2px); background: var(--themeBackground); }
+.cloud a:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+.cloud a { animation: none; }
+.cloud a:nth-child(n) { animation: none; }
+.section-head .more:hover { transform: none; font-weight: 400; color: var(--themeBackground); }
+
+/* ---------- 搜索：焦点态改用主色柔环 ---------- */
+.search-box input { border-radius: var(--radius-md); box-shadow: var(--shadow-2); }
+.search-box input:focus { box-shadow: 0 0 0 3px var(--themeSoft), var(--shadow-2); }
+.search-box button { border-radius: var(--radius-md); transition: background .2s ease; }
+.search-box button:hover { background: var(--themeHover); }
+.search-results { border-radius: var(--radius-md); box-shadow: var(--shadow-3); }
+
+/* ---------- 文章页细节 ---------- */
+.article-content h2 { border-left-color: var(--themeBackground); }
+.article-content blockquote { background: var(--themeSoft); border-left-color: var(--themeBackground); }
+.article-content code { border-radius: 6px; }
+.toc, .related-item { border-radius: var(--radius-md); }
+.related-item:hover { box-shadow: var(--shadow-1); }
+.article-meta kbd { border-radius: 6px; }
+a { transition: color .2s ease; }
+
+/* ---------- 可达性：键盘焦点可见 ---------- */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--themeBackground);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- 深色模式同步 ---------- */
+body.dark .card, body.dark .post-card, body.dark .article-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+}
+body.dark .card:hover, body.dark .post-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .55);
+}
+body.dark { --themeSoft: rgba(232, 89, 12, .16); }
