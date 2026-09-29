@@ -36,3 +36,7 @@ zola serve
 ## 部署
 
 推送到 `main` 分支后，GitHub Actions 会自动安装 Zola、执行 `zola build` 并部署到 GitHub Pages。
+
+## 仓库来源
+
+本仓库以自建 Gitea 为唯一源，GitHub 侧为只读镜像；请勿直接在 GitHub 提交。
