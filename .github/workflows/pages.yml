@@ -15,7 +15,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Gitea 只对带 needs 的 job 求值 job 级 if（见 gitea-flow skill）。
+  # 没有这个占位 job，下面的 build/deploy 会在 Gitea 上永久排队。
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 说明
+        run: echo "GitHub Pages 部署只在 github.com 上执行；Gitea 上到此为止。"
+
   build:
+    needs: preflight
+    if: github.server_url == 'https://github.com'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,11 +49,12 @@ jobs:
           path: public
 
   deploy:
+    needs: [preflight, build]
+    if: github.server_url == 'https://github.com'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
