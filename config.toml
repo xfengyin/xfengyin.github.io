@@ -40,6 +40,12 @@ lang = "zh-CN"
 start_year = 2024
 # 社交分享用的默认卡片图（贴到微信/X/Telegram 上不再是白板）。
 # 用站点已有的封面资源，不新增二进制。
+# 站内用（相对路径）：<img src> 之类
 og_image = "/assets/img/covers/default-tech.jpg"
+# 社交卡片用（**绝对 URL**）：og:image / twitter:image 必须是绝对地址，
+# 爬虫不解析相对路径。这两个值分开写，避免在模板里做字符串裁剪 ——
+# 实测 Tera 的 replace(count=1) 会把所有斜杠都删掉（不是只删第一个），
+# 且本版 Tera 没有 slice / trim_start_matches，子模板顶层也不允许 {% set %}。
+og_image_abs = "https://xfengyin.github.io/assets/img/covers/default-tech.jpg"
 # 需要时填 X/Twitter 账号（含 @）；留空则只输出 summary_large_image 卡片
 twitter_site = ""

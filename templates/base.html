@@ -48,14 +48,14 @@
   <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock %}" />
   <meta property="og:description" content="{% block og_desc %}{{ config.description }}{% endblock %}" />
   <meta property="og:url" content="{{ current_url | safe }}" />
-  <meta property="og:image" content="{% block og_image %}{{ config.extra.og_image | default(value='') | safe }}{% endblock %}" />
+  <meta property="og:image" content="{% block og_image %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endblock %}" />
   {% if config.extra.twitter_site %}
   <meta name="twitter:site" content="{{ config.extra.twitter_site }}" />
   {% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{% block tw_title %}{{ config.title }}{% endblock %}" />
   <meta name="twitter:description" content="{% block tw_desc %}{{ config.description }}{% endblock %}" />
-  <meta name="twitter:image" content="{% block tw_image %}{{ config.extra.og_image | default(value='') | safe }}{% endblock %}" />
+  <meta name="twitter:image" content="{% block tw_image %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endblock %}" />
 
   {# ---- 结构化数据：让搜索引擎认出这是「人 + 站点」和「文章」 ---- #}
   <script type="application/ld+json">
