@@ -59,7 +59,7 @@ a { color: inherit; text-decoration: none; }
   box-shadow: rgba(0, 34, 77, 0.05) 0 1px 3px 0;
 }
 .toolbar-title { font-size: 20px; font-weight: 700; letter-spacing: .06em; }
-.toolbar-title span { color: var(--themeBackground); }
+.toolbar-title span { color: var(--themeText); }
 .scroll-menu { display: flex; justify-content: flex-end; margin: 0; padding: 0; list-style: none; }
 .scroll-menu li { list-style: none; margin: 0 8px; font-size: 16px; height: 60px; line-height: 60px; position: relative; cursor: pointer; }
 .scroll-menu li a { display: block; padding: 0 4px; }
@@ -76,7 +76,7 @@ a { color: inherit; text-decoration: none; }
   transition: max-width .25s ease-in-out;
 }
 .scroll-menu li:hover .my-menu::after { max-width: 100%; }
-.scroll-menu li:hover .my-menu { color: var(--themeBackground); }
+.scroll-menu li:hover .my-menu { color: var(--themeText); }
 .menu-toggle { display: none; background: none; border: 1px solid currentColor; border-radius: 6px; padding: 5px 12px; color: inherit; cursor: pointer; font-size: 14px; }
 
 @media (max-width: 768px) {
@@ -266,7 +266,7 @@ a { color: inherit; text-decoration: none; }
 .post-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1s ease; }
 .post-card:hover .post-cover img { transform: scale(1.2); }
 .post-body { width: 100%; height: 130px; padding: 10px 15px; display: flex; flex-direction: column; }
-.post-category { font-size: 12px; color: var(--themeBackground); }
+.post-category { font-size: 12px; color: var(--themeText); }
 .post-title {
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -335,7 +335,7 @@ a { color: inherit; text-decoration: none; }
 .article-content img { max-width: 100%; border-radius: 8px; border: 1px solid var(--lightGray); }
 .article-content hr { border: none; border-top: 1px dashed var(--lightGray); margin: 2em 0; }
 .article-footer { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 16px; border-top: 1px dashed var(--lightGray); font-size: 14px; }
-.article-footer a { color: var(--themeBackground); }
+.article-footer a { color: var(--themeText); }
 
 /* ---------- 页脚 ---------- */
 .footer {
@@ -347,7 +347,7 @@ a { color: inherit; text-decoration: none; }
   border-top: 1px solid var(--lightGray);
   background: #fff;
 }
-.footer a { color: var(--themeBackground); }
+.footer a { color: var(--themeText); }
 
 /* ---------- 搜索框 ---------- */
 .search-box {
@@ -552,7 +552,7 @@ html.dark .search-box input { background: #18181e; color: #d8d3c8; }
   border-top: 1px dashed var(--lightGray);
   font-size: 14px;
 }
-.article-nav a { color: var(--themeBackground); }
+.article-nav a { color: var(--themeText); }
 .article-nav .disabled { color: var(--faint, #b0b4b9); }
 
 /* ---------- 文章描述 ---------- */
@@ -573,7 +573,7 @@ html.dark .search-box input { background: #18181e; color: #d8d3c8; }
   float: left;
   line-height: 1;
   margin: 4px 8px 0 0;
-  color: var(--themeBackground);
+  color: var(--themeText);   /* 首字下沉是文字（3.2em≈51px 属大字，规范只要 3:1，但统一用文字色更稳） */
   font-weight: 700;
 }
 .article-content h2 {
@@ -613,7 +613,7 @@ html.dark .toc { background: #1d1d24; }
 .toc ul { list-style: none; padding-left: 0; }
 .toc ul li { margin: 4px 0; }
 .toc ul li a { font-size: 13px; color: var(--greyFont); }
-.toc ul li a:hover { color: var(--themeBackground); }
+.toc ul li a:hover { color: var(--themeText); }
 
 /* ---------- 相关推荐 ---------- */
 .related { margin-top: 40px; }
@@ -632,7 +632,7 @@ html.dark .toc { background: #1d1d24; }
 }
 html.dark .related-item { background: #1d1d24; }
 .related-item:hover { border-color: var(--themeBackground); transform: translateY(-2px); }
-.related-item .rel-cat { font-size: 12px; color: var(--themeBackground); }
+.related-item .rel-cat { font-size: 12px; color: var(--themeText); }
 .related-item .rel-title { font-size: 14px; color: var(--fontColor); }
 
 /* ============ 模板修饰类（替代原内联样式） ============ */
@@ -656,6 +656,18 @@ html.dark .related-item { background: #1d1d24; }
 :root {
   /* 语义化主色：朱砂（原 orange #ffa500 过亮，白底对比度不足） */
   --themeBackground: #e8590c;
+  /* 「当文字用」的主色：与 --themeBackground 同色相，只压亮度。
+     原因：#e8590c 作为文字时白底 3.58:1、浅底 3.40:1，低于 WCAG AA 正文 4.5:1。
+     ---- 选型（实测，别按直觉挑）----
+       #d24d08 白底 4.37  浅底 4.15  ← 不达标
+       #cc4707 白底 4.70  浅底 4.46  ← **只在白底过，浅底 4.46 仍不达标**，是个陷阱
+       #c44507 白底 5.00  浅底 4.75  ← 全部达标，取它
+     装饰性用法（边框、渐变、背景、焦点外环）**不改**，
+     对比度规范不约束非文字；只有作为 color 的地方才用这个变量。
+     ⚠️ 默认值 = 品牌色 #e8590c：**深色模式下它本来就达标**
+        （on #1d1d24 = 4.68:1），若一并压暗反而掉到 3.35:1 不合格。
+        所以只在**浅色模式**下覆盖成 #c44507。 */
+  --themeText: #e8590c;
   --themeHover: #d9480f;
   --themeSoft: rgba(232, 89, 12, .08);
   /* 统一圆角 */
@@ -684,7 +696,7 @@ html.dark .related-item { background: #1d1d24; }
 .cloud a:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
 .cloud a { animation: none; }
 .cloud a:nth-child(n) { animation: none; }
-.section-head .more:hover { transform: none; font-weight: 400; color: var(--themeBackground); }
+.section-head .more:hover { transform: none; font-weight: 400; color: var(--themeText); }
 
 /* ---------- 搜索：焦点态改用主色柔环 ---------- */
 .search-box input { border-radius: var(--radius-md); box-shadow: var(--shadow-2); }
@@ -728,6 +740,10 @@ html.dark .card:hover, html.dark .post-card:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, .55);
 }
 html.dark { --themeSoft: rgba(232, 89, 12, .16); }
+
+/* 浅色模式下「当文字用的主色」需压暗到达标；
+   深色模式保持 #e8590c（实测 4.68:1，本就合格）。 */
+:root:not(.dark) { --themeText: #c44507; }
 
 /* ---------- 可访问性补丁（perf-a11y）----------
    搜索条目键盘焦点态：条目是 <a href> 原生可聚焦，这里只补可见反馈。
