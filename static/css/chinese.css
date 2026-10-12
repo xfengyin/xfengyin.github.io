@@ -522,6 +522,12 @@ html.dark .search-box input { background: #18181e; color: #d8d3c8; }
 /* ---------- 文章详情页增强 ---------- */
 .article-cover {
   width: 100%;
+  /* 预留高度：原来只有 max-height:320px，容器高度**取决于图片是否加载完**
+     —— 实测（延迟封面图 900ms）容器在图片到达前只有 2px，加载后跳到 320px，
+     下方 h1/目录/正文全部被推下去，CLS=0.082（真实 Chrome 复现 5/5）。
+     用 aspect-ratio 让高度由**宽度**决定（布局时即已知），不再依赖图片：
+     宽 706px 时 16/9≈397px，被 max-height 收在 320px；窄屏按比例自然变矮。 */
+  aspect-ratio: 16 / 9;
   max-height: 320px;
   border-radius: 8px;
   overflow: hidden;
