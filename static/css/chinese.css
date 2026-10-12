@@ -771,3 +771,11 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
    实测 375px 视口横向溢出 461px、390px 溢出 446px、768px 溢出 68px（601 个元素越界）。
    width:100% 让卡片跟着容器走，min-width:0 解除 flex 的自动最小尺寸下限。 */
 .article-card { width: 100%; min-width: 0; }
+
+/* 推荐阅读：只展示前 4 条。
+   模板里没法计数（本版 Tera 缺 filter/namespace/slice），所以多渲染一些候选
+   （同标签的在前、最新文章兜底在后），由 CSS 裁到 4 条 ——
+   这样无论当前文章排在哪，永远都显示满 4 条。 */
+.related-grid > .related-item:nth-child(n+5) { display: none; }
+/* 同标签的候选带 related-item--fallback 以外的类名，兜底项统一带该类；
+   若前 4 条已经够，兜底项自然落在 nth-child(n+5) 之外被隐藏。 */

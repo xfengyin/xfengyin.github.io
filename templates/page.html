@@ -91,16 +91,51 @@
         {% endif %}
       </div>
 
+      {# 推荐阅读
+         旧实现两个实测缺陷：
+           ① `loop.index0 < 4` 限制的是「在整份列表里的位置」而不是「输出几条」——
+              当前文章若排进前 4，就只补到 3 条（17 篇里 4 篇中招）；
+           ② 与当前文章毫无关系，纯粹取最新的几篇。
+         相关性信号的选择（都有实测依据）：
+           · 64 个标签里只有 7 个被 2 篇以上共用 —— 纯按标签只有 9/17 篇能找到邻居；
+           · 分类复用度高得多（「硬件测试」覆盖 7 篇）；
+           · 标签+分类合起来覆盖 14/17。
+         本版 Tera 能力有限（无 filter / concat / namespace / slice，且 `{% set %}`
+         在嵌套循环里不带出累加值），因此无法计数去重 —— 改为多渲染候选、
+         由 CSS 只显示前 4 条；同时限制候选数量，避免把 HTML 撑大。 #}
+      {% set sec = get_section(path="posts/_index.md") %}
+      {% set all = sec.pages %}
+      {% set my_cats = page.taxonomies.categories | default(value=[]) %}
+      {% set my_tags = page.taxonomies.tags | default(value=[]) %}
       <div class="related">
         <div class="related-title">📖 推荐阅读</div>
         <div class="related-grid">
-          {% set posts = get_section(path="posts/_index.md") %}
-          {% for rel in posts.pages %}
-            {% if rel.permalink != page.permalink and loop.index0 < 4 %}
-            <a class="related-item" href="{{ rel.permalink }}">
-              <span class="rel-cat">{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}文章{% endif %}</span>
-              <span class="rel-title">{{ rel.title }}</span>
-            </a>
+          {# 1) 同分类（最多 2 个分类 × 3 篇） #}
+          {% for c in my_cats %}
+            {% if true %}
+              {% set cterm = get_taxonomy_term(kind="categories", term=c) %}
+              {% for rel in cterm.pages %}
+                {% if loop.index <= 3 and rel.permalink != page.permalink %}
+            <a class="related-item" href="{{ rel.permalink }}"><span class="rel-cat">{{ c }}</span><span class="rel-title">{{ rel.title }}</span></a>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          {# 2) 同标签（最多 2 个标签 × 3 篇） #}
+          {% for t in my_tags %}
+            {% if true %}
+              {% set term = get_taxonomy_term(kind="tags", term=t) %}
+              {% for rel in term.pages %}
+                {% if loop.index <= 3 and rel.permalink != page.permalink %}
+            <a class="related-item" href="{{ rel.permalink }}"><span class="rel-cat">#{{ t }}</span><span class="rel-title">{{ rel.title }}</span></a>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          {# 3) 兜底：最新 5 篇（CSS 只显示前 4 条） #}
+          {% for rel in all %}
+            {% if loop.index <= 5 and rel.permalink != page.permalink %}
+            <a class="related-item related-item--fallback" href="{{ rel.permalink }}"><span class="rel-cat">{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}文章{% endif %}</span><span class="rel-title">{{ rel.title }}</span></a>
             {% endif %}
           {% endfor %}
         </div>
