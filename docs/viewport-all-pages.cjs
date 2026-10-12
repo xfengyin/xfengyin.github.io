@@ -49,6 +49,9 @@ const VIEWPORTS = [
   }
   await b.close();
   console.log(`\n  全站检查：${pages.length} 页 × ${VIEWPORTS.length} 视口 = ${VIEWPORTS.length * pages.length} 次渲染`);
+  // 显式退出码：发现问题必须返回非零，否则上层验收脚本会把它当 PASS。
+  // （实测过：这些工具原先能打印 ✗ 却仍 exit 0，等于"永远绿"。）
+  process.exit(problems.length ? 1 : 0);
   if (!problems.length) console.log('  ✓ 无问题');
   else { console.log(`  ✗ ${problems.length} 处问题`); problems.slice(0, 20).forEach(p => console.log('    ' + p)); }
 })();

@@ -139,4 +139,7 @@ const VP = { width: 390, height: 844, isMobile: true, hasTouch: true };
   const nk = Object.keys(noName);
   if (!nk.length) console.log('  ✓ 所有交互元素都有可访问名');
   else { console.log(`  ✗ 无可访问名 ${nk.length} 种:`); nk.slice(0, 8).forEach(k => console.log('      ' + k)); }
+  // 显式退出码：发现问题必须返回非零，否则上层验收会当 PASS
+  // （原先这些工具能打印 ✗ 却仍 exit 0，等于「永远绿」；实测证实过。）
+  process.exit((sk.length + nk.length) ? 1 : 0);
 })();

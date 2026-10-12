@@ -40,6 +40,9 @@ const pages = fs.readFileSync(process.argv[3] || '/tmp/allpages.txt', 'utf8').tr
   }
   await b.close();
   console.log(`\n  320px 视口审计 ${pages.length} 页（加载失败 ${failed}）`);
+  // 显式退出码：发现问题必须返回非零，否则上层验收脚本会把它当 PASS。
+  // （实测过：这些工具原先能打印 ✗ 却仍 exit 0，等于"永远绿"。）
+  process.exit(ovf.length ? 1 : 0);
   if (!ovf.length) console.log('  ✓ 无横向溢出');
   else { console.log(`  ✗ ${ovf.length} 页横向溢出:`); ovf.slice(0, 12).forEach(x => console.log('      ' + x)); }
 })();

@@ -93,4 +93,7 @@ function ratio(a, b) { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) 
   const lk = Object.keys(low);
   if (!lk.length) console.log('  ✓ 深色下所有实底文本均达 AA');
   else { console.log(`  ✗ 深色下低于 AA 的样式 ${lk.length} 种：`); lk.sort((a,b)=>low[a].r-low[b].r).forEach(k => console.log(`      ${low[k].r.toFixed(2)}:1 ×${String(low[k].cnt).padStart(4)}  fg=rgb(${low[k].fg}) bg=rgb(${low[k].bg})  ${k.split('|')[0]}   例:${low[k].page}`)); }
+  // 显式退出码：发现问题必须返回非零，否则上层验收会当 PASS
+  // （原先这些工具能打印 ✗ 却仍 exit 0，等于「永远绿」；实测证实过。）
+  process.exit((lk.length + ik.length + overflow.length) ? 1 : 0);
 })();
