@@ -13,8 +13,11 @@
   <meta name="theme-color" content="#1b3b46" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0f2026" media="(prefers-color-scheme: dark)" />
 
-  {# canonical：避免同一个页面因带不带尾斜杠被当成两份内容 #}
-  <link rel="canonical" href="{{ current_url | safe }}" />
+  {# canonical：避免同一个页面因带不带尾斜杠被当成两份内容。
+     必须判空：404 页没有 current_url，原来会输出 <link href rel=canonical>
+     —— href 属性没有值，是畸形的 canonical（线上实测确实如此）。
+     404 页本来就不该有 canonical，判空后直接不输出。 #}
+  {% if current_url %}<link rel="canonical" href="{{ current_url | safe }}" />{% endif %}
 
   {# 订阅源自动发现：浏览器/阅读器能直接发现 /atom.xml #}
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}" />
