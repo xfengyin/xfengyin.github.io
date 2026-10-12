@@ -3,10 +3,12 @@ title = "Tauri v2 + React 18 跨平台开发实战：XingJu 开发手记"
 date = 2026-04-03T09:00:00+08:00
 description = "Tauri v2 + React 18 跨平台开发实战，XingJu 开发手记。"
 
-[extra]
-author = "xFeng"
+[taxonomies]
 categories = ["技术实践", "Rust"]
 tags = ["tauri", "rust", "react", "桌面开发", "跨平台"]
+
+[extra]
+author = "xFeng"
 image = "/assets/img/posts/xingju-cyberpunk.jpg"
 
 +++

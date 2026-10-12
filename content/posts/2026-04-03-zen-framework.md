@@ -3,10 +3,12 @@ title = "Zen 框架：Python 模块化执行的禅意之道"
 date = 2026-04-03T12:00:00+08:00
 description = "Zen：一个 Python 模块化执行框架的设计哲学与实现。"
 
-[extra]
-author = "xFeng"
+[taxonomies]
 categories = ["Python", "架构设计"]
 tags = ["python", "framework", "architecture", "modular", "zen"]
+
+[extra]
+author = "xFeng"
 image = "/assets/img/posts/zen-workflow.jpg"
 
 +++

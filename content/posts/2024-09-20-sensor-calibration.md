@@ -3,10 +3,12 @@ title = "传感器标定与测试：从误差分析到工程实践"
 date = 2024-09-20T10:00:00+08:00
 description = "传感器标定方法、误差分析与工程实践，让数据更可靠。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["硬件测试", "传感器"]
 tags = ["传感器", "标定", "校准", "精度测试", "误差分析"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 概述

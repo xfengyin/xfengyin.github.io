@@ -3,10 +3,12 @@ title = "博客优化手记：从 Jekyll 部署到中文风格改造"
 date = 2026-04-03T14:00:00+08:00
 description = "记录博客从 Jekyll 部署到中文风格改造的完整过程。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["博客建设", "前端开发"]
 tags = ["jekyll", "chirpy", "cyberpunk", "ui", "github-pages"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 前言
