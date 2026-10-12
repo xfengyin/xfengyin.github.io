@@ -37,9 +37,12 @@
 {% block content %}
   <div class="progress-bar" id="progressBar"></div>
 
-  <section class="signature-wall signature-wall--compact" aria-label="文章标题">
+  {# 这一块是页头装饰横幅，不是正文标题 —— 正文标题是下面 article-card 里的那个 h1。
+     原来两处都是 <h1> 且文字相同：一个页面出现两个 h1 是语义/SEO 问题（16 篇文章页全部如此）。
+     视觉完全不变：把类名从元素选择器改为显式类，样式规则同步加到 .hero-title 上。 #}
+  <section class="signature-wall signature-wall--compact" aria-label="页头">
     <div class="signature-inner">
-      <h1>{{ page.title }}</h1>
+      <p class="hero-title">{{ page.title }}</p>
     </div>
   </section>
 
