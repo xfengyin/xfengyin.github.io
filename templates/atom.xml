@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{# 覆盖 Zola 内置 feed 模板。
+   动机：内置模板把**全部文章全文**塞进 feed。实测 17 篇 = 666KB（gzip 78KB），
+   是全站最大的资源（第二名 chinese.css 仅 12.7KB），且体积随总篇数线性增长。
+   做法：保留全文（RSS 读者可离线读），但**只取最近 N 篇**，体积不再随总篇数增长。
+
+   实测踩到的坑（都验证过）：
+     · page.updated 在此上下文为 null，要用 page.date
+     · page.date 本身已是 RFC3339 字符串，**不要再套 date() 过滤器**
+     · taxonomies 的值是**字符串数组**（{"tags":["a","b"]}），不是对象数组
+     · 本版 Tera 无 slice 过滤器，用 range 索引取前 N 篇 #}
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="{{ lang }}">
+    <title>{{ config.title }}</title>
+    <subtitle>{{ config.description }}</subtitle>
+    <link rel="self" type="application/atom+xml" href="{{ feed_url | safe }}"/>
+    <link rel="alternate" type="text/html" href="{{ config.base_url | safe }}"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>{{ pages[0].date }}</updated>
+    <id>{{ feed_url | safe }}</id>
+    <author><name>{{ config.author }}</name></author>
+    {%- set limit = config.extra.feed_entries | default(value=10) %}
+    {%- for i in range(end=limit) %}
+    {%- if pages[i] %}
+    <entry>
+        <title>{{ pages[i].title }}</title>
+        <link rel="alternate" type="text/html" href="{{ pages[i].permalink | safe }}"/>
+        <id>{{ pages[i].permalink | safe }}</id>
+        <published>{{ pages[i].date }}</published>
+        <updated>{{ pages[i].date }}</updated>
+        {%- if pages[i].description %}
+        <summary type="text">{{ pages[i].description }}</summary>
+        {%- endif %}
+        <author><name>{{ config.author }}</name></author>
+        {%- if pages[i].taxonomies %}
+        {%- for name, terms in pages[i].taxonomies %}
+        {%- for term in terms %}
+        <category term="{{ term }}"/>
+        {%- endfor %}
+        {%- endfor %}
+        {%- endif %}
+        <content type="html">{{ pages[i].content | safe }}</content>
+    </entry>
+    {%- endif %}
+    {%- endfor %}
+</feed>

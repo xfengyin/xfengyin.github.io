@@ -30,6 +30,8 @@ smart_punctuation = true
 theme = "github-dark"
 
 [extra]
+# feed 里保留的条目数（全文输出，所以用条数控制体积；见 templates/atom.xml）
+feed_entries = 10
 author = "xfengyin"
 role = "AI Systems Engineer / AI Agent Engineer"
 site_url = "https://xfengyin.github.io"
