@@ -42,6 +42,9 @@ const pages = fs.readFileSync(process.argv[3] || '/tmp/allpages.txt', 'utf8').tr
   }
   await b.close();
   console.log(`\n  全站打印审计 ${pages.length} 页（加载失败 ${failed}）`);
+  // 显式退出码：发现问题必须返回非零，否则上层验收脚本会把它当 PASS。
+  // （实测过：这些工具原先能打印 ✗ 却仍 exit 0，等于"永远绿"。）
+  process.exit(blanks.length + darkish.length ? 1 : 0);
   console.log(blanks.length ? `  ✗ 打印内容过少 ${blanks.length} 页:` : '  ✓ 所有页打印时都有可读内容');
   blanks.slice(0, 8).forEach(x => console.log('      ' + x));
   console.log(darkish.length ? `  ✗ 打印时仍有大块深色 ${darkish.length} 页:` : '  ✓ 无大块深色（省墨）');

@@ -85,4 +85,6 @@ const LIMIT = parseInt(process.argv[4] || '200', 10);   // 安全上限（远大
   };
   show('焦点到达但无可见焦点环', noRing);
   show('枚举为应可达、但 Tab 一圈内从未获得焦点', neverFocused);
+  // 显式退出码：有问题必须非零，否则上层验收会当 PASS（原先能打印 ✗ 却 exit 0）
+  process.exit((Object.keys(noRing).length + Object.keys(neverFocused).length) ? 1 : 0);
 })();

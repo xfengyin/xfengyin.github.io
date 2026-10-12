@@ -21,7 +21,11 @@ run() {  # run "名称" 命令...
 run "内部链接 (111 页/407 引用)"      python3 "$DOCS/check-links.py" "$REPO"
 run "内容漂移 (17 篇)"                 python3 "$DOCS/content-drift-check.py" "$REPO"
 run "结构化声明值 (111 页)"            node "$DOCS/declared-values.cjs"
-run "axe 全站 (真实 Chrome)"           node "$DOCS/axe-all-pages.cjs" "$BASE" 2>/dev/null || node "$DOCS/axe-live.cjs" "$BASE"
+# ⚠️ 这里**不能**写 `cmd1 || cmd2`：那样一旦 cmd1 因「发现违规」返回 1，
+# 就会转而执行 cmd2；若 cmd2 返回 0，整项就显示 PASS —— **违规被吞掉**。
+# 实测过：造一个含 button-name / image-alt / color-contrast 违规的页面，
+# `axe-all-pages || axe-live` 的退出码是 0。所以只跑全站版。
+run "axe 全站 (真实 Chrome)"           node "$DOCS/axe-all-pages.cjs" "$BASE"
 run "视口 4 档 (111×4=444)"            node "$DOCS/viewport-all-pages.cjs" "$BASE" "$PAGES"
 run "320px 超窄屏 (111)"               node "$DOCS/narrow-320-pages.cjs" "$BASE" "$PAGES"
 run "交互元素目标尺寸 (111)"           node "$DOCS/interactive-all-pages.cjs" "$BASE" "$PAGES"

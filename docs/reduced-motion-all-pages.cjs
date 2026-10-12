@@ -53,4 +53,7 @@ const pages = fs.readFileSync(process.argv[3] || '/tmp/allpages.txt', 'utf8').tr
   const tk = Object.keys(trans);
   if (!tk.length) console.log('  ✓ 没有任何仍在进行的过渡');
   else { console.log(`  ✗ 仍有过渡 ${tk.length} 种（前 10）:`); tk.slice(0, 10).forEach(k => console.log('      ' + k)); }
+  // 显式退出码：发现问题必须返回非零，否则上层验收会当 PASS
+  // （原先这些工具能打印 ✗ 却仍 exit 0，等于「永远绿」；实测证实过。）
+  process.exit((ak.length + tk.length) ? 1 : 0);
 })();
