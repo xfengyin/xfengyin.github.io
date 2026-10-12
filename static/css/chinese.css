@@ -783,3 +783,48 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
 .related-grid > .related-item:nth-child(n+5) { display: none; }
 /* 同标签的候选带 related-item--fallback 以外的类名，兜底项统一带该类；
    若前 4 条已经够，兜底项自然落在 nth-child(n+5) 之外被隐藏。 */
+
+/* ---------- 触控目标尺寸（WCAG 2.5.8 AA 要求 ≥24×24） ----------
+   实测（390px 视口，真实 Chrome）发现几处小控件低于阈值：
+     #darkToggle 18×26（每页都有，最要紧）
+     .toc 目录链接 26×19 ~ 102×19
+     .footer 链接 27×19
+     .more「MORE →」56×23、文章分类/标签 chip 58×23
+   用户要求整体风格不再变动，所以**不改任何视觉尺寸** ——
+   统一用绝对定位的 ::after 把**可点区域**撑到 24×24 以上：
+   它不参与布局、不影响字号/间距/换行，视觉上完全看不出来。
+   父元素需要 position: relative 作为定位上下文。 */
+.dark-toggle,
+.section-head .more,
+.article-meta kbd,
+.toc ul li a,
+.footer a,
+.signature-back .back-home {
+  position: relative;
+}
+/* 行内元素上的绝对定位 ::after 是相对**第一个行盒**定位的，
+   跨行/居中段落里会跑偏（实测 footer 链接补了 ::after 仍只有 1px 可点）。
+   给这些链接 display:inline-block —— 它各自独占一个行盒，
+   ::after 的定位上下文才是整条链接。视觉上文字位置不变。 */
+.footer a,
+.signature-back .back-home {
+  display: inline-block;
+}
+.dark-toggle::after,
+.section-head .more::after,
+.article-meta kbd::after,
+.toc ul li a::after,
+.footer a::after,
+.signature-back .back-home::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* 24×24 是 WCAG 2.5.8 的 AA 下限；这里取 26×26 留一点余量 */
+  width: max(100%, 26px);
+  height: max(100%, 26px);
+}
+/* kbd 在 .article-meta 里是行内元素，撑开后相邻 chip 的可点区会重叠。
+   给容器加间隙，保证相邻目标不互相盖住（WCAG 2.5.8 的 spacing 例外条件）。 */
+.article-meta { gap: 14px; }
