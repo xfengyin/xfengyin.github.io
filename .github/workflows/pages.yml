@@ -1,0 +1,72 @@
+name: Deploy Zola site to GitHub Pages
+
+# ⚠️ 这个文件必须存在于 .github/workflows/ 下 —— 原因见下。
+#
+# 2026-10-09 的 d5e3153 把 workflow 从 .github/workflows 迁到了 .gitea/workflows，
+# 提交信息写的是「GitHub 侧不再跑 Actions」。但 GitHub Pages 的 build_type 是
+# **workflow**：它需要一个 GitHub Actions workflow 来构建并发布。
+# 结果：.github/workflows/ 空了之后，**站点再没有任何部署路径** ——
+# 推上去的提交不会出现在线上（实测：main 已到 74d2189，线上仍是旧页面、/atom.xml 404）。
+#
+# 因此这里恢复一份 GitHub 侧的 pages workflow。与 .gitea/workflows/pages.yml 的分工：
+#   · GitHub 上：这个文件真正执行 build + deploy
+#   · Gitea 上：Gitea 读 .gitea/workflows/，本文件里的 job 因 job 级 if 不成立而跳过
+#     （Gitea 只对带 needs 的 job 求值 job 级 if，所以保留 preflight 占位）
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    runs-on: ${{ github.server_url == 'https://github.com' && 'ubuntu-latest' || 'amd64' }}
+    steps:
+      - name: 说明
+        run: echo "GitHub Pages 部署只在 github.com 上执行。"
+
+  build:
+    needs: preflight
+    if: github.server_url == 'https://github.com'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install Zola
+        run: |
+          mkdir -p "$HOME/bin"
+          curl -fsSL https://github.com/getzola/zola/releases/download/v0.23.4/zola-v0.23.4-x86_64-unknown-linux-gnu.tar.gz | tar xz -C "$HOME/bin"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Build site
+        run: zola build
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: [preflight, build]
+    if: github.server_url == 'https://github.com'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
