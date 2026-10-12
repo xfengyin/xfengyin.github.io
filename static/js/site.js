@@ -123,6 +123,21 @@
   // 可访问名，屏幕阅读器只会读出「复选框 不可用」，读不到它是哪一条（axe: label 规则，
   // 实测全站 65 处）。这里用同一条 <li> 的文本补一个 aria-label，语义就完整了。
   // 纯增强：没有这块，页面其余功能不受影响。
+  // ---------- 可横向滚动的代码块 ----------
+  // <pre> 默认 tabIndex 为 -1，键盘用户无法聚焦、也就无法用方向键滚动它。
+  // 实测：移动端 390px 下 12 个代码块有 10 个横向溢出 —— 键盘用户会读不到超出的代码。
+  // WCAG 2.1.1 要求可滚动区域可键盘访问，这里在**确实溢出**时才加 tabindex="0"（不溢出就不必进 Tab 顺序）。
+  var pres = document.querySelectorAll('.article-content pre');
+  Array.prototype.forEach.call(pres, function (pre) {
+    if (pre.scrollWidth > pre.clientWidth + 1 && !pre.hasAttribute('tabindex')) {
+      pre.setAttribute('tabindex', '0');
+      // ⚠️ 不要加 role="region" + 相同 aria-label：
+      // 那会让 10 个代码块变成 10 个同名 landmark，反而触发 axe 的
+      // landmark-unique（landmark 名称必须唯一）。可聚焦 + 可见焦点态就够满足
+      // WCAG 2.1.1 了，这里只留 tabindex。
+    }
+  });
+
   var taskBoxes = document.querySelectorAll('.article-content input[type="checkbox"]');
   Array.prototype.forEach.call(taskBoxes, function (cb) {
     var li = cb.closest('li');

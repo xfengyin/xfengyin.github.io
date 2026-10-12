@@ -5,14 +5,19 @@
 {% block toolbar %}{% endblock %}
 
 {% block content %}
-  <section class="signature-wall signature-wall--full" aria-label="页面未找到">
-    <div class="signature-inner">
-      <div class="seal" aria-hidden="true">失</div>
-      <h1>页面未寻得</h1>
-      <p class="subtitle">「只在此山中，云深不知处。」</p>
-      <p class="signature-back"><a class="back-home" href="/">← 回到首页</a></p>
-    </div>
-  </section>
+  {# 404 页没有正文容器，axe 报 landmark-one-main（页面缺少 main landmark）。
+     用 <main> 包住唯一的区块：CSS 按 .signature-wall 类选择，换标签视觉不变
+     （实测过同类替换：目录 div→nav 是 0 像素差异）。 #}
+  <main>
+    <section class="signature-wall signature-wall--full" aria-label="页面未找到">
+      <div class="signature-inner">
+        <div class="seal" aria-hidden="true">失</div>
+        <h1>页面未寻得</h1>
+        <p class="subtitle">「只在此山中，云深不知处。」</p>
+        <p class="signature-back"><a class="back-home" href="/">← 回到首页</a></p>
+      </div>
+    </section>
+  </main>
 {% endblock %}
 
 {% block footer %}{% endblock %}
