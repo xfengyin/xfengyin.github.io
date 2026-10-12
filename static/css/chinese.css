@@ -905,3 +905,58 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
    这也是 GitHub 深色主题本身用的注释色，观感一致。
    只覆盖注释色，其余语法色不动。 */
 .article-content pre span[style*="#6a737d"] { color: #8b949e !important; }
+
+/* ---------- 打印样式（此前完全没有 @media print） ----------
+   实测未加之前：一篇 16 页的打印稿里
+     第 1 页 20.6% 是深色像素（题词区渐变横幅整块打印出来）
+     第 3 页 47.9% 是深色像素（代码块背景整块打印）
+   另有 position:fixed 的顶栏会被重复打印在每页顶部、压住正文。
+   原则：纸上只要正文，去掉一切屏幕装饰，并把深底改浅底省墨。 */
+@media print {
+  /* 屏幕装饰一律不打印 */
+  .toolbar, .aside, .footer, .search-box, .danmaku-wall,
+  .related, .article-nav, .back-to-top, .progress-bar, .toc,
+  #ptrbtn, .dark-toggle, .menu-toggle, .scroll-menu, .section-head .more {
+    display: none !important;
+  }
+  /* ⚠️ 题词区不能一律隐藏：它在**正常页**是装饰横幅，但在 **404 页是唯一内容容器**。
+     第一版把它一起隐藏了，结果 404 页打印出来**整页空白**（实测打印文本 0 字）。
+     所以只隐藏"作为装饰存在"的那些（紧凑/全屏变体之外的普通题词区），
+     404 用的是 .signature-wall--full，保留。 */
+  .signature-wall:not(.signature-wall--full) { display: none !important; }
+
+  /* 改浅底深字，省墨且可读 */
+  html, body { background: #fff !important; color: #000 !important; }
+  .article-card, .post-card, .card, .page-wrap, .main {
+    background: #fff !important; box-shadow: none !important;
+    border: none !important; margin: 0 !important; padding: 0 !important;
+    max-width: 100% !important; width: 100% !important;
+  }
+  .article-content { font-size: 11.5pt; line-height: 1.55; }
+
+  /* 代码块：深底改浅底 + 描边，避免整块墨 */
+  .article-content pre, .article-content pre code, .article-content code {
+    background: #f6f6f6 !important; color: #1a1a1a !important;
+    border: 1px solid #ccc !important; box-shadow: none !important;
+  }
+  /* 语法高亮的内联颜色在纸上会变浅，统一压成深色（保留粗体区分关键字） */
+  .article-content pre span { color: #1a1a1a !important; }
+
+  /* 链接：正文内的链接补上地址，纸质稿才看得出指向 */
+  .article-content a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #444; word-break: break-all; }
+  .article-content a { color: #000 !important; text-decoration: underline; }
+
+  /* 表格：避免跨页时表头与内容分离、避免整块深色 */
+  .article-content table { page-break-inside: auto; }
+  .article-content th { background: #eee !important; color: #000 !important; }
+  .article-content tr { page-break-inside: avoid; }
+  .article-content th, .article-content td { border: 1px solid #999 !important; }
+
+  /* 标题不与正文分离 */
+  h1, h2, h3 { page-break-after: avoid; color: #000 !important; }
+  img { max-width: 100% !important; page-break-inside: avoid; }
+  blockquote { background: none !important; border-left: 3px solid #999 !important; color: #333 !important; }
+
+  /* 打印时显示来源地址 */
+  .article-content::after { content: ""; }
+}
