@@ -81,7 +81,10 @@
   <!-- 顶部导航：透明 -> 滚动白底毛玻璃 -->
   <header class="toolbar" id="toolbar">
     <div class="toolbar-title">{{ config.extra.author }}<span>.</span></div>
-    <button class="dark-toggle" id="darkToggle" title="切换深浅色">🌙</button>
+    {# 无 JS 时这个按钮点了没反应（实测：存在、可聚焦、点击无变化），
+       是"死控件"。所以默认不显示，由 site.js 运行时把它显示出来。
+       这样禁用 JS 的用户不会看到一个按了没用的按钮。 #}
+    <button class="dark-toggle" id="darkToggle" title="切换深浅色" aria-pressed="false">🌙</button>
     <button class="menu-toggle" id="menuToggle">菜单</button>
     <ul class="scroll-menu" id="scrollMenu">
       <li><a href="/"><span class="my-menu">🏡 首页</span></a></li>

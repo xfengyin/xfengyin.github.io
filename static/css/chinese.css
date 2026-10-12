@@ -548,7 +548,12 @@ html.dark .search-box button { background: #a63a05; }
   font-size: 18px;
   cursor: pointer;
   margin-left: 12px;
+  /* 默认隐藏：没有 JS 时它是"死控件"（点了没反应）。
+     site.js 运行后会执行 document.documentElement.classList.add('js')，
+     这条规则才让它出现。禁用 JS 的用户因此不会看到无效按钮。 */
+  display: none;
 }
+html.js .dark-toggle { display: inline-block; }
 
 /* ---------- 文章详情页增强 ---------- */
 .article-cover {
