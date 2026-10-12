@@ -378,7 +378,12 @@ a { color: inherit; text-decoration: none; }
   padding: 0 20px;
   border: none;
   border-radius: 22px;
-  background: var(--themeBackground);
+  /* 白字 + 品牌橙 #e8590c 只有 3.58:1，低于 WCAG AA 正文 4.5:1
+     （这是「白字压在橙底上」，和上轮修的「橙字压在浅底上」是同一主色的另一种用法）。
+     改用文字用的深一档主色 --themeText（浅色下 #c44507 = 5.00:1）；
+     深色下 --themeText 是 #e8590c（作为"文字"在深底上合格），作按钮底仍不足，
+     故深色另有覆盖（见 html.dark .search-box button）。 */
+  background: var(--themeText);
   color: #fff;
   font-family: inherit;
   font-size: 14px;
@@ -516,6 +521,8 @@ html.dark .danmaku-wall { background: #050a0e; }
 html.dark .article-content pre { background: #000; color: #ccc; }
 html.dark .article-content code { background: #202027; border-color: #333; color: #ffb26b; }
 html.dark .search-box input { background: #18181e; color: #d8d3c8; }
+/* 深色下 --themeText 是 #e8590c，配白字只有 3.58:1 —— 按钮单独用更深一档（白字 6.50:1） */
+html.dark .search-box button { background: #a63a05; }
 
 /* ---------- 暗色切换按钮 ---------- */
 .dark-toggle {
