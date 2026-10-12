@@ -1,10 +1,18 @@
 {% extends "base.html" %}
-{% block title %}{{ term.name }} · {{ taxonomy.name }} · {{ config.title }}{% endblock %}
+{% block title %}{{ term.name }} · {% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %} · {{ config.title }}{% endblock %}
+{# 每个分类/标签页要有**自己的** description。
+   原来这里没覆盖，89 个词条页全部落到站点通用描述 ——
+   对 89 个可被索引的页面来说等于重复描述，是 SEO 上的实在损失（实测：111 页里 91 页同描述）。 #}
+{% block description %}「{{ term.name }}」{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}下共 {{ term.pages | length }} 篇文章，来自 {{ config.extra.author }} 的技术笔记。{% endblock %}
+{% block og_title %}{{ term.name }} · {% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}{% endblock %}
+{% block og_desc %}「{{ term.name }}」{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}下共 {{ term.pages | length }} 篇文章。{% endblock %}
+{% block tw_title %}{{ term.name }} · {% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}{% endblock %}
+{% block tw_desc %}「{{ term.name }}」{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}下共 {{ term.pages | length }} 篇文章。{% endblock %}
 {% block content %}
   <section class="signature-wall signature-wall--compact" aria-label="{{ taxonomy.name }}：{{ term.name }}">
     <div class="signature-inner">
       <h1>{{ term.name }}</h1>
-      <p class="subtitle">{{ taxonomy.name }} · 共 {{ term.pages | length }} 篇</p>
+      <p class="subtitle">{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %} · 共 {{ term.pages | length }} 篇</p>
     </div>
   </section>
   <main class="page-wrap page-wrap--column">
@@ -17,7 +25,7 @@
             {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 300px" /><img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" decoding="async" /></picture>{% else %}<img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />{% endif %}
           </div>
           <div class="post-body">
-            <span class="post-category">{{ taxonomy.name }}</span>
+            <span class="post-category">{% if taxonomy.name == 'categories' %}{{ term.name }}{% else %}#{{ term.name }}{% endif %}</span>
             <h3 class="post-title">{{ post.title }}</h3>
             {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
             <div class="post-meta"><span>{{ post.date | date(format="%Y-%m-%d") }}</span></div>
