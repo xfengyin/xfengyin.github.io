@@ -756,3 +756,12 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
 .guide-stats table { width: 100%; border-collapse: collapse; }
 .guide-stats th, .guide-stats td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--borderColor, #e6e6e6); }
 .guide-note { margin: 8px 0 0; font-size: 13px; color: var(--greyFont); }
+
+/* ---------- 窄屏：文章页不能横向溢出 ----------
+   .page-wrap 是 display:flex（.page-wrap--center 还带 justify-content:center），
+   且 align-items:flex-start。在 column 方向下，flex 子项默认 min-width:auto ——
+   它会以**内容宽度**为下限，遇到代码块/长串这类不可断行内容时就把容器撑破。
+   .article-card 原本只有 max-width:820px、没有 width，于是手机上卡片保持 820px 宽：
+   实测 375px 视口横向溢出 461px、390px 溢出 446px、768px 溢出 68px（601 个元素越界）。
+   width:100% 让卡片跟着容器走，min-width:0 解除 flex 的自动最小尺寸下限。 */
+.article-card { width: 100%; min-width: 0; }
