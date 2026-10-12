@@ -48,11 +48,7 @@
   <main class="page-wrap page-wrap--center">
     <article class="article-card">
       <div class="article-cover">
-        {% if page.extra.image %}
-        <img src="{{ page.extra.image }}" alt="{{ page.title }}" />
-        {% else %}
-        <img src="/assets/covers/{{ page.slug }}.svg" alt="{{ page.title }}" />
-        {% endif %}
+        {% if page.extra.image %}{% set base = page.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 980px) 100vw, 720px" /><img src="{{ page.extra.image }}" alt="{{ page.title }}" decoding="async" /></picture>{% else %}<img src="/assets/covers/{{ page.slug }}.svg" alt="{{ page.title }}" />{% endif %}
       </div>
 
       <h1>{{ page.title }}</h1>

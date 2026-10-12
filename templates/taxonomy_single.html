@@ -14,8 +14,7 @@
         {% for post in term.pages %}
         <a class="post-card" href="{{ post.permalink }}">
           <div class="post-cover">
-            {% if post.extra.image %}<img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" />
-            {% else %}<img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />{% endif %}
+            {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 300px" /><img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" decoding="async" /></picture>{% else %}<img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />{% endif %}
           </div>
           <div class="post-body">
             <span class="post-category">{{ taxonomy.name }}</span>
