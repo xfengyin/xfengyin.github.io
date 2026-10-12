@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} · {{ config.title }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block og_type_value %}article{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_desc %}{{ page.description }}{% endblock %}
+{% block tw_title %}{{ page.title }}{% endblock %}
+{% block tw_desc %}{{ page.description }}{% endblock %}
+{% block ld_type %}"BlogPosting"{% endblock %}
+
+{% block content %}
+  <section class="signature-wall signature-wall--compact" aria-label="文章标题">
+    <div class="signature-inner"><h1>{{ page.title }}</h1></div>
+  </section>
+  <main class="page-wrap page-wrap--center">
+    <article class="article-card">
+      {% set posts = get_section(path="posts/_index.md") %}
+      {% set cats = get_taxonomy(kind="categories") %}
+      {% set tags = get_taxonomy(kind="tags") %}
+
+      {# 统计表与标签云都在模板里算 —— 页面正文（markdown）里那两处手写清单已删除。
+         原因：Zola 0.23 的内容渲染阶段**不能调用** get_section/get_taxonomy
+         （官方限制：短代码/内容渲染发生在站点状态就绪之前），所以只能放到模板里做。 #}
+      <div class="guide-stats">
+        <table>
+          <thead><tr><th>统计项</th><th>数量</th></tr></thead>
+          <tbody>
+            <tr><td><strong>总文章数</strong></td><td>{{ posts.pages | length }} 篇</td></tr>
+            <tr><td><strong>分类数</strong></td><td>{{ cats.items | length }} 个</td></tr>
+            <tr><td><strong>标签数</strong></td><td>{{ tags.items | length }} 个</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-note">以上数字由构建时实时统计生成，不会与仓库实际内容脱节。</p>
+      </div>
+
+      <div class="article-content">
+        {{ page.content | safe }}
+      </div>
+
+      <h2 class="title">🔖 标签云（按实际引用次数）</h2>
+      <div class="cloud">
+        {% for t in tags.items %}{% if loop.index0 < 20 %}<a href="{{ t.permalink }}">{{ t.name }}（{{ t.pages | length }}）</a>
+        {% endif %}{% endfor %}
+      </div>
+    </article>
+  </main>
+{% endblock %}
