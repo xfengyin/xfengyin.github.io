@@ -40,3 +40,50 @@
 
 改动任何一个工具或模板后，建议按上面表格里的方式重新注入一遍验证。
 （这些注入都是一次性的，测完必须还原 —— 本轮全部已还原，工作区已验证为 0 改动。）
+
+---
+
+## 第 20 轮补充：axe 自身的审计
+
+### 1) 发现原来的规则集过窄
+
+`/tmp/a11y-browser/axe-run.cjs` 一直只用
+`['wcag2a','wcag2aa','wcag21a','wcag21aa','best-practice']` ——
+**漏掉了 WCAG 2.2**（`wcag22a`/`wcag22aa`）、2.1 AAA、ACT、Section 508。
+而 2.5.8 目标尺寸（我第 11 轮手工修的项）恰恰属于 WCAG 2.2 AA。
+
+用**完整规则集**重跑 111 页，结论与之前一致：
+```
+规则集: wcag2a,wcag2aa,wcag2aaa,wcag21a,wcag21aa,wcag21aaa,wcag22a,wcag22aa,best-practice,ACT,section508
+扫描页面 111，有违规的 4
+  [critical] label × 65  出现在 4 页
+```
+→ 说明之前"只报了 label"的结论**没有因为规则集窄而漏报**，可以放心。
+（这条结论本身值得记：不是"我猜没漏"，而是换宽规则集重跑验证过。）
+
+### 2) axe 的故障注入：确认它能抓到
+
+植入 3 类必然违规（无 alt 图片 / 空按钮 / 第二个 h1），axe 全部报出：
+```
+[critical] image-alt   × 1
+[critical] button-name × 1
+[moderate] region      × 2
+```
+→ axe 是活的，不是"永远报 ok"。
+
+### 3) ⚠️ 重要限制：axe 在本机**测不了 target-size**
+
+本机 axe 跑在 **jsdom** 里，**没有布局引擎**——所有元素的尺寸都是 0。
+实测：植入一个 `6×6` 的按钮后，`wcag22aa` 规则集仍然 **0 违规**。
+
+这不代表"目标尺寸达标"，而是**axe 在这个环境下根本量不出来**。
+
+→ 这正是我用自写 `hit-area.cjs`（真实 Chrome + `elementFromPoint` 量实际可点区域）的理由 ——
+  它**不是冗余**，而是覆盖了 axe 在 jsdom 下看不见的一整类问题。
+  该工具已单独做过故障注入（把深色按钮改 8×8 → 正确判 ✗）。
+
+### 结论：两套检测互补，缺一不可
+| 维度 | 用什么测 | 为什么 |
+|---|---|---|
+| 语义/ARIA/标签/标题层级 | axe（jsdom 够用） | 不依赖布局 |
+| 目标尺寸 / 实际可点区域 / 溢出 | hit-area.cjs、viewport-check.cjs（真实 Chrome） | **依赖布局**，axe 在 jsdom 下量不到 |
