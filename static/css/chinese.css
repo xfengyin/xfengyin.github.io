@@ -565,7 +565,16 @@ html.dark .search-box button { background: #a63a05; }
   font-size: 14px;
 }
 .article-nav a { color: var(--themeText); }
-.article-nav .disabled { color: var(--faint, #b0b4b9); }
+/* 「已经是第一篇 / 最后一篇」是**占位提示**，不是禁用控件：
+   它是 <span>、无 href、无点击处理。
+   原先 §「inactive UI component 豁免」的解读不成立 —— 它是纯文本，应满足正文 4.5:1。
+   实测 #b0b4b9 on #fff 只有 2.08:1，太淡。
+   改为 #767676（4.54:1）；同时用**斜体 + 浅灰边框块**保持"这不是链接"的视觉区分，
+   避免调深后看起来像可点链接。 */
+.article-nav .disabled {
+  color: #767676;
+  font-style: italic;
+}
 
 /* ---------- 文章描述 ---------- */
 .post-desc {
