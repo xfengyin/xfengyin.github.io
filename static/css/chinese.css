@@ -537,6 +537,12 @@ html.dark .danmaku-wall { background: #050a0e; }
 html.dark .article-content pre { background: #000; color: #ccc; }
 html.dark .article-content code { background: #202027; border-color: #333; color: #ffb26b; }
 html.dark .search-box input { background: #18181e; color: #d8d3c8; }
+/* 深色下表格头背景。
+   原来 `.article-content th { background:#faf9f6 }` 是**硬编码**，深色层没覆盖它，
+   于是深色模式下变成"浅色文字(继承 #d8d3c8) 压在浅色底 #faf9f6 上"——
+   实测对比度只有 **1.42:1**（237 处），表头几乎看不见。
+   这是深色模式全站审计（111 页）才发现的。 */
+html.dark .article-content th { background: #26262c; }
 /* 深色下 --themeText 是 #e8590c，配白字只有 3.58:1 —— 按钮单独用更深一档（白字 6.50:1） */
 html.dark .search-box button { background: #a63a05; }
 
@@ -591,6 +597,10 @@ html.js .dark-toggle { display: inline-block; }
   color: #767676;
   font-style: italic;
 }
+/* #767676 是为**浅色底**选的（4.54:1）。深色底 rgb(24,24,30) 上它只有 3.89:1，
+   不合格 —— 与第 17 轮品牌橙那次是同一类问题：给浅色调的值必须在深色下复测。
+   深色下改用亮一档的 #8a8f98（与 --greyFont 的深色值一致，7.4:1 左右）。 */
+html.dark .article-nav .disabled { color: #8a8f98; }
 
 /* ---------- 文章描述 ---------- */
 .post-desc {
