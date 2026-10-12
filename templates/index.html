@@ -122,6 +122,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="/js/search-data.js"></script>
-  <script src="/js/site.js"></script>
+  <script src="{{ get_url(path='js/search-data.js', cachebust=true) }}"></script>
+  <script src="{{ get_url(path='js/site.js', cachebust=true) }}"></script>
 {% endblock %}

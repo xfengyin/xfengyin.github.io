@@ -20,7 +20,7 @@
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}" />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
-  <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false) }}" />
+  <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false, cachebust=true) }}" />
 
   {# 防闪白（FOUC）：深色模式的类必须在**首屏绘制之前**挂上 <html>。
      放在 body 末尾的 site.js 执行时，浏览器早已用浅色画完第一帧 —— 深色用户必然看到白闪。
@@ -98,7 +98,7 @@
   {% endblock %}
 
   {% block scripts %}
-  <script src="/js/site.js"></script>
+  <script src="{{ get_url(path='js/site.js', cachebust=true) }}"></script>
   {% endblock %}
 </body>
 </html>
