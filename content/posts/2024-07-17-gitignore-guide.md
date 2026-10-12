@@ -3,10 +3,12 @@ title = ".gitignore 配置指南：让你的仓库保持干净"
 date = 2024-07-17T10:00:00+08:00
 description = "掌握 .gitignore 的正确配置姿势，让仓库保持干净、避免误提交。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["开发工具", "Git"]
 tags = ["git", "gitignore", "开发规范"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 什么是 .gitignore？

@@ -2,11 +2,12 @@
 title = "赛博朋克 UI 设计：XingJu 的视觉实现"
 date = 2026-04-03T13:00:00+08:00
 description = "赛博朋克美学如何落地为 XingJu 的界面设计。"
+[taxonomies]
+categories = ["前端开发", "UI设计"]
+tags = ["cyberpunk", "ui", "design", "tailwind", "react"]
 
 [extra]
 author = "xfengyin"
-categories = ["前端开发", "UI设计"]
-tags = ["cyberpunk", "ui", "design", "tailwind", "react"]
 +++
 
 ## 前言

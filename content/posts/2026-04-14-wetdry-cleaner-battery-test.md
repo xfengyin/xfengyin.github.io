@@ -3,10 +3,12 @@ title = "洗地机电池续航测试：方法、标准与数据分析"
 date = 2026-04-14T00:00:00
 description = "洗地机电池续航测试的方法、标准与数据分析。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["洗地机测试", "硬件测试"]
 tags = ["洗地机", "电池测试", "续航", "硬件测试"]
+
+[extra]
+author = "xfengyin"
 # 原来这里指向 /assets/images/wetdry-cleaner-test.jpg —— 该文件在仓库里不存在，
 # 线上是 404，首页卡片因此显示裂图。删掉这行后模板回退到
 # /assets/covers/<slug>.svg（该封面文件存在），与其余 16 篇一致。

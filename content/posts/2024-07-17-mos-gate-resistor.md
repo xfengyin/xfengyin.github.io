@@ -3,10 +3,12 @@ title = "MOS 管栅极电阻的作用与选型：从原理到 PCB 布局"
 date = 2024-07-17T16:00:00+08:00
 description = "MOS 管栅极电阻到底有什么用？从振荡、开关速度到保护机制一次讲清。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["电路设计", "硬件基础"]
 tags = ["mosfet", "栅极电阻", "电路设计", "硬件"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 问题引入

@@ -32,7 +32,7 @@
             {% endif %}
           </div>
           <div class="post-body">
-            <span class="post-category">{% if post.extra.categories %}{{ post.extra.categories[0] }}{% else %}随笔{% endif %}</span>
+            <span class="post-category">{% if post.taxonomies.categories %}{{ post.taxonomies.categories[0] }}{% else %}随笔{% endif %}</span>
             <h3 class="post-title">{{ post.title }}</h3>
             {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
             <div class="post-meta">

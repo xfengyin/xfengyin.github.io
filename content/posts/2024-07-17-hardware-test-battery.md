@@ -3,10 +3,12 @@ title = "电池充放电测试方法与实战：从设备到数据"
 date = 2024-07-13T10:00:00+08:00
 description = "电池充放电测试的完整流程、设备选型与关键指标解读。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["硬件测试", "电源"]
 tags = ["电池测试", "充放电", "电源管理", "测试方法"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 概述

@@ -3,10 +3,12 @@ title = "电源完整性实战：PDN 设计与噪声分析"
 date = 2024-09-01T10:00:00+08:00
 description = "PDN 设计与电源噪声分析实战，理解去耦电容与完整性测试。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["硬件测试", "电源设计"]
 tags = ["电源完整性", "PDN", "噪声分析", "去耦电容"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 概述

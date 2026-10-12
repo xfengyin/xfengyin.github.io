@@ -3,10 +3,12 @@ title = "Kongming 微服务架构设计：从单体到云原生"
 date = 2026-04-03T11:00:00+08:00
 description = "从单体到微服务，Kongming 架构设计的完整思路与实践。"
 
-[extra]
-author = "xFeng"
+[taxonomies]
 categories = ["后端开发", "微服务"]
 tags = ["go", "microservices", "architecture", "kongming"]
+
+[extra]
+author = "xFeng"
 image = "/assets/img/posts/kongming-architecture.jpg"
 
 +++

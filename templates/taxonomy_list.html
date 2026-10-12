@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ taxonomy.name }} · {{ config.title }}{% endblock %}
+{% block description %}全部{{ taxonomy.name }}，共 {{ terms | length }} 个。{% endblock %}
+{% block content %}
+  <section class="signature-wall signature-wall--compact" aria-label="{{ taxonomy.name }}">
+    <div class="signature-inner">
+      <h1>{{ taxonomy.name }}</h1>
+      <p class="subtitle">共 {{ terms | length }} 个{{ taxonomy.name }}</p>
+    </div>
+  </section>
+  <main class="page-wrap page-wrap--column">
+    <div class="main main--full">
+      <div class="cloud">
+        {% for term in terms %}<a href="{{ term.permalink }}">{{ term.name }}（{{ term.pages | length }}）</a>{% endfor %}
+      </div>
+    </div>
+  </main>
+{% endblock %}

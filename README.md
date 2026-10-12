@@ -78,10 +78,27 @@ Zola 版本在 workflow 中固定为 0.23.4，与本地一致。
 
 本仓库以自建 Gitea（`http://192.168.31.101:3100/admin/xfengyin.github.io.git`）为唯一源，GitHub 侧为只读镜像；请勿直接在 GitHub 提交。
 
+## 分类与标签（Zola taxonomies）
+
+分类与标签由 Zola 的 `taxonomies` 真实生成，**不再是写死的展示文字**：
+
+- 页面：`/categories/`、`/tags/` 以及每个词条一页（如 `/categories/dian-lu-she-ji/`）。
+  实测 **25 个分类 / 64 个标签**，sitemap 收录 **110 条 URL**（原来只有 19 条）。
+- 文章 front matter 里的写法是 **`[taxonomies]` 表**，不是顶层 `categories = [...]`：
+  ```toml
+  [taxonomies]
+  categories = ["前端开发", "UI设计"]
+  tags = ["cyberpunk", "ui", "design"]
+  ```
+  ⚠️ 顶层写法（`categories = [...]` 与 `title`/`date` 同级）**实测不生效** ——
+  Zola 不把它当 taxonomy 词条；页面照样构建成功、也不报错，只是不生成分类/标签页。
+- 首页的「文章 / 分类 / 标签」三个数字与「分类云」都由模板实时统计
+  （`posts.pages | length`、`get_taxonomy(kind="categories").items`），增删文章后**无需手工同步**。
+
 ## 已知的内容维护点
 
-- `content/_index.md` 中 `posts_count` / `category_count` / `tag_count` 是**手写的静态数字**，模板直接读取显示（`templates/index.html` 使用 `section.extra.*`），Zola 不会自动计算。新增或删除文章后需同步更新。
-- `content/posts/2024-12-01-blog-guide-index.md` 内含一份手写的博客统计与文章目录，同样需要手动同步。
+- `content/posts/2024-12-01-blog-guide-index.md` 内含一份**手写**的博客统计与文章目录，
+  与首页的实时统计不同源，增删文章后仍需手动同步 —— 这是目前**唯一还会漂移的展示数字**。
 - `static/js/search-data.js` 是手写的搜索数据，需与文章列表手动同步（当前 17 条，与文章数一致）。
   注意：`config.toml` 的 `build_search_index` **必须保持 `false`** —— Zola 自带的搜索索引（tantivy）
   不支持 `zh-CN`，与 `default_language = "zh-CN"` 同时打开会直接构建失败

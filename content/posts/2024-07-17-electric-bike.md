@@ -3,10 +3,12 @@ title = "电动两轮车核心技术解析：从系统架构到安全标准"
 date = 2024-07-17T09:00:00+08:00
 description = "从系统架构到电机、电池、传感器，一文读懂电动两轮车的核心技术。"
 
-[extra]
-author = "xfengyin"
+[taxonomies]
 categories = ["行业应用", "新能源"]
 tags = ["电动车", "锂电池", "电机控制", "BMS"]
+
+[extra]
+author = "xfengyin"
 +++
 
 ## 电动两轮车市场概述

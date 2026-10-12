@@ -18,6 +18,11 @@ build_search_index = false
 generate_feeds = true
 feed_filenames = ["atom.xml"]
 
+taxonomies = [
+  { name = "categories", feed = false },
+  { name = "tags", feed = false },
+]
+
 [markdown]
 smart_punctuation = true
 
