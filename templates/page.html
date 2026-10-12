@@ -67,14 +67,17 @@
       {% endif %}
 
       {% if page.toc %}
-      <div class="toc">
+      {# 目录是一个导航区块，用 <nav> 给出语义（原来是无语义的 <div>）。
+         CSS 按 .toc 类选择，换标签视觉不变；aria-label 让读屏能区分
+         「页头导航」与「本文目录」两个 navigation landmark。 #}
+      <nav class="toc" aria-label="本文目录">
         <div class="toc-title">📑 目录</div>
         <ul>
           {% for h in page.toc %}
           <li><a href="{{ h.permalink }}">{{ h.title }}</a></li>
           {% endfor %}
         </ul>
-      </div>
+      </nav>
       {% endif %}
 
       <div class="article-content">
