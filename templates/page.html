@@ -7,8 +7,12 @@
 {% block og_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
 {% block tw_title %}{{ page.title }}{% endblock %}
 {% block tw_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
-{% block og_image %}{{ page.extra.image | default(value=config.extra.og_image) | safe }}{% endblock %}
-{% block tw_image %}{{ page.extra.image | default(value=config.extra.og_image) | safe }}{% endblock %}
+{# og:image / twitter:image 必须是绝对 URL（社交爬虫不解析相对路径）。
+   文章自己的封面在 front matter 里是站内相对路径，这里直接拼 base_url：
+   base_url 带结尾斜杠、图片值以 / 开头 —— 会拼出双斜杠，
+   所以干脆在 config 里另存一份绝对地址用于社交卡片（见 config.toml 的说明）。 #}
+{% block og_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
+{% block tw_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
 {% block ld_type %}"BlogPosting"{% endblock %}
 {% block ld_extra %}
   <script type="application/ld+json">
