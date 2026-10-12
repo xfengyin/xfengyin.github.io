@@ -750,3 +750,9 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------- 博客导航页：构建时统计表 ---------- */
+.guide-stats { margin: 18px 0 8px; }
+.guide-stats table { width: 100%; border-collapse: collapse; }
+.guide-stats th, .guide-stats td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--borderColor, #e6e6e6); }
+.guide-note { margin: 8px 0 0; font-size: 13px; color: var(--greyFont); }

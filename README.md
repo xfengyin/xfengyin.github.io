@@ -97,8 +97,15 @@ Zola 版本在 workflow 中固定为 0.23.4，与本地一致。
 
 ## 已知的内容维护点
 
-- `content/posts/2024-12-01-blog-guide-index.md` 内含一份**手写**的博客统计与文章目录，
-  与首页的实时统计不同源，增删文章后仍需手动同步 —— 这是目前**唯一还会漂移的展示数字**。
+- `content/posts/2024-12-01-blog-guide-index.md`：页首统计与页尾标签云**已改为构建时生成**
+  （见 `templates/blog-guide.html`），不再手写。正文里的系列分组标题（如「硬件测试系列（7篇）」）
+  与每个系列的条目清单仍是**人工维护**的编辑内容，增删文章后需要手动同步。
+  ⚠️ 注意：**Zola 0.23 的内容渲染阶段不能调用 `get_section` / `get_taxonomy`**
+  （官方限制：内容在站点状态就绪前渲染），所以在 markdown 里写这些函数会直接构建失败
+  （实测报 `Section \`posts/_index.md\` not found.`）。要在页面里用这些数据，正确做法是给页面
+  加 `template = "xxx.html"` front matter，在模板里算好再用 `{{ page.content | safe }}` 嵌正文。
+  另外 Zola 0.23 **已移除 shortcode 机制**，`templates/shortcodes/` 不再生效
+  （调用会报 `Unknown function`）。
 - `static/js/search-data.js` 是手写的搜索数据，需与文章列表手动同步（当前 17 条，与文章数一致）。
   注意：`config.toml` 的 `build_search_index` **必须保持 `false`** —— Zola 自带的搜索索引（tantivy）
   不支持 `zh-CN`，与 `default_language = "zh-CN"` 同时打开会直接构建失败
