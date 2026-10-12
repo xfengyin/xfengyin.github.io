@@ -6,7 +6,12 @@
 :root {
   --background: #ffffff;
   --fontColor: #000000;
-  --greyFont: #797979;
+  /* 原来是 #797979：在白底 4.35:1、在 chip/目录的 #faf9f6 与 kbd 的 #f7f9fe 上只有 4.13:1，
+     都低于 WCAG AA 正文要求的 4.5:1。
+     实测可选值： #767676 -> 白底 4.54 但浅底仍只有 4.31（还是不达标）；
+                 #6f6f6f -> 白底 5.02、浅底 4.77，全部达标。
+     选 #6f6f6f：只比原值深一档，肉眼几乎无差别，但把整站的次级文字一次性拉到 AA 以上。 */
+  --greyFont: #6f6f6f;
   --lightGray: #e5e5e5;
   --borderColor: rgba(0, 0, 0, 0.1);
   --borderHoverColor: hsla(0, 0%, 43%, 0.2);
@@ -828,3 +833,12 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
 /* kbd 在 .article-meta 里是行内元素，撑开后相邻 chip 的可点区会重叠。
    给容器加间隙，保证相邻目标不互相盖住（WCAG 2.5.8 的 spacing 例外条件）。 */
 .article-meta { gap: 14px; }
+
+/* ---------- 代码块里语法高亮的内联颜色覆盖 ----------
+   Zola 的 github-dark 主题把颜色**内联**成 style 属性（例如注释 #6a737d），
+   而代码块背景也是内联的 #24292e —— 所以 CSS 里的 .article-content pre 背景其实被覆盖了。
+   实测注释色 #6a737d on #24292e 只有 3.05:1，低于 AA 正文 4.5:1。
+   这里用属性选择器 + !important 覆盖那一档注释色为 #8b949e（4.77:1），
+   这也是 GitHub 深色主题本身用的注释色，观感一致。
+   只覆盖注释色，其余语法色不动。 */
+.article-content pre span[style*="#6a737d"] { color: #8b949e !important; }
