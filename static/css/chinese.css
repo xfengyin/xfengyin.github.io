@@ -204,27 +204,7 @@ a { color: inherit; text-decoration: none; }
 .profile-stats .num { font-size: 18px; font-weight: 700; }
 .profile-stats .label { font-size: 12px; color: var(--greyFont); }
 
-/* ---------- 标签云 ---------- */
-.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag-cloud a, .tag-cloud span {
-  display: inline-block;
-  font-size: 12px;
-  padding: 3px 12px;
-  border-radius: 20px;
-  color: var(--greyFont);
-  background: var(--favoriteBg);
-  transition: all .3s ease-in-out;
-}
-.tag-cloud a:hover, .tag-cloud span:hover {
-  background: var(--themeBackground);
-  color: #fff;
-  transform: scale(1.1);
-}
-
-/* ---------- 项目链接 ---------- */
-.aside-links a { display: block; padding: 8px 0; color: var(--greyFont); font-size: 14px; border-bottom: 1px dashed var(--lightGray); transition: all .2s; }
-.aside-links a:last-child { border-bottom: none; }
-.aside-links a:hover { color: var(--themeBackground); padding-left: 6px; }
+/* 已删除 .tag-cloud / .aside-links（5 条规则）：templates/ 与 static/js/ 零引用。 */
 
 /* ---------- 区块标题（与 poetize 的 sort-article-first 对齐） ---------- */
 .section-head {
@@ -498,7 +478,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ---------- 深色模式 ---------- */
-body.dark {
+html.dark {
   --background: #101014;
   --fontColor: #d8d3c8;
   --greyFont: #8a8f98;
@@ -509,25 +489,25 @@ body.dark {
   --maxMaxWhiteMask: rgba(16,16,20,.7);
   --toolbarFont: #d8d3c8;
 }
-body.dark .card,
-body.dark .post-card,
-body.dark .article-card,
-body.dark .footer,
-body.dark .search-results {
+html.dark .card,
+html.dark .post-card,
+html.dark .article-card,
+html.dark .footer,
+html.dark .search-results {
   background: #18181e;
 }
-body.dark .profile-card {
+html.dark .profile-card {
   background: linear-gradient(rgba(255,255,255,0), #182630 40%, #1b2a35);
 }
-body.dark .signature-wall {
+html.dark .signature-wall {
   background:
     radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.08), transparent 55%),
     linear-gradient(180deg, #0a1620 0%, #122a33 45%, #1b3a40 75%, #101014 100%);
 }
-body.dark .danmaku-wall { background: #050a0e; }
-body.dark .article-content pre { background: #000; color: #ccc; }
-body.dark .article-content code { background: #202027; border-color: #333; color: #ffb26b; }
-body.dark .search-box input { background: #18181e; color: #d8d3c8; }
+html.dark .danmaku-wall { background: #050a0e; }
+html.dark .article-content pre { background: #000; color: #ccc; }
+html.dark .article-content code { background: #202027; border-color: #333; color: #ffb26b; }
+html.dark .search-box input { background: #18181e; color: #d8d3c8; }
 
 /* ---------- 暗色切换按钮 ---------- */
 .dark-toggle {
@@ -614,7 +594,7 @@ body.dark .search-box input { background: #18181e; color: #d8d3c8; }
   padding: 14px 18px;
   margin: 22px 0;
 }
-body.dark .toc { background: #1d1d24; }
+html.dark .toc { background: #1d1d24; }
 .toc-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
 .toc ul { list-style: none; padding-left: 0; }
 .toc ul li { margin: 4px 0; }
@@ -636,7 +616,7 @@ body.dark .toc { background: #1d1d24; }
   border-radius: 8px;
   transition: all .2s;
 }
-body.dark .related-item { background: #1d1d24; }
+html.dark .related-item { background: #1d1d24; }
 .related-item:hover { border-color: var(--themeBackground); transform: translateY(-2px); }
 .related-item .rel-cat { font-size: 12px; color: var(--themeBackground); }
 .related-item .rel-title { font-size: 14px; color: var(--fontColor); }
@@ -686,7 +666,6 @@ body.dark .related-item { background: #1d1d24; }
 .post-card:hover .post-cover img { transform: scale(1.05); }
 
 /* ---------- 标签云/分类云：收敛缩放动效 ---------- */
-.tag-cloud a:hover, .tag-cloud span:hover { transform: translateY(-2px); background: var(--themeBackground); }
 .cloud a:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
 .cloud a { animation: none; }
 .cloud a:nth-child(n) { animation: none; }
@@ -715,11 +694,59 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   border-radius: 4px;
 }
 
+/* ---------- 尊重系统"减弱动态效果"（弹幕/浮动/缩放仅在用户声明时关停）---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .post-card:hover, .card:hover, .related-item:hover, .cloud a:hover { transform: none; }
+}
+
 /* ---------- 深色模式同步 ---------- */
-body.dark .card, body.dark .post-card, body.dark .article-card {
+html.dark .card, html.dark .post-card, html.dark .article-card {
   box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
-body.dark .card:hover, body.dark .post-card:hover {
+html.dark .card:hover, html.dark .post-card:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, .55);
 }
-body.dark { --themeSoft: rgba(232, 89, 12, .16); }
+html.dark { --themeSoft: rgba(232, 89, 12, .16); }
+
+/* ---------- 可访问性补丁（perf-a11y）----------
+   搜索条目键盘焦点态：条目是 <a href> 原生可聚焦，这里只补可见反馈。
+   outline 朝内偏移，避免被 .search-results 的 overflow:hidden 裁掉。 */
+.search-results a.search-item:focus-visible {
+  background: var(--favoriteBg);
+  outline: 2px solid var(--themeBackground);
+  outline-offset: -2px;
+}
+/* 搜索条目标题域显式类名（原为裸 <span>，无独立样式，视觉一致）。 */
+.search-results a.search-item .search-text { min-width: 0; }
+
+/* 顶栏未滚动时是透明底 + 橙色描边，停在浅色题词区上对比不足；补深色外描边。 */
+.toolbar a:focus-visible,
+.toolbar button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px var(--themeBackground);
+}
+.dark-toggle[aria-pressed="true"] { opacity: .85; }
+
+
+/* ---------- 屏幕阅读器专用（视觉隐藏，但仍在可访问树里） ----------
+   原来的搜索输入框只有 placeholder —— 占位符不算可访问名（WCAG 4.1.2），
+   所以补一个 <label class="vh">。这里不用 display:none / visibility:hidden，
+   那两样会把元素从可访问树里一并拿掉，等于没写。 */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

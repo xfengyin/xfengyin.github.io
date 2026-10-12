@@ -1,16 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}{{ section.title }} | {{ config.title }}{% endblock %}
+{% block title %}{{ config.extra.author }} · {{ config.extra.role }}{% endblock %}
+{% block og_title %}{{ config.extra.author }} · {{ config.extra.role }}{% endblock %}
+{% block tw_title %}{{ config.extra.author }} · {{ config.extra.role }}{% endblock %}
+{% block ld_extra %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "url": {{ config.base_url | json_encode() | safe }},
+    "inLanguage": "zh-CN",
+    "mainEntity": {
+      "@type": "Person",
+      "name": {{ config.extra.author | json_encode() | safe }},
+      "jobTitle": {{ config.extra.role | json_encode() | safe }},
+      "url": {{ config.extra.github | json_encode() | safe }},
+      "image": {{ config.extra.avatar | json_encode() | safe }},
+      "sameAs": [{{ config.extra.github | json_encode() | safe }}]
+    }
+  }
+  </script>
+{% endblock %}
 
 {% block nav_extra %}
       <li><a href="#about"><span class="my-menu">💖 关于</span></a></li>
 {% endblock %}
 
 {% block content %}
-  <!-- 题词区 -->
-  <section class="signature-wall">
+  <!-- 题词区：给 section 一个可访问名，它才会成为 landmark（region），
+       否则里面的标题/统计/搜索都被 axe 判为「不在任何 landmark 内」。 -->
+  <section class="signature-wall" aria-label="题词与站点统计">
     <div class="signature-inner">
-      <div class="seal">印</div>
+      <div class="seal" aria-hidden="true">印</div>
       <h1>{{ section.extra.hero_quote }}</h1>
       <p class="subtitle">{{ section.extra.hero_role }}</p>
       <div class="stats">
@@ -18,16 +39,18 @@
         <div class="stat"><div class="num">{{ section.extra.category_count }}</div><div class="label">分类</div></div>
         <div class="stat"><div class="num">{{ section.extra.tag_count }}</div><div class="label">标签</div></div>
       </div>
-      <div class="search-box">
-        <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off" />
+      <div class="search-box" role="search">
+        <label class="vh" for="searchInput">搜索文章或分类</label>
+        <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off"
+               aria-label="搜索文章或分类" />
         <button id="searchBtn">搜索</button>
-        <div class="search-results" id="searchResults"></div>
+        <div class="search-results" id="searchResults" role="status" aria-live="polite"></div>
       </div>
     </div>
   </section>
 
   <!-- 弹幕墙 -->
-  <section class="danmaku-wall" aria-label="弹幕墙">
+  <section class="danmaku-wall" aria-label="访客留言弹幕">
     <div class="row"><span>大佬666，这个主页太有感觉了！</span></div>
     <div class="row"><span>「荣耀存于心，而非留于形」写得真好。</span></div>
     <div class="row"><span>AI Agent + Go + 硬件，从云端到边缘！</span></div>
@@ -70,7 +93,7 @@
     <!-- 右侧内容 -->
     <main class="main">
       <div class="section-head">
-        <span class="title">📖 最新文章</span>
+        <h2 class="title">📖 最新文章</h2>
         <a class="more" href="/posts/">MORE →</a>
       </div>
       <div class="post-grid">

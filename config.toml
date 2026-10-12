@@ -2,10 +2,21 @@
 title = "xfengyin"
 base_url = "https://xfengyin.github.io/"
 description = "xfengyin | AI Systems Engineer / AI Agent Engineer"
+# 订阅源的 <feed xml:lang> 与 <entry xml:lang> 取 Zola 的 default_language；
+# 不设时默认 en —— 实测生成出来是 xml:lang="en"，对中文站是错的。
+default_language = "zh-CN"
+# 订阅源的 <author><name> 取 Zola 的顶层 author；原来输出 "Unknown"。
+author = "xfengyin"
 compile_sass = false
-minify_html = false
+# 压缩 HTML：纯静态站，没有依赖空格的内联内容，收益是实打实的字节数
+minify_html = true
+# Zola 自带搜索索引（tantivy）**不支持 zh-CN** —— 打开后配 default_language="zh-CN"
+# 会直接构建失败（实测：Tried to build search index for language zh-CN which is not supported）。
+# 站点本来就用自维护的 static/js/search-data.js，所以这里保持关闭。
 build_search_index = false
-generate_feeds = false
+# 生成 Atom 订阅源：博客的基本盘，原来关着，线上 /atom.xml 是 404
+generate_feeds = true
+feed_filenames = ["atom.xml"]
 
 [markdown]
 smart_punctuation = true
@@ -22,3 +33,8 @@ email = "hi@xfengyin.github.io"
 avatar = "https://github.com/xfengyin.png"
 lang = "zh-CN"
 start_year = 2024
+# 社交分享用的默认卡片图（贴到微信/X/Telegram 上不再是白板）。
+# 用站点已有的封面资源，不新增二进制。
+og_image = "/assets/img/covers/default-tech.jpg"
+# 需要时填 X/Twitter 账号（含 @）；留空则只输出 summary_large_image 卡片
+twitter_site = ""

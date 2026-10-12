@@ -3,12 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{{ config.description }}" />
+
+  {# 标题：子模板用 title 块覆盖。首页不再输出 "xfengyin | xfengyin" 这种重复品牌名。 #}
+  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+
+  {# 描述：文章页覆盖成文章自己的 description，其余用站点描述 #}
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}" />
   <meta name="author" content="{{ config.extra.author }}" />
-  <meta name="theme-color" content="#1b3b46" />
+  <meta name="theme-color" content="#1b3b46" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f2026" media="(prefers-color-scheme: dark)" />
+
+  {# canonical：避免同一个页面因带不带尾斜杠被当成两份内容 #}
+  <link rel="canonical" href="{{ current_url | safe }}" />
+
+  {# 订阅源自动发现：浏览器/阅读器能直接发现 /atom.xml #}
+  <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}" />
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
   <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false) }}" />
-  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+
+  {# 防闪白（FOUC）：深色模式的类必须在**首屏绘制之前**挂上 <html>。
+     放在 body 末尾的 site.js 执行时，浏览器早已用浅色画完第一帧 —— 深色用户必然看到白闪。
+     这段必须内联且同步（不能 defer/async），也必须在样式表之后：
+     - localStorage 有明确选择 => 用用户的选择
+     - 没有选择 => 跟随系统 prefers-color-scheme
+     与 static/js/site.js 用同一个 key（xfengyin-dark）与同一个类名（dark）。 #}
+  <script>
+    (function () {
+      var pref = null;
+      try { pref = localStorage.getItem('xfengyin-dark'); } catch (e) {}
+      var dark = pref === '1' || (pref !== '0' &&
+        window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark');
+    })();
+  </script>
+
+  {# ---- Open Graph：分享到微信/X/Telegram 时不再是一张白板 ---- #}
+  <meta property="og:site_name" content="{{ config.title }}" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:type" content="{% block og_type_value %}website{% endblock %}" />
+  <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock %}" />
+  <meta property="og:description" content="{% block og_desc %}{{ config.description }}{% endblock %}" />
+  <meta property="og:url" content="{{ current_url | safe }}" />
+  <meta property="og:image" content="{% block og_image %}{{ config.extra.og_image | default(value='') | safe }}{% endblock %}" />
+  {% if config.extra.twitter_site %}
+  <meta name="twitter:site" content="{{ config.extra.twitter_site }}" />
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{% block tw_title %}{{ config.title }}{% endblock %}" />
+  <meta name="twitter:description" content="{% block tw_desc %}{{ config.description }}{% endblock %}" />
+  <meta name="twitter:image" content="{% block tw_image %}{{ config.extra.og_image | default(value='') | safe }}{% endblock %}" />
+
+  {# ---- 结构化数据：让搜索引擎认出这是「人 + 站点」和「文章」 ---- #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": {% block ld_type %}"WebSite"{% endblock %},
+    "name": {{ config.title | json_encode() | safe }},
+    "url": {{ config.base_url | json_encode() | safe }},
+    "description": {{ config.description | json_encode() | safe }},
+    "inLanguage": "zh-CN",
+    "author": {
+      "@type": "Person",
+      "name": {{ config.extra.author | json_encode() | safe }},
+      "url": {{ config.extra.github | json_encode() | safe }},
+      "jobTitle": {{ config.extra.role | json_encode() | safe }}
+    }
+  }
+  </script>
+  {% block ld_extra %}{% endblock %}
 </head>
 <body>
   {% block toolbar %}

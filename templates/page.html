@@ -1,17 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+{% block title %}{{ page.title }} · {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_type_value %}article{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block tw_title %}{{ page.title }}{% endblock %}
+{% block tw_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_image %}{{ page.extra.image | default(value=config.extra.og_image) | safe }}{% endblock %}
+{% block tw_image %}{{ page.extra.image | default(value=config.extra.og_image) | safe }}{% endblock %}
+{% block ld_type %}"BlogPosting"{% endblock %}
+{% block ld_extra %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ page.title | json_encode() | safe }},
+    "description": {{ page.description | default(value=config.description) | json_encode() | safe }},
+    "url": {{ page.permalink | json_encode() | safe }},
+    "datePublished": {{ page.date | date(format="%Y-%m-%dT%H:%M:%S%:z") | json_encode() | safe }},
+    {% if page.extra.image %}"image": {{ page.extra.image | json_encode() | safe }},{% endif %}
+    "inLanguage": "zh-CN",
+    "author": {
+      "@type": "Person",
+      "name": {{ page.extra.author | default(value=config.extra.author) | json_encode() | safe }},
+      "url": {{ config.extra.github | json_encode() | safe }}
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": {{ config.title | json_encode() | safe }}
+    }
+  }
+  </script>
+{% endblock %}
 
 {% block content %}
   <div class="progress-bar" id="progressBar"></div>
 
-  <section class="signature-wall signature-wall--compact">
+  <section class="signature-wall signature-wall--compact" aria-label="文章标题">
     <div class="signature-inner">
       <h1>{{ page.title }}</h1>
     </div>
   </section>
 
-  <div class="page-wrap page-wrap--center">
+  {# 用 <main> 而不是 <div>：文章正文是页面的主体内容，需要一个 landmark，
+     否则 axe 报「内容不在任何 landmark 内」。CSS 按类选，标签改了视觉不变。 #}
+  <main class="page-wrap page-wrap--center">
     <article class="article-card">
       <div class="article-cover">
         {% if page.extra.image %}
@@ -81,5 +115,5 @@
         <a href="/">回到首页</a>
       </div>
     </article>
-  </div>
+  </main>
 {% endblock %}
