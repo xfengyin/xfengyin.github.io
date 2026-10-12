@@ -327,6 +327,11 @@ a { color: inherit; text-decoration: none; }
 .article-content li { margin: .35em 0; }
 .article-content code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .88em; background: #f6f4ef; border: 1px solid var(--lightGray); border-radius: 4px; padding: 1px 6px; color: #333; }
 .article-content pre { background: #2b2724; color: #e8e2d8; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 1.2em 0; }
+/* 代码块会横向滚动（实测移动端 390px 下 12 个块有 10 个溢出），
+   但 <pre> 默认可聚焦性为 -1 —— **键盘用户无法滚动它去读超出屏幕的代码**。
+   WCAG 2.1.1（键盘）要求可滚动区域可键盘访问。
+   加 tabindex="0" 让它进入 Tab 顺序（由 JS 加，见 site.js，避免模板重复改）。 */
+.article-content pre:focus-visible { outline: 2px solid var(--themeBackground); outline-offset: 2px; }
 .article-content pre code { background: transparent; border: none; padding: 0; color: inherit; font-size: 13px; line-height: 1.7; }
 .article-content blockquote { margin: 1.2em 0; padding: 10px 18px; border-left: 4px solid var(--themeBackground); background: #fffaf0; border-radius: 0 6px 6px 0; color: var(--greyFont); }
 .article-content table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 14px; }
