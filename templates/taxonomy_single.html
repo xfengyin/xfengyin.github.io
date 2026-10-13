@@ -9,28 +9,44 @@
 {% block tw_title %}{{ term.name }} · {% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}{% endblock %}
 {% block tw_desc %}「{{ term.name }}」{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}下共 {{ term.pages | length }} 篇文章。{% endblock %}
 {% block content %}
-  <section class="signature-wall signature-wall--compact" aria-label="{{ taxonomy.name }}：{{ term.name }}">
-    <div class="signature-inner">
-      <h1>{{ term.name }}</h1>
-      <p class="subtitle">{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %} · 共 {{ term.pages | length }} 篇</p>
+  {% set n = term.pages | length %}
+  <section class="hero hero--compact" aria-label="{{ taxonomy.name }}：{{ term.name }}">
+    <div class="hero-inner">
+      <h1 class="hero-title">{{ term.name }}</h1>
+      <p class="hero-role">{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %} · 共 {{ n }} 篇</p>
     </div>
   </section>
-  <main class="page-wrap page-wrap--column">
+  <main class="page-wrap page-wrap--full">
     <div class="main main--full">
-      <div class="section-head"><h2 class="title">📖 本分类下的文章</h2></div>
-      <div class="post-list">
+      <div class="section-head">
+        {# Bug A（Lead 报的）：这一行原来硬编码「本分类下的文章」，
+           而同模板其余 8 处都按 taxonomy.name 分支 ⇒ 64 个标签页全部写成「本分类」。
+           改成与其余各处一致的分支；图标同时换成内联 SVG（原来是 📖 emoji）。 #}
+        <h2 class="title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.6C12 6.6 10.1 5 7.2 5H4.2v13.2h3c2.9 0 4.8 1.6 4.8 1.6s1.9-1.6 4.8-1.6h3V5h-3c-2.9 0-4.8 1.6-4.8 1.6z"/><path d="M12 6.6v13.2"/></svg>{% if taxonomy.name == 'categories' %}本分类下的文章{% else %}本标签下的文章{% endif %}</h2>
+      </div>
+      {# 89 个词条页里绝大多数只挂 1 篇（这是常态，不是例外）。
+         只有 1~2 篇时若还铺三列网格，就是「一张卡孤零零占左三分之一、右侧全空」——
+         按稀疏常态设计：≤2 篇收成一条居中的单列，卡片当主角；≥3 篇用与首页/归档同构的网格。
+         两种只差一个修饰类，卡片构图完全一致（旧版三处是三套不同构图）。 #}
+      <div class="post-list{% if n < 3 %} post-list--single{% endif %}">
         {% for post in term.pages %}
-        <a class="post-card" href="{{ post.permalink }}">
-          <div class="post-cover">
-            {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 300px" /><img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" decoding="async" /></picture>{% else %}<img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />{% endif %}
-          </div>
-          <div class="post-body">
-            <span class="post-category">{% if taxonomy.name == 'categories' %}{{ term.name }}{% else %}#{{ term.name }}{% endif %}</span>
-            <h3 class="post-title">{{ post.title }}</h3>
-            {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
-            <div class="post-meta"><span>{{ post.date | date(format="%Y-%m-%d") }}</span></div>
-          </div>
-        </a>
+          <a class="post-card" href="{{ post.permalink }}">
+            {# 封面：无图文章不再放那张「标题卡」SVG（图里烤着的标题有 12/17 与 front matter 不符，
+               且无论怎么裁都会露字）。改由 CSS 按 data-cat 生成渐变封面 —— 结构上不可能漂移。
+               有真实配图的 3 篇仍然用照片（<picture> + webp 变体）。 #}
+            <div class="post-cover" data-cat="{% if post.taxonomies.categories %}{{ post.taxonomies.categories[0] }}{% else %}随笔{% endif %}" data-v="{{ post.reading_time % 4 }}">
+              {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" /><img src="{{ post.extra.image }}" alt="" loading="lazy" decoding="async" width="800" height="480" /></picture>{% endif %}
+            </div>
+            <div class="post-body">
+              <span class="post-category">{% if post.taxonomies.categories %}{{ post.taxonomies.categories[0] }}{% else %}随笔{% endif %}</span>
+              <h3 class="post-title">{{ post.title }}</h3>
+              {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
+              <div class="post-meta">
+                <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
+                <span>{{ post.reading_time }} 分钟 · {{ post.word_count }} 字</span>
+              </div>
+            </div>
+          </a>
         {% endfor %}
       </div>
     </div>

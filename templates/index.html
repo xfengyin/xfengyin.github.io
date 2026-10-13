@@ -23,109 +23,111 @@
 {% endblock %}
 
 {% block nav_extra %}
-      <li><a href="#about"><span class="my-menu">💖 关于</span></a></li>
+        <li><a href="#about"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20.2S4.6 15.6 4.6 10.3A4.1 4.1 0 0 1 12 6.9a4.1 4.1 0 0 1 7.4 3.4c0 5.3-7.4 9.9-7.4 9.9z"/></svg><span class="my-menu">关于</span></a></li>
 {% endblock %}
 
 {% block content %}
-  {# 统计数字与分类云全部从真实数据算出来 —— 原来这三个数是写在 content/_index.md 里的
+  {# 统计数字与分类全部从真实数据算出来 —— 原来这三个数是写在 content/_index.md 里的
      手写常量，新增文章后不会自动变（会静默撒谎）；分类云更严重：8 个链接全指向 /posts/，
      点任何一个分类看到的都是全部文章。现在都改为读 taxonomies / section.pages。 #}
   {% set posts = get_section(path="posts/_index.md") %}
   {% set cats = get_taxonomy(kind="categories") %}
   {% set tags = get_taxonomy(kind="tags") %}
-  <!-- 题词区：给 section 一个可访问名，它才会成为 landmark（region），
-       否则里面的标题/统计/搜索都被 axe 判为「不在任何 landmark 内」。 -->
-  <section class="signature-wall" aria-label="题词与站点统计">
-    <div class="signature-inner">
+
+  {# 页头：500px 的「风景画」压成有内容的报头。
+     删掉凭空出现的深色 V 形伪影（那是 .signature-wall::before 用三段硬停靠
+     linear-gradient(160deg/200deg/180deg) 拼出来的假山，横穿统计数字、看起来像渲染坏了）。
+     现在只有一层品牌渐变 + 顶部极淡的径向高光；高度由内容与 clamp 内边距决定，不再写死。
+     白字在这条渐变上的对比度是手算过的，见交付说明（最亮处 6.46:1，最暗处 13.4:1）。 #}
+  <section class="hero" aria-label="题词与站点统计">
+    <div class="hero-inner">
       <div class="seal" aria-hidden="true">印</div>
-      <h1>{{ section.extra.hero_quote }}</h1>
-      <p class="subtitle">{{ section.extra.hero_role }}</p>
+      <h1 class="hero-title">{{ section.extra.hero_quote }}</h1>
+      <p class="hero-role">{{ section.extra.hero_role }}</p>
       <div class="stats">
-        <div class="stat"><div class="num">{{ posts.pages | length }}</div><div class="label">文章</div></div>
-        <div class="stat"><div class="num">{{ cats.items | length }}</div><div class="label">分类</div></div>
-        <div class="stat"><div class="num">{{ tags.items | length }}</div><div class="label">标签</div></div>
-      </div>
-      <div class="search-box" role="search">
-        <label class="vh" for="searchInput">搜索文章或分类</label>
-        <input id="searchInput" type="text" placeholder="搜索文章 / 分类..." autocomplete="off"
-               aria-label="搜索文章或分类" />
-        <button id="searchBtn">搜索</button>
-        <div class="search-results" id="searchResults" role="status" aria-live="polite"></div>
+        <div class="stat"><span class="num">{{ posts.pages | length }}</span><span class="label">篇文章</span></div>
+        <div class="stat"><span class="num">{{ cats.items | length }}</span><span class="label">个分类</span></div>
+        <div class="stat"><span class="num">{{ tags.items | length }}</span><span class="label">个标签</span></div>
       </div>
     </div>
   </section>
 
-  <!-- 弹幕墙 -->
-  <section class="danmaku-wall" aria-label="访客留言弹幕">
-    <div class="row"><span>大佬666，这个主页太有感觉了！</span></div>
-    <div class="row"><span>「荣耀存于心，而非留于形」写得真好。</span></div>
-    <div class="row"><span>AI Agent + Go + 硬件，从云端到边缘！</span></div>
-    <div class="row"><span>已 Star，期待更多文章。</span></div>
-    <div class="row"><span>中文风 + 诗意布局，爱了爱了。</span></div>
-  </section>
+  {# 功能条：搜索框从 hero 正中间挪到这里（原来悬在 500px 页头的腰上，上下都不靠）。
+     这一条同时替掉了原来的「弹幕墙」：5 条硬编码的假访客留言（含一句自称「已 Star」）。
+     假的社会证明不该出现在个人主页上 —— 与其换成更漂亮的假留言，不如换成真能用的入口。
+     （可见文字总量不降反升：首页 12 张卡片各自新增了真实摘要，页脚也新增了 6 个入口。） #}
+  <div class="hero-utility">
+    <div class="hero-utility-inner">
+      <div class="search-box" role="search">
+        <label class="vh" for="searchInput">搜索文章或分类</label>
+        <div class="search-field">
+          <svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.6 15.6 4.2 4.2"/></svg>
+          <input id="searchInput" type="text" placeholder="搜索文章 / 分类…" autocomplete="off" aria-label="搜索文章或分类" />
+        </div>
+        <button id="searchBtn">搜索</button>
+        <div class="search-results" id="searchResults" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
 
-  <!-- 主体 -->
   <div class="page-wrap">
-    <!-- 左侧栏 -->
     <aside class="aside">
       <div class="card profile-card" id="about">
-        <img class="avatar" src="{{ config.extra.avatar }}" alt="avatar" />
+        <img class="avatar" src="{{ config.extra.avatar }}" alt="{{ config.extra.author }} 的头像" width="96" height="96" />
         <div class="name">{{ section.extra.hero_whoami }}</div>
         <div class="role">{{ section.extra.hero_role }}</div>
         <p class="bio">{{ section.extra.hero_quote_en }}</p>
-        <div class="profile-stats">
-          <div><div class="num">{{ posts.pages | length }}</div><div class="label">文章</div></div>
-          <div><div class="num">{{ cats.items | length }}</div><div class="label">分类</div></div>
-          <div><div class="num">{{ tags.items | length }}</div><div class="label">标签</div></div>
+        {# 资料卡原来重复了页头那三个数字（同一页出现两遍）。换成三个真实入口。 #}
+        <div class="profile-links">
+          <a href="{{ config.extra.github }}" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path fill="currentColor" stroke="none" d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.7c-2.72.59-3.3-1.31-3.3-1.31-.44-1.13-1.08-1.43-1.08-1.43-.89-.6.07-.59.07-.59.98.07 1.5 1 1.5 1 .87 1.5 2.29 1.07 2.85.82.09-.64.34-1.07.62-1.32-2.18-.25-4.47-1.09-4.47-4.85 0-1.07.38-1.94 1-2.63-.1-.24-.43-1.23.1-2.58 0 0 .82-.26 2.7 1a9.3 9.3 0 0 1 4.9 0c1.87-1.26 2.69-1 2.69-1 .53 1.35.2 2.34.1 2.58.63.69 1 1.56 1 2.63 0 3.77-2.3 4.6-4.49 4.84.35.31.66.9.66 1.82v2.7c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2z"/></svg><span>GitHub</span></a>
+          <a href="mailto:{{ config.extra.email }}"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.4" y="5.4" width="17.2" height="13.2" rx="2.2"/><path d="m4.6 7.4 7.4 5.4 7.4-5.4"/></svg><span>Email</span></a>
+          <a href="{{ get_url(path='atom.xml') | safe }}"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 11.4a7.6 7.6 0 0 1 7.6 7.6"/><path d="M5 5a14 14 0 0 1 14 14"/><circle cx="5.4" cy="18.6" r="1.5" fill="currentColor" stroke="none"/></svg><span>RSS</span></a>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">分类</div>
+        <h2 class="card-title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3.4 8.4 4.6-8.4 4.6-8.4-4.6z"/><path d="m4.2 12.6 7.8 4.3 7.8-4.3"/><path d="m4.2 16.9 7.8 4.3 7.8-4.3"/></svg>分类</h2>
         <div class="cloud">
-          <a href="/posts/">全部</a>
-          {% for t in cats.items %}{% if loop.index0 < 12 %}<a href="{{ t.permalink }}">{{ t.name }}（{{ t.pages | length }}）</a>{% endif %}{% endfor %}
-          <a href="/categories/">更多…</a>
+          <a href="/posts/"><span>全部</span><em>{{ posts.pages | length }}</em></a>
+          {% for t in cats.items %}{% if loop.index0 < 10 %}<a href="{{ t.permalink }}"><span>{{ t.name }}</span><em>{{ t.pages | length }}</em></a>
+          {% endif %}{% endfor %}
+          <a href="/categories/"><span>更多</span><em>→</em></a>
         </div>
       </div>
-
     </aside>
 
-    <!-- 右侧内容 -->
     <main class="main">
       <div class="section-head">
-        <h2 class="title">📖 最新文章</h2>
-        <a class="more" href="/posts/">MORE →</a>
+        <h2 class="title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.6C12 6.6 10.1 5 7.2 5H4.2v13.2h3c2.9 0 4.8 1.6 4.8 1.6s1.9-1.6 4.8-1.6h3V5h-3c-2.9 0-4.8 1.6-4.8 1.6z"/><path d="M12 6.6v13.2"/></svg>最新文章</h2>
+        <a class="more" href="/posts/">全部文章 →</a>
       </div>
       <div class="post-grid">
-        {% for post in posts.pages %}
-          {% if loop.index0 < 12 %}
+        {% for post in posts.pages %}{% if loop.index0 < 12 %}
           <a class="post-card" href="{{ post.permalink }}">
-            <div class="post-cover">
-              {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 300px" /><img src="{{ post.extra.image }}" alt="{{ post.title }}" loading="lazy" decoding="async" /></picture>{% else %}<img src="/assets/covers/{{ post.slug }}.svg" alt="{{ post.title }}" loading="lazy" />{% endif %}
+            {# 封面：无图文章不再放那张「标题卡」SVG（图里烤着的标题有 12/17 与 front matter 不符，
+               且无论怎么裁都会露字）。改由 CSS 按 data-cat 生成渐变封面 —— 结构上不可能漂移。
+               有真实配图的 3 篇仍然用照片（<picture> + webp 变体）。 #}
+            <div class="post-cover" data-cat="{% if post.taxonomies.categories %}{{ post.taxonomies.categories[0] }}{% else %}随笔{% endif %}" data-v="{{ post.reading_time % 4 }}">
+              {% if post.extra.image %}{% set base = post.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 400px" /><img src="{{ post.extra.image }}" alt="" loading="lazy" decoding="async" width="800" height="480" /></picture>{% endif %}
             </div>
             <div class="post-body">
               <span class="post-category">{% if post.taxonomies.categories %}{{ post.taxonomies.categories[0] }}{% else %}随笔{% endif %}</span>
               <h3 class="post-title">{{ post.title }}</h3>
+              {% if post.description %}<p class="post-desc">{{ post.description }}</p>{% endif %}
               <div class="post-meta">
                 <span>{{ post.date | date(format="%Y-%m-%d") }}</span>
-                <span>{{ post.reading_time }} 分钟</span>
+                <span>{{ post.reading_time }} 分钟 · {{ post.word_count }} 字</span>
               </div>
             </div>
           </a>
-          {% endif %}
-        {% endfor %}
+        {% endif %}{% endfor %}
       </div>
-
     </main>
   </div>
 {% endblock %}
 
 {% block scripts %}
   {# 搜索索引**在构建时由 posts.pages 生成**，不再手写。
-     原来有一份手写的 static/js/search-data.js，标题已与 front matter 脱节 ——
-     实测 17 篇里有 8 篇**用自己真实标题搜都搜不到**
-     （例如 mos-gate-resistor 的索引里还写着旧标题「为什么MOS管的栅极要串接电阻？」）。
      手写索引必然漂移；改成构建时生成后不可能再脱节，顺带少一次请求。 #}
   <script>
   window.POSTS = [

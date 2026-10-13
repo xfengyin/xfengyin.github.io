@@ -5,16 +5,18 @@
 {% block toolbar %}{% endblock %}
 
 {% block content %}
-  {# 404 页没有正文容器，axe 报 landmark-one-main（页面缺少 main landmark）。
-     用 <main> 包住唯一的区块：CSS 按 .signature-wall 类选择，换标签视觉不变
-     （实测过同类替换：目录 div→nav 是 0 像素差异）。 #}
+  {# 404 页没有正文容器，axe 会报 landmark-one-main（页面缺少 main landmark）。
+     用 <main> 包住唯一的区块。 #}
   <main>
-    <section class="signature-wall signature-wall--full" aria-label="页面未找到">
-      <div class="signature-inner">
+    {# 类名统一到新的 hero 体系（旧 signature-wall 系列已随视觉层重写一起废弃）。
+       打印时 .hero--full 是**唯一**保留的 hero 变体 —— 它是这一页唯一的内容容器，
+       一起隐藏会让整页打印成空白（第 20 轮踩过一次）。 #}
+    <section class="hero hero--full" aria-label="页面未找到">
+      <div class="hero-inner">
         <div class="seal" aria-hidden="true">失</div>
-        <h1>页面未寻得</h1>
-        <p class="subtitle">「只在此山中，云深不知处。」</p>
-        <p class="signature-back"><a class="back-home" href="/">← 回到首页</a></p>
+        <h1 class="hero-title">页面未寻得</h1>
+        <p class="hero-role">「只在此山中，云深不知处。」</p>
+        <p class="hero-back"><a class="back-home" href="/">← 回到首页</a></p>
       </div>
     </section>
   </main>
