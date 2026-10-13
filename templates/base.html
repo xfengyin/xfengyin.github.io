@@ -99,7 +99,8 @@
 
   {% block footer %}
   <footer class="footer">
-    <p>© <span id="year">2026</span> {{ config.extra.author }} · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="{{ config.extra.github }}" target="_blank" rel="noopener">GitHub Pages</a></p>
+    <p>© <span id="year">2026</span> {{ config.extra.author }} · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · {# 原来文案写「GitHub Pages」但链接指向 config.extra.github（**个人主页**），名不副实。改为指向真正的源码仓库 —— 与文案一致。 #}
+    托管于 <a href="{{ config.extra.repo_url | default(value=config.extra.github) }}" target="_blank" rel="noopener">GitHub Pages</a></p>
   </footer>
   {% endblock %}
 

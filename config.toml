@@ -36,6 +36,8 @@ author = "xfengyin"
 role = "AI Systems Engineer / AI Agent Engineer"
 site_url = "https://xfengyin.github.io"
 github = "https://github.com/xfengyin"
+# 源码仓库地址（页脚「托管于 GitHub Pages」应指向它，而不是个人主页）
+repo_url = "https://github.com/xfengyin/xfengyin.github.io"
 email = "hi@xfengyin.github.io"
 avatar = "https://github.com/xfengyin.png"
 lang = "zh-CN"
