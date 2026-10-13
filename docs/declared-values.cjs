@@ -24,6 +24,11 @@ for(const f of files.sort()){
   const rel=f.slice(PUB.length+1);
   // ---- JSON-LD ----
   const blocks=[...s.matchAll(/<script type=application\/ld\+json>([\s\S]*?)<\/script>/g)];
+  { const seenTypes={};
+    for(const b of blocks){ let t=null; try{ t=JSON.parse(b[1])['@type']; }catch(e){}
+      if(t){ seenTypes[t]=(seenTypes[t]||0)+1; } }
+    for(const [t,n] of Object.entries(seenTypes))
+      if(n>1) problems.push([rel,'同页重复的 JSON-LD 类型',t+' × '+n]); }
   for(const b of blocks){
     let d; try{ d=JSON.parse(b[1]); }catch(e){ problems.push([rel,'JSON-LD 无法解析',e.message.slice(0,40)]); continue; }
     // 收集所有形似 URL 的字符串
@@ -44,6 +49,20 @@ for(const f of files.sort()){
     }
     // @type 必须存在
     if(!d['@type']) problems.push([rel,'JSON-LD 缺 @type','']);
+    // 结构性校验（第 41 轮补）：
+    // 曾经每篇文章页都输出**两个** BlogPosting —— 一个是 base.html 的站点级块被
+    // 子模板覆盖 ld_type 变成的（字段还是 WebSite 的 name/url），另一个是 page.html
+    // 自己加的。前者是「类型与字段不匹配」的畸形数据，比没有更糟。
+    // 这里校验：每个块的类型必须与它携带的字段相符。
+    if(d['@type']==='BlogPosting'){
+      for(const k of ['headline','datePublished','url','author'])
+        if(!(k in d)) problems.push([rel,'BlogPosting 缺字段',k]);
+      if('name' in d && !('headline' in d)) problems.push([rel,'BlogPosting 却带 WebSite 字段','name']);
+    }
+    if(d['@type']==='WebSite'){
+      for(const k of ['name','url'])
+        if(!(k in d)) problems.push([rel,'WebSite 缺字段',k]);
+    }
   }
   // ---- canonical / og:url 应与页面自身 URL 一致 ----
   const want=urlOf(f);

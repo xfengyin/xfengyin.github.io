@@ -6,7 +6,31 @@
 {% block og_desc %}{{ page.description }}{% endblock %}
 {% block tw_title %}{{ page.title }}{% endblock %}
 {% block tw_desc %}{{ page.description }}{% endblock %}
-{% block ld_type %}"BlogPosting"{% endblock %}
+
+{# 本页也是 posts 区里的一篇文章，补上与 page.html 一致的 BlogPosting 结构化数据。
+   原先它只覆盖了 base.html 的 ld_type（把站点级 WebSite 块改成了 BlogPosting），
+   但那个块的字段是 WebSite 的（name/url，没有 headline/datePublished），
+   于是产出一个**类型与字段不匹配**的块 —— 比没有更糟。 #}
+{% block ld_extra %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ page.title | json_encode() | safe }},
+    "description": {{ page.description | default(value=config.description) | json_encode() | safe }},
+    "url": {{ page.permalink | json_encode() | safe }},
+    "datePublished": {{ page.date | date(format="%Y-%m-%dT%H:%M:%S%:z") | json_encode() | safe }},
+    {% if page.extra.image %}"image": {{ ("https://xfengyin.github.io" ~ page.extra.image) | json_encode() | safe }},{% endif %}
+    "inLanguage": "zh-CN",
+    "author": {
+      "@type": "Person",
+      "name": {{ config.extra.author | json_encode() | safe }},
+      "url": {{ config.extra.github | json_encode() | safe }}
+    },
+    "publisher": { "@type": "Organization", "name": {{ config.title | json_encode() | safe }} }
+  }
+  </script>
+{% endblock %}
 
 {% block content %}
   <section class="signature-wall signature-wall--compact" aria-label="文章标题">
