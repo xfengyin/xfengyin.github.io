@@ -122,6 +122,19 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="{{ get_url(path='js/search-data.js', cachebust=true) }}"></script>
+  {# 搜索索引**在构建时由 posts.pages 生成**，不再手写。
+     原来有一份手写的 static/js/search-data.js，标题已与 front matter 脱节 ——
+     实测 17 篇里有 8 篇**用自己真实标题搜都搜不到**
+     （例如 mos-gate-resistor 的索引里还写着旧标题「为什么MOS管的栅极要串接电阻？」）。
+     手写索引必然漂移；改成构建时生成后不可能再脱节，顺带少一次请求。 #}
+  <script>
+  window.POSTS = [
+    {%- for p in posts.pages %}
+    { "title": {{ p.title | json_encode() | safe }},
+      "cat": {% if p.taxonomies.categories %}{{ p.taxonomies.categories[0] | json_encode() | safe }}{% else %}"随笔"{% endif %},
+      "url": {{ p.permalink | json_encode() | safe }} }{{ "," if not loop.last else "" }}
+    {%- endfor %}
+  ];
+  </script>
   <script src="{{ get_url(path='js/site.js', cachebust=true) }}"></script>
 {% endblock %}
