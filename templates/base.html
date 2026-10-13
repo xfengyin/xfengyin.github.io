@@ -33,6 +33,15 @@
      与 static/js/site.js 用同一个 key（xfengyin-dark）与同一个类名（dark）。 #}
   <script>
     (function () {
+      {# js 类必须在这里加，不能只留给 body 末尾的 site.js。
+         ≤820px 时 CSS 写着 html:not(.js) .toolbar { position: static; height: auto }，
+         那是给「禁用 JS」用户的降级（导航平铺、不留死控件）。
+         但 site.js 在 body 末尾才执行，而首屏早就画出来了 ——
+         于是手机用户先看到一个 **静态、149px 高**的顶栏，等 site.js 跑完再变成
+         **fixed、62px** ⇒ 正文整块上跳 149px。
+         实测（390px，冷缓存）：CLS 0.1765，来源就是 SECTION.hero 与 MAIN 同时上移 149px。
+         这里与 dark 类一起在首屏绘制前加上，JS 用户的顶栏从第一帧就是 fixed，偏移消失。 #}
+      document.documentElement.classList.add('js');
       var pref = null;
       try { pref = localStorage.getItem('xfengyin-dark'); } catch (e) {}
       var dark = pref === '1' || (pref !== '0' &&
