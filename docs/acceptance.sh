@@ -8,6 +8,35 @@ DOCS=/vol1/work/xfengyin.github.io/docs
 REPO=/vol1/work/xfengyin.github.io
 cd /vol1/work/blog-opt || exit 1
 
+# ── preflight：local 目标必须自洽，否则整套浏览器检查测的是线上 CSS ──────────────
+# 背景（详见 docs/LOCAL-TESTING.md）：config.toml 的 base_url 是生产域名，模板用 get_url()，
+# 所以产物里的 CSS/JS 是**绝对地址**。若把 public/ 直接用静态服务器打开，浏览器会去线上取样式 ——
+# 「本地改了 CSS」的检查会全绿，却根本没测到改动。2026-10-13 重做视觉层时真的踩到了。
+# 因此这里必须**在 run 循环之前**判定并整个脚本退出：
+#   SELF-ERROR（退出码 2）既不能记 PASS、也不能记 FAIL —— run() 会把任何非 0 记成 FAIL，故不走 run()。
+case "$BASE" in
+  *127.0.0.1*|*localhost*|*::1*)
+    _base="${BASE%/}"
+    _css=$(curl -sS --max-time 20 "$_base/" 2>/dev/null \
+           | grep -o 'href="\?[^" >]*chinese\.css[^" >]*' | head -1 | sed 's/^href="\?//')
+    if [ -z "$_css" ]; then
+      echo "SELF-ERROR: 取不到 $_base/ 的样式表地址（本地站点没起来？）" >&2
+      exit 2
+    fi
+    case "$_css" in
+      "$_base"/*) : ;;   # 指向本地同源 —— 自洽
+      /*)         : ;;   # 根相对地址，浏览器按页面 origin 解析 —— 同样自洽
+      *)
+        echo "SELF-ERROR: 首页样式表指向 $_css，与 baseUrl $_base 既不同源也不是根相对。" >&2
+        echo "  ⇒ 这次是在用**线上 CSS** 检查**本地 HTML**，结果没有意义（而且会假绿）。" >&2
+        echo "  ⇒ 正确做法见 docs/LOCAL-TESTING.md：" >&2
+        echo "       zola build -u $_base -o /tmp/site-local" >&2
+        echo "       python3 docs/serve-local.py <port> --root /tmp/site-local" >&2
+        exit 2 ;;
+    esac
+    ;;
+esac
+
 pass=0; fail=0; declare -a LINES
 run() {  # run "名称" 命令...
   local name="$1"; shift
