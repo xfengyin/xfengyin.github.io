@@ -10,8 +10,11 @@ tags = ["洗地机", "电池测试", "续航", "硬件测试"]
 [extra]
 author = "xfengyin"
 # 原来这里指向 /assets/images/wetdry-cleaner-test.jpg —— 该文件在仓库里不存在，
-# 线上是 404，首页卡片因此显示裂图。删掉这行后模板回退到
-# /assets/covers/<slug>.svg（该封面文件存在），与其余 16 篇一致。
+# 线上是 404，首页卡片因此显示裂图。
+# 现在这里**有意留空**：文章页/卡片只在真有位图配图时才输出照片（走 /assets/img/resp/ 的
+# picture + webp），没有配图时封面由 CSS 按分类色相生成 —— 不再依赖
+# static/assets/covers/*.svg（那 17 张 SVG 是「把标题烧进图里」的大标题卡，
+# 其中 12 张的图内标题已与 front matter 不符，已于本次重构中删除）。
 +++
 
 ## 一、测试目的
