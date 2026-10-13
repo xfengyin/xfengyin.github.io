@@ -13,7 +13,6 @@
    所以干脆在 config 里另存一份绝对地址用于社交卡片（见 config.toml 的说明）。 #}
 {% block og_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
 {% block tw_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
-{% block ld_type %}"BlogPosting"{% endblock %}
 {% block ld_extra %}
   <script type="application/ld+json">
   {
@@ -90,14 +89,21 @@
         {{ page.content | safe }}
       </div>
 
+      {# ⚠️ Zola 0.23 的 page 对象**没有 `earlier` / `later` 字段**
+         （可用字段是 higher / lower，见构建报错里的 "Available fields" 列表）。
+         原来写 `{% if page.earlier %}` 永远为假 ⇒ **17 篇文章全部**同时显示
+         「已经是第一篇」和「已经是最后一篇」，自相矛盾，而且上下篇导航
+         完全点不了 —— 这是一个静默失效：模板不报错，只是判断永远为假。
+         实测（探针验证）：higher = 按 sort_by 顺序的**上一篇**（较新），
+         lower = **下一篇**（较旧）；首末两端确实为 undefined，属正确。 #}
       <div class="article-nav">
-        {% if page.earlier %}
-        <a class="prev" href="{{ page.earlier.permalink }}">← {{ page.earlier.title }}</a>
+        {% if page.higher %}
+        <a class="prev" href="{{ page.higher.permalink }}">← {{ page.higher.title }}</a>
         {% else %}
         <span class="prev disabled">已经是第一篇</span>
         {% endif %}
-        {% if page.later %}
-        <a class="next" href="{{ page.later.permalink }}">{{ page.later.title }} →</a>
+        {% if page.lower %}
+        <a class="next" href="{{ page.lower.permalink }}">{{ page.lower.title }} →</a>
         {% else %}
         <span class="next disabled">已经是最后一篇</span>
         {% endif %}
