@@ -43,10 +43,21 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Install Zola
+        # 原来是一句 `curl ... | tar xz`：管道里 curl 失败时 tar 只会报
+        # "unexpected end of file"，看不出根因，也没有任何重试
+        # （Gitea 侧的 ci.yml 已因同一个形状假红过一次，改法见那里的注释；这里补齐同样的加固）。
         run: |
-          mkdir -p "$HOME/bin"
-          curl -fsSL https://github.com/getzola/zola/releases/download/v0.23.4/zola-v0.23.4-x86_64-unknown-linux-gnu.tar.gz | tar xz -C "$HOME/bin"
+          set -euo pipefail
+          VER=0.23.4
+          FILE=zola-v${VER}-x86_64-unknown-linux-gnu.tar.gz
+          URL=https://github.com/getzola/zola/releases/download/v${VER}/${FILE}
+          mkdir -p "$HOME/bin" /tmp/zola
+          curl -fsSL --retry 3 --retry-delay 2 --connect-timeout 15 --max-time 180 -o /tmp/zola/dl.tar.gz "$URL"
+          # 解压前先确认这是一个完整的 tar：截断的下载在这里就失败，不会留下半个二进制
+          tar tzf /tmp/zola/dl.tar.gz >/dev/null
+          tar xzf /tmp/zola/dl.tar.gz -C "$HOME/bin"
           echo "$HOME/bin" >> "$GITHUB_PATH"
+          "$HOME/bin/zola" --version
 
       - name: Build site
         run: zola build
