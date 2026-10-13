@@ -1,6 +1,7 @@
 # xfengyin.github.io
 
 Codex 风格个人主页 + 技术博客，基于 **Zola**（Rust 静态站点生成器）构建，部署于 GitHub Pages。
+线上地址：<https://xfengyin.github.io/>
 
 ## 技术栈
 
@@ -12,29 +13,40 @@ Codex 风格个人主页 + 技术博客，基于 **Zola**（Rust 静态站点生
 
 ```
 .
-├── config.toml            # Zola 配置
+├── config.toml                 # Zola 配置：站点、taxonomies、社交卡片、订阅源
 ├── content/
-│   ├── _index.md          # 主页数据（文章 / 分类 / 标签计数、hero 文案）
-│   └── posts/             # 博客文章（17 篇）
-├── templates/             # Tera 模板（base / index / section / page / 404）
+│   ├── _index.md               # 主页数据（hero 文案；计数由模板实时统计，不写死）
+│   └── posts/                  # 17 篇文章 + _index.md
+├── templates/                  # Tera 模板
+│   ├── base.html               # 骨架：head / Open Graph / JSON-LD / 顶栏 / 页脚
+│   ├── index.html              # 首页（含构建时生成的搜索索引）
+│   ├── section.html            # 文章列表 /posts/
+│   ├── page.html               # 文章页：进度条、目录、上下篇、推荐阅读；
+│   │                           #   带 `guide = true` 时额外注入统计表与标签云
+│   ├── taxonomy_list.html      # /categories/ 与 /tags/
+│   ├── taxonomy_single.html    # 单个分类 / 标签页
+│   ├── 404.html
+│   └── atom.xml                # Atom 订阅源模板
 ├── static/
-│   ├── css/chinese.css
-│   ├── js/site.js             # 站点交互（导航、深浅色切换）
-│   ├── js/search-data.js      # 手工维护的搜索数据，需与文章列表手动同步
+│   ├── css/chinese.css         # 全站样式（含打印样式与 reduced-motion）
+│   ├── js/site.js              # 顶栏 / 菜单 / 深浅色 / 搜索 / 推荐去重 / 代码块可聚焦
+│   ├── favicon.ico             # 浏览器自动请求 /favicon.ico 时的兜底
 │   └── assets/
-│       ├── covers/        # 文章封面 SVG（17）
-│       ├── diagrams/      # 文章内文示意图 SVG（17）
-│       └── img/           # 位图与图标配置（6）：posts/ 文章配图 3、covers/ 默认封面 1、
-│                          #   favicons/ 的 browserconfig.xml 与 site.webmanifest 2（非位图）
-└── .gitea/workflows/
-    ├── pages.yml          # 部署到 GitHub Pages（仅在 github.com 上执行）
-    └── ci.yml             # PR 构建检查
+│       ├── covers/             # 文章封面 SVG（17，与 slug 同名）
+│       ├── diagrams/           # 文章内文示意图 SVG（17）
+│       └── img/
+│           ├── covers/         # 默认社交卡片图（1）
+│           ├── posts/          # 位图配图（3）
+│           └── resp/           # 上述位图的响应式 webp（9 = 3 张 × 400/800/1200）
+├── docs/                       # 检查与验收脚本（见「质量检查」）
+├── .gitea/workflows/           # ci.yml（PR 构建检查）、pages.yml（Gitea 侧占位）
+└── .github/workflows/pages.yml # GitHub 侧真正执行构建与发布的那一份
 ```
 
 ## 本地预览
 
 ```bash
-# 安装 Zola 后执行
+# 安装 Zola 0.23.4 后执行
 zola serve
 ```
 
@@ -45,7 +57,7 @@ zola serve
 工作流分两处，**两处都需要存在**：
 
 - `.gitea/workflows/ci.yml` —— PR 时在 Gitea 上跑 `zola build` 并校验 `public/index.html`。
-- `.gitea/workflows/pages.yml` —— Gitea 侧的占位（两个 job 都带 `if: github.server_url == 'https://github.com'`，在 Gitea 上只跑 `preflight`）。
+- `.gitea/workflows/pages.yml` —— Gitea 侧的占位（各 job 带 `if: github.server_url == 'https://github.com'`，在 Gitea 上只跑 `preflight`）。
 - `.github/workflows/pages.yml` —— **GitHub 侧真正执行构建与发布的那一份。**
 
 > ⚠️ **为什么 `.github/workflows/pages.yml` 必须存在**（2026-10-13 实测的坑）
@@ -69,21 +81,47 @@ zola serve
 > # 3) 看 runs 有没有真的产生（total_count=0 说明没触发）
 > ```
 >
-> 另外：Gitea → GitHub 的 push mirror 偶发 `HTTP 408`（实测过一次，重试即恢复）。
-> 若线上迟迟不更新，先确认 GitHub 侧 `main` 的 SHA 是否已等于 Gitea 侧。
+> 另外：Gitea → GitHub 的 push mirror 偶发 `HTTP 408` 或 `gnutls_handshake() failed`，
+> 一般 10 分钟内自愈。若线上迟迟不更新，**先核对 GitHub 侧 main 的 SHA 是否已等于 Gitea 侧**，
+> 再怀疑构建本身。
 
-Zola 版本在 workflow 中固定为 0.23.4，与本地一致。
+Zola 版本在两处 workflow 中固定为 0.23.4，与本地一致。
+
+## 质量检查（`docs/`）
+
+`docs/` 里是一整套针对本站的检查脚本，全部为「发现问题时退出码非 0」的形式：
+
+| 脚本 | 覆盖 |
+|---|---|
+| `acceptance.sh` | 一次跑完下面所有项并汇总（16 项 + 可选的配图质量） |
+| `check-links.py` | 全站内部链接可达性（111 页 / 400+ 引用） |
+| `link-semantics.py` | 链接**落地内容的语义**：TOC 锚点、分类 chip、上下篇顺序、列表页反向一致性 |
+| `content-drift-check.py` | front matter 与实际内容 / 文件名的漂移 |
+| `declared-values.cjs` | JSON-LD 等「声明值」的有效性（类型与字段是否相符、同页是否重复） |
+| `axe-all-pages.cjs` | 真实 Chrome 跑 axe（含 best-practice 规则） |
+| `viewport-all-pages.cjs` / `narrow-320-pages.cjs` | 4 档视口 + 320px 超窄屏 |
+| `contrast-all-pages.cjs` / `dark-all-pages.cjs` | 浅色 / 深色对比度 |
+| `cls-all-pages.cjs` | 累积布局偏移 |
+| `interactive-all-pages.cjs` / `kbd-audit-all-pages.cjs` | 交互目标尺寸 / 键盘可达 |
+| `structure-all-pages.cjs` / `nojs-all-pages.cjs` / `print-all-pages.cjs` / `reduced-motion-all-pages.cjs` | HTML 结构与元数据 / 无 JS 降级 / 打印 / 减弱动效 |
+| `nav-verify.cjs` / `interaction-verify.cjs` | 真的点进去核对落地页与交互 |
+| `serve-local.py` | 带 gzip 的本地静态服务器（贴近线上条件） |
+
+⚠️ 这些脚本目前**带着本机路径**（`/tmp/pptr/node_modules/puppeteer`、
+`/tmp/a11y-browser/node_modules/axe-core`、`/vol1/work/...`、`/tmp/allpages.txt`），
+只能在开发机上运行；换机器需要先按 `docs/ENVIRONMENT.md` 准备依赖与页面清单。
 
 ## 仓库来源
 
-本仓库以自建 Gitea（`http://192.168.31.101:3100/admin/xfengyin.github.io.git`）为唯一源，GitHub 侧为只读镜像；请勿直接在 GitHub 提交。
+本仓库以自建 Gitea（`http://192.168.31.101:3100/admin/xfengyin.github.io.git`）为唯一源，
+GitHub 侧为只读镜像（push mirror 每 10 分钟同步一次）；**请勿直接在 GitHub 提交**。
 
 ## 分类与标签（Zola taxonomies）
 
-分类与标签由 Zola 的 `taxonomies` 真实生成，**不再是写死的展示文字**：
+分类与标签由 Zola 的 `taxonomies` 真实生成，**不是写死的展示文字**：
 
 - 页面：`/categories/`、`/tags/` 以及每个词条一页（如 `/categories/dian-lu-she-ji/`）。
-  实测 **25 个分类 / 64 个标签**，sitemap 收录 **110 条 URL**（原来只有 19 条）。
+  实测 **25 个分类 / 64 个标签**，sitemap 收录 **110 条 URL**。
 - 文章 front matter 里的写法是 **`[taxonomies]` 表**，不是顶层 `categories = [...]`：
   ```toml
   [taxonomies]
@@ -97,17 +135,17 @@ Zola 版本在 workflow 中固定为 0.23.4，与本地一致。
 
 ## 已知的内容维护点
 
-- `content/posts/2024-12-01-blog-guide-index.md`：页首统计与页尾标签云**已改为构建时生成**
-  （见 `templates/blog-guide.html`），不再手写。正文里的系列分组标题（如「硬件测试系列（7篇）」）
-  与每个系列的条目清单仍是**人工维护**的编辑内容，增删文章后需要手动同步。
-  ⚠️ 注意：**Zola 0.23 的内容渲染阶段不能调用 `get_section` / `get_taxonomy`**
-  （官方限制：内容在站点状态就绪前渲染），所以在 markdown 里写这些函数会直接构建失败
-  （实测报 `Section \`posts/_index.md\` not found.`）。要在页面里用这些数据，正确做法是给页面
-  加 `template = "xxx.html"` front matter，在模板里算好再用 `{{ page.content | safe }}` 嵌正文。
-  另外 Zola 0.23 **已移除 shortcode 机制**，`templates/shortcodes/` 不再生效
-  （调用会报 `Unknown function`）。
-- `static/js/search-data.js` 是手写的搜索数据，需与文章列表手动同步（当前 17 条，与文章数一致）。
-  注意：`config.toml` 的 `build_search_index` **必须保持 `false`** —— Zola 自带的搜索索引（tantivy）
+- **搜索索引在构建时生成**：`templates/index.html` 的 scripts 块直接从 `posts.pages`
+  内联输出 `window.POSTS`。早期有一份手写的 `static/js/search-data.js`，已删除 ——
+  手写索引必然与 front matter 漂移（实测 17 篇里有 8 篇**用自己的真实标题搜不到**）。
+- `config.toml` 的 `build_search_index` **必须保持 `false`**：Zola 自带搜索索引（tantivy）
   不支持 `zh-CN`，与 `default_language = "zh-CN"` 同时打开会直接构建失败
   （实测报 `Tried to build search index for language zh-CN which is not supported`）。
-  若要改用自带索引，需先把语言配置与前端一起重新评估。
+- `content/posts/2024-12-01-blog-guide-index.md` 是一篇**需要构建时数据**的文章：
+  它要输出「总文章数 / 分类数 / 标签数」统计表与按引用次数排序的标签云。
+  front matter 里的 `guide = true` 会打开 `templates/page.html` 中对应的两段。
+  正文里的系列分组标题（如「硬件测试系列（7篇）」）与条目清单仍是**人工维护**的编辑内容。
+  ⚠️ 注意：**Zola 0.23 的内容渲染阶段不能调用 `get_section` / `get_taxonomy`**
+  （内容在站点状态就绪前渲染），在 markdown 里写这些函数会直接构建失败
+  （实测报 `Section \`posts/_index.md\` not found.`）。要在页面里用这些数据，就得走模板。
+  另外 Zola 0.23 **已移除 shortcode 机制**，`templates/shortcodes/` 不再生效。
