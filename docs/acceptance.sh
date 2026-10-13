@@ -34,6 +34,10 @@ run "对比度·浅色 (111)"                node "$DOCS/contrast-all-pages.cjs"
 run "对比度·深色 (111)"                node "$DOCS/dark-all-pages.cjs" "$BASE" "$PAGES"
 run "打印 (111)"                       node "$DOCS/print-all-pages.cjs" "$BASE" "$PAGES"
 run "reduced-motion (111)"             node "$DOCS/reduced-motion-all-pages.cjs" "$BASE" "$PAGES"
+# 以下三项此前不在验收范围（历轮修过相关缺陷，却没纳入例行检查）
+run "CLS 布局偏移 (111)"               node "$DOCS/cls-all-pages.cjs" "$BASE" "$PAGES"
+run "HTML 结构+元数据 (111)"           node "$DOCS/structure-all-pages.cjs" "$BASE" "$PAGES"
+run "无 JS 降级 (111)"                 node "$DOCS/nojs-all-pages.cjs" "$BASE" "$PAGES"
 
 echo
 echo "════════════ 验收汇总 ════════════"
