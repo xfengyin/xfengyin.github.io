@@ -595,3 +595,29 @@ scroll-behavior:auto，避免平滑滚动导致测到屏幕外），再用 eleme
 - 新版仍有可改进项（无照片文章的渐变占位、深色开关的可访问名、旧类名残留、宋体回退风险），
   但没有发现会让验收结论失效或该拦而未拦的问题。
 
+---
+
+# 附：Lead 后记（验证冻结之后发生的变更，如实登记）
+
+验证员冻结的站点指纹是 `content+templates+static = d4184fb8…`、`chinese.css = 25ba6802…`。
+冻结**之后**，Lead 只做了一处站点文件改动，必须在此登记，否则本报告的指纹与仓库对不上：
+
+| 变更 | 文件 | 理由 |
+|---|---|---|
+| 给深浅色开关补 `aria-label="深色模式"` | `templates/base.html` | 该按钮的内容是 emoji（site.js 用 textContent 切 🌙/☀️），可访问名因此是一个字符、语义不明。`aria-pressed` 已表达开关状态，故名字用静态值即可（这正是 `aria-pressed` 的标准用法）。 |
+
+变更后实测：
+- `templates/base.html = f004a8493ae20c311adc168bf4f66d5800e8a4817edeb9aa34dc9ca65eafc58f`
+- 全树 `content+templates+static = c7f3f93c576b547939098afb19ecf4aa6507c1a16866b0de94143bff874885f6`
+- `static/css/chinese.css` **未变**（仍 25ba6802…）⇒ 视觉结论与对比度/目标尺寸等结论完全不受影响。
+- 浏览器可访问性树复核：按钮名 = `深色模式`，`pressed=false`。
+- **在改完之后的产物上重跑整套 `docs/acceptance.sh`：16/16 通过**（自洽镜像 `zola build -u http://127.0.0.1:8851`）。
+
+另外两处**不影响站点、只影响检查器**的改动（同批修掉）：
+- `docs/viewport-all-pages.cjs`、`docs/narrow-320-pages.cjs`：与 `print-all-pages.cjs` 同一个
+  「`process.exit()` 写在结论 `console.log` 之前 ⇒ 结论是死代码」的缺陷，退出码一律移到文件末尾。
+  修后实测三项日志都开始输出 `✓` 结论行（此前只有一行汇总）。
+  这正是你报告第 7 节末尾指出的问题；`docs/` 的其余检查器未改动。
+
+> 结论未变：16/16、无作弊、设计全面更好。本节只保证「报告里的指纹」与「仓库里的文件」一一对得上。
+
