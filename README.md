@@ -95,6 +95,7 @@ Zola 版本在两处 workflow 中固定为 0.23.4，与本地一致。
 |---|---|
 | `acceptance.sh` | 一次跑完下面所有项并汇总（16 项 + 可选的配图质量） |
 | `check-links.py` | 全站内部链接可达性（111 页 / 400+ 引用） |
+| `check-external-links.py` | **站外**链接可达性；区分 404（判失败）、403 机器人拒绝、测不出来 |
 | `link-semantics.py` | 链接**落地内容的语义**：TOC 锚点、分类 chip、上下篇顺序、列表页反向一致性 |
 | `content-drift-check.py` | front matter 与实际内容 / 文件名的漂移 |
 | `declared-values.cjs` | JSON-LD 等「声明值」的有效性（类型与字段是否相符、同页是否重复） |
