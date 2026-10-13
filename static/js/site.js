@@ -45,6 +45,22 @@
     window.addEventListener('resize', function () {
       if (window.innerWidth > 768) setMenuOpen(false);
     }, { passive: true });
+    // ---------- 菜单的关闭方式，与搜索框保持一致 ----------
+    // 实测（390px 真实浏览器）：此前**只有"再点一次按钮"能关** ——
+    //   Escape 无反应、点外部无反应，而同样场景下搜索框两者都支持。
+    // 键盘用户尤其吃亏：Escape 是对话框/菜单的通用关闭键。
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && scrollMenu.classList.contains('open')) {
+        setMenuOpen(false);
+        // 关闭后把焦点还给按钮，否则焦点留在已隐藏的元素上
+        if (menuToggle.focus) menuToggle.focus();
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (!scrollMenu.classList.contains('open')) return;
+      if (scrollMenu.contains(e.target) || e.target === menuToggle) return;
+      setMenuOpen(false);
+    });
   }
 
   // ---------- 页脚年份 ----------
