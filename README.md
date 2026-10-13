@@ -106,11 +106,21 @@ Zola 版本在两处 workflow 中固定为 0.23.4，与本地一致。
 | `interactive-all-pages.cjs` / `kbd-audit-all-pages.cjs` | 交互目标尺寸 / 键盘可达 |
 | `structure-all-pages.cjs` / `nojs-all-pages.cjs` / `print-all-pages.cjs` / `reduced-motion-all-pages.cjs` | HTML 结构与元数据 / 无 JS 降级 / 打印 / 减弱动效 |
 | `nav-verify.cjs` / `interaction-verify.cjs` | 真的点进去核对落地页与交互 |
+| `shot-pages.cjs` | **视觉回归截图**：8 种页面 × 桌面/移动 × 浅色/深色 = 32 张整页图（16 项检查覆盖不到「长得丑」） |
 | `serve-local.py` | 带 gzip 的本地静态服务器（贴近线上条件） |
 
 ⚠️ 这些脚本目前**带着本机路径**（`/tmp/pptr/node_modules/puppeteer`、
 `/tmp/a11y-browser/node_modules/axe-core`、`/vol1/work/...`、`/tmp/allpages.txt`），
 只能在开发机上运行；换机器需要先按 `docs/ENVIRONMENT.md` 准备依赖与页面清单。
+
+⚠️ **跑浏览器类检查前必须用自洽镜像** —— 否则测的是线上 CSS。`config.toml` 的 base_url 是生产域名，
+产物里的 CSS/JS 因此是绝对地址，直接 `serve public/` 的本地页面会去线上下载样式：
+```bash
+zola build -u http://127.0.0.1:8901 -o /tmp/site-local
+python3 docs/serve-local.py 8901 --root /tmp/site-local
+bash docs/acceptance.sh http://127.0.0.1:8901 /tmp/allpages.txt   # 现在会自己拦住不自洽的目标
+```
+详见 `docs/LOCAL-TESTING.md`。
 
 ## 仓库来源
 
