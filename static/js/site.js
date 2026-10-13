@@ -142,6 +142,34 @@
     }
   });
 
+  // ---------- 推荐阅读去重 ----------
+  // 问题：模板分两轮独立产出推荐（先同分类、再同标签），**轮次之间没有共享状态**，
+  // 于是「既同分类又同标签」的文章会被推多次。
+  // 实测：/posts/blog-optimization-notes/ 与 /posts/cyberpunk-ui-design/ 互相
+  // 共享 1 个分类 + 2 个标签 → 对方被推 **3 次**；CSS 只显示前 4 条
+  // （.related-grid > .related-item:nth-child(n+5){display:none}），
+  // 于是这页实际只给用户看了 **2 篇不同的文章**，另外 2 个位置是同一篇的重复。
+  // 为什么放在 JS 里做：模板侧做不到 —— Zola 0.23 的 Tera 没有 set_global、
+  // 没有集合运算，`{% set %}` 也无法跨嵌套循环带出值（实测确认过）。
+  // 纯增强：没有这块，推荐列表照常显示（只是有重复），其余功能不受影响。
+  var grid = document.querySelector('.related-grid');
+  if (grid) {
+    var seenHref = {};
+    // ⚠️ 必须先**快照**再删：HTMLCollection（grid.children）是**活的**，
+    // 边遍历边 removeChild 会导致下标错位、漏删后面的元素。
+    // （我第一版就是这么写的，实测 hardware-test-battery 页有一条重复没删掉。）
+    var items = Array.prototype.slice.call(grid.children);
+    items.forEach(function (item) {
+      var href = (item.getAttribute('href') || '').replace(/\/$/, '');
+      if (!href) return;
+      if (seenHref[href]) {
+        if (item.parentNode) item.parentNode.removeChild(item);
+      } else {
+        seenHref[href] = true;
+      }
+    });
+  }
+
   var taskBoxes = document.querySelectorAll('.article-content input[type="checkbox"]');
   Array.prototype.forEach.call(taskBoxes, function (cb) {
     var li = cb.closest('li');
