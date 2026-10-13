@@ -38,6 +38,10 @@ run "reduced-motion (111)"             node "$DOCS/reduced-motion-all-pages.cjs"
 run "CLS 布局偏移 (111)"               node "$DOCS/cls-all-pages.cjs" "$BASE" "$PAGES"
 run "HTML 结构+元数据 (111)"           node "$DOCS/structure-all-pages.cjs" "$BASE" "$PAGES"
 run "无 JS 降级 (111)"                 node "$DOCS/nojs-all-pages.cjs" "$BASE" "$PAGES"
+# 配图质量（需要 /tmp/img-backup 里的原图；缺原图时该项跳过并视为通过）
+if [ -d /tmp/img-backup ]; then
+  run "配图质量 (同尺寸 PSNR)"          bash "$DOCS/image-quality.sh"
+fi
 
 echo
 echo "════════════ 验收汇总 ════════════"
