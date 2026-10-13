@@ -443,8 +443,8 @@ Kongming框架的设计理念：
 
 ## 相关项目
 
-- [XingJu 星聚](https://github.com/xfengyin/XingJu) - 跨平台聚合应用
-- [Zen](https://github.com/xfengyin/zen) - Python模块化执行框架
+- XingJu 星聚 - 跨平台聚合应用
+- Zen - Python模块化执行框架
 
 ---
 

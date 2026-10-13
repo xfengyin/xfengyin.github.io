@@ -915,8 +915,8 @@ html.dark { --themeSoft: rgba(232, 89, 12, .16); }
 @media print {
   /* 屏幕装饰一律不打印 */
   .toolbar, .aside, .footer, .search-box, .danmaku-wall,
-  .related, .article-nav, .back-to-top, .progress-bar, .toc,
-  #ptrbtn, .dark-toggle, .menu-toggle, .scroll-menu, .section-head .more {
+  .related, .article-nav, .progress-bar, .toc,
+  .dark-toggle, .menu-toggle, .scroll-menu, .section-head .more {
     display: none !important;
   }
   /* ⚠️ 题词区不能一律隐藏：它在**正常页**是装饰横幅，但在 **404 页是唯一内容容器**。

@@ -19,7 +19,7 @@ image = "/assets/img/posts/xingju-cyberpunk.jpg"
 
 ![示意图](/assets/diagrams/xingju-dev-notes.svg)
 
-[XingJu 星聚](https://github.com/xfengyin/XingJu) 是我最近开发的一款跨平台聚合应用，支持音乐、视频、小说、漫画的多源搜索。本文记录开发过程中的技术选型和实战经验。
+XingJu 星聚是我最近开发的一款跨平台聚合应用，支持音乐、视频、小说、漫画的多源搜索。本文记录开发过程中的技术选型和实战经验。
 
 ## 技术栈选型
 
@@ -578,6 +578,6 @@ XingJu 项目验证了 Tauri 在生产环境中的可行性，推荐给大家尝
 
 ---
 
-**项目地址**: [https://github.com/xfengyin/XingJu](https://github.com/xfengyin/XingJu)
+**项目地址**: 暂未单独开源；更多项目见 [GitHub @xfengyin](https://github.com/xfengyin)。
 
 *最后更新: 2026-04-03*

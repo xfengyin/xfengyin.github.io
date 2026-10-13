@@ -491,8 +491,8 @@ Zen框架的设计哲学：
 
 ## 相关项目
 
-- [XingJu 星聚](https://github.com/xfengyin/XingJu) - 跨平台聚合应用
-- [Kongming 孔明](https://github.com/xfengyin/kongming) - Go微服务框架
+- XingJu 星聚 - 跨平台聚合应用
+- Kongming 孔明 - Go微服务框架
 
 ---
 

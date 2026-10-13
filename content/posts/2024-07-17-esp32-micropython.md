@@ -44,7 +44,7 @@ ESP32 是乐鑫科技推出的一款低功耗、高集成度的 Wi-Fi + 蓝牙�
 根据开发板使用的 USB 转串口芯片安装相应驱动：
 
 - **CP2102**: [Silicon Labs 驱动](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
-- **CH340**: [沁恒微电子驱动](http://www.wch.cn/downloads/CH341SER_ZIP.html)
+- **CH340**: [沁恒微电子驱动](https://www.wch.cn/downloads/CH341SER_ZIP.html)
 
 ### 3. 烧录 MicroPython 固件
 
