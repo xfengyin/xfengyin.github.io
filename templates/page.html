@@ -137,7 +137,10 @@
               {% set cterm = get_taxonomy_term(kind="categories", term=c) %}
               {% for rel in cterm.pages %}
                 {% if loop.index <= 3 and rel.permalink != page.permalink %}
-            <a class="related-item" href="{{ rel.permalink }}"><span class="rel-cat">{{ c }}</span><span class="rel-title">{{ rel.title }}</span></a>
+            <a class="related-item" href="{{ rel.permalink }}">
+              <span class="rel-cover" data-cat="{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}随笔{% endif %}" data-v="{{ rel.reading_time % 4 }}" aria-hidden="true"></span>
+              <span class="rel-body"><span class="chip">{{ c }}</span><span class="rel-title">{{ rel.title }}</span></span>
+            </a>
                 {% endif %}
               {% endfor %}
             {% endif %}
@@ -147,14 +150,20 @@
               {% set term = get_taxonomy_term(kind="tags", term=t) %}
               {% for rel in term.pages %}
                 {% if loop.index <= 3 and rel.permalink != page.permalink %}
-            <a class="related-item" href="{{ rel.permalink }}"><span class="rel-cat">#{{ t }}</span><span class="rel-title">{{ rel.title }}</span></a>
+            <a class="related-item" href="{{ rel.permalink }}">
+              <span class="rel-cover" data-cat="{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}随笔{% endif %}" data-v="{{ rel.reading_time % 4 }}" aria-hidden="true"></span>
+              <span class="rel-body"><span class="chip">#{{ t }}</span><span class="rel-title">{{ rel.title }}</span></span>
+            </a>
                 {% endif %}
               {% endfor %}
             {% endif %}
           {% endfor %}
           {% for rel in all %}
             {% if loop.index <= 5 and rel.permalink != page.permalink %}
-            <a class="related-item related-item--fallback" href="{{ rel.permalink }}"><span class="rel-cat">{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}文章{% endif %}</span><span class="rel-title">{{ rel.title }}</span></a>
+            <a class="related-item related-item--fallback" href="{{ rel.permalink }}">
+              <span class="rel-cover" data-cat="{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}随笔{% endif %}" data-v="{{ rel.reading_time % 4 }}" aria-hidden="true"></span>
+              <span class="rel-body"><span class="chip">{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}文章{% endif %}</span><span class="rel-title">{{ rel.title }}</span></span>
+            </a>
             {% endif %}
           {% endfor %}
         </div>

@@ -176,15 +176,23 @@ html.js .dark-toggle { display: grid; }
   font-weight: 800;
   line-height: 1.16;
   letter-spacing: -.028em;
-  /* 整句渐变字：与概念稿「标题带渐变」一致，但不需要拆句（不新造字句）。
-     最浅的一端 #7c3aed 在白底 5.7:1、在深底更高 —— 大字号要 3:1，这里富余很多。 */
-  background: linear-gradient(115deg, var(--ink) 0%, var(--ink) 34%, var(--p1) 62%, var(--p2) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
   text-wrap: balance;
 }
-html.dark .hero h1 { background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dcf7 30%, var(--brand-text) 70%, #c4b5fd 100%); }
+/* ---------- 渐变标题（主页 + 文章页共用同一套） ----------
+   用 @supports 包住：不支持的浏览器不写 color:transparent，
+   否则整句标题会不可见（宁可退化成普通墨色标题）。
+   最浅一端 #7c3aed 在白底 5.7:1、深底更高 —— 大字号只要 3:1，富余很多。 */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1, .article-card h1, .page-head h1 {
+    background-image: linear-gradient(115deg, var(--ink) 0%, var(--ink) 34%, var(--p1) 62%, var(--p2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  html.dark .hero h1, html.dark .article-card h1, html.dark .page-head h1 {
+    background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dcf7 30%, var(--brand-text) 70%, #c4b5fd 100%);
+  }
+}
 .lede { margin: 18px 0 0; max-width: 38em; color: var(--dim); font-size: 16.5px; }
 .cta { display: flex; justify-content: flex-start; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
 .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 34px 0 0; max-width: 760px; }
@@ -261,45 +269,45 @@ html.dark .hero h1 { background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dc
 .post-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); border-color: transparent; }
 /* 封面：CSS 生成（按 data-cat 分类色相 + data-v 4 个稳定变体）
    —— 那 17 张烤字 SVG 已废弃：图内标题 12/17 与 front matter 不符，且怎么裁都会露字。 */
-.post-cover {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
+/* 封面图形：文章卡片（.post-cover）与推荐阅读卡片（.rel-cover）共用同一套
+   分类色相 + 纹理 + 变体角度；颜色定义是属性选择器，元素叫什么名字都能用上。 */
+.post-cover, .rel-cover {
   background-color: var(--cover-a, #4f46e5);
   background-image:
     radial-gradient(120% 100% at 80% 6%, rgba(255, 255, 255, .34), rgba(255, 255, 255, 0) 58%),
     linear-gradient(var(--cover-angle, 135deg), var(--cover-a, #4f46e5) 0%, var(--cover-b, #7c3aed) 100%);
   background-repeat: no-repeat;
 }
-.post-cover[data-v="1"] { --cover-angle: 108deg; }
-.post-cover[data-v="2"] { --cover-angle: 160deg; }
-.post-cover[data-v="3"] { --cover-angle: 122deg; }
+.post-cover { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+[data-v="1"] { --cover-angle: 108deg; }
+[data-v="2"] { --cover-angle: 160deg; }
+[data-v="3"] { --cover-angle: 122deg; }
 /* 分类色相（25 个真实分类；未列出的落到默认靛紫） */
-.post-cover[data-cat="硬件测试"] { --cover-a: #4f46e5; --cover-b: #7c3aed; }
-.post-cover[data-cat="硬件基础"] { --cover-a: #4f46e5; --cover-b: #0ea5e9; }
-.post-cover[data-cat="洗地机测试"] { --cover-a: #6366f1; --cover-b: #8b5cf6; }
-.post-cover[data-cat="测试仪器"] { --cover-a: #0ea5e9; --cover-b: #2563eb; }
-.post-cover[data-cat="电路设计"] { --cover-a: #06b6d4; --cover-b: #3b82f6; }
-.post-cover[data-cat="PCB设计"] { --cover-a: #0891b2; --cover-b: #22d3ee; }
-.post-cover[data-cat="传感器"] { --cover-a: #14b8a6; --cover-b: #0891b2; }
-.post-cover[data-cat="电源"] { --cover-a: #f59e0b; --cover-b: #ea580c; }
-.post-cover[data-cat="电源设计"] { --cover-a: #f59e0b; --cover-b: #ea580c; }
-.post-cover[data-cat="嵌入式开发"] { --cover-a: #10b981; --cover-b: #059669; }
-.post-cover[data-cat="ESP32"] { --cover-a: #22c55e; --cover-b: #0ea5e9; }
-.post-cover[data-cat="开发工具"] { --cover-a: #64748b; --cover-b: #475569; }
-.post-cover[data-cat="Git"] { --cover-a: #f97316; --cover-b: #ef4444; }
-.post-cover[data-cat="后端开发"] { --cover-a: #10b981; --cover-b: #0ea5e9; }
-.post-cover[data-cat="微服务"] { --cover-a: #14b8a6; --cover-b: #6366f1; }
-.post-cover[data-cat="架构设计"] { --cover-a: #6366f1; --cover-b: #0ea5e9; }
-.post-cover[data-cat="技术实践"] { --cover-a: #ec4899; --cover-b: #8b5cf6; }
-.post-cover[data-cat="Rust"] { --cover-a: #f97316; --cover-b: #b45309; }
-.post-cover[data-cat="前端开发"] { --cover-a: #8b5cf6; --cover-b: #ec4899; }
-.post-cover[data-cat="UI设计"] { --cover-a: #ec4899; --cover-b: #f43f5e; }
-.post-cover[data-cat="博客建设"] { --cover-a: #f43f5e; --cover-b: #f59e0b; }
-.post-cover[data-cat="Python"] { --cover-a: #f59e0b; --cover-b: #f97316; }
-.post-cover[data-cat="项目实战"] { --cover-a: #0ea5e9; --cover-b: #14b8a6; }
-.post-cover[data-cat="新能源"] { --cover-a: #22c55e; --cover-b: #84cc16; }
-.post-cover[data-cat="行业应用"] { --cover-a: #64748b; --cover-b: #0ea5e9; }
+[data-cat="硬件测试"] { --cover-a: #4f46e5; --cover-b: #7c3aed; }
+[data-cat="硬件基础"] { --cover-a: #4f46e5; --cover-b: #0ea5e9; }
+[data-cat="洗地机测试"] { --cover-a: #6366f1; --cover-b: #8b5cf6; }
+[data-cat="测试仪器"] { --cover-a: #0ea5e9; --cover-b: #2563eb; }
+[data-cat="电路设计"] { --cover-a: #06b6d4; --cover-b: #3b82f6; }
+[data-cat="PCB设计"] { --cover-a: #0891b2; --cover-b: #22d3ee; }
+[data-cat="传感器"] { --cover-a: #14b8a6; --cover-b: #0891b2; }
+[data-cat="电源"] { --cover-a: #f59e0b; --cover-b: #ea580c; }
+[data-cat="电源设计"] { --cover-a: #f59e0b; --cover-b: #ea580c; }
+[data-cat="嵌入式开发"] { --cover-a: #10b981; --cover-b: #059669; }
+[data-cat="ESP32"] { --cover-a: #22c55e; --cover-b: #0ea5e9; }
+[data-cat="开发工具"] { --cover-a: #64748b; --cover-b: #475569; }
+[data-cat="Git"] { --cover-a: #f97316; --cover-b: #ef4444; }
+[data-cat="后端开发"] { --cover-a: #10b981; --cover-b: #0ea5e9; }
+[data-cat="微服务"] { --cover-a: #14b8a6; --cover-b: #6366f1; }
+[data-cat="架构设计"] { --cover-a: #6366f1; --cover-b: #0ea5e9; }
+[data-cat="技术实践"] { --cover-a: #ec4899; --cover-b: #8b5cf6; }
+[data-cat="Rust"] { --cover-a: #f97316; --cover-b: #b45309; }
+[data-cat="前端开发"] { --cover-a: #8b5cf6; --cover-b: #ec4899; }
+[data-cat="UI设计"] { --cover-a: #ec4899; --cover-b: #f43f5e; }
+[data-cat="博客建设"] { --cover-a: #f43f5e; --cover-b: #f59e0b; }
+[data-cat="Python"] { --cover-a: #f59e0b; --cover-b: #f97316; }
+[data-cat="项目实战"] { --cover-a: #0ea5e9; --cover-b: #14b8a6; }
+[data-cat="新能源"] { --cover-a: #22c55e; --cover-b: #84cc16; }
+[data-cat="行业应用"] { --cover-a: #64748b; --cover-b: #0ea5e9; }
 .post-cover img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; transition: transform .5s ease; }
 .post-card:hover .post-cover img { transform: scale(1.03); }
 .cbody { display: flex; flex-direction: column; gap: 9px; flex: 1; padding: 18px 20px 20px; }
@@ -325,7 +333,16 @@ html.dark .hero h1 { background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dc
 .crumb .i { width: 15px; height: 15px; }
 .crumb a { color: var(--brand-text); min-height: 24px; display: inline-flex; align-items: center; }
 .crumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.article-card h1 { margin: 12px 0 0; font-size: clamp(26px, 3.2vw, 40px); line-height: 1.22; letter-spacing: -.028em; }
+.article-card h1 {
+  margin: 12px 0 0;
+  max-width: 100%;
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1.24;
+  letter-spacing: -.028em;
+  text-wrap: balance;
+  /* 超长不可断串（URL / 型号）也不撑破容器；中文照常逐字断行 */
+  overflow-wrap: break-word;
+}
 .author { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
 .author .av { width: 42px; height: 42px; border-radius: var(--pill); background: var(--grad); color: #fff; display: grid; place-items: center; font-size: 14px; font-weight: 700; flex: none; }
 .author .who b { display: block; font-size: 14.5px; font-weight: 700; }
@@ -334,15 +351,21 @@ html.dark .hero h1 { background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dc
 .article-cover { width: 100%; aspect-ratio: 16 / 9; margin-top: 24px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--soft); }
 .article-cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 .article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 16px; font-size: 13.5px; color: var(--dim); }
+/* 与主页 .cloud a 同一规格的胶囊（原来是一套更小、hover 也不同的 kbd） */
 .article-meta kbd {
-  display: inline-flex; align-items: center; min-height: 28px; padding: 0 12px;
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px;
   border: 1px solid var(--line-2); border-radius: var(--pill);
   background: var(--surface); color: var(--dim);
-  font: inherit; font-size: 12.5px;
+  font: inherit; font-size: 13.5px;
+  transition: color .18s, border-color .18s, background .18s;
 }
 .article-meta a:hover kbd { color: var(--brand-text); border-color: var(--p1); background: var(--brand-soft); }
 /* 目录 */
-.toc { margin-top: 26px; padding: 18px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--soft); }
+.toc {
+  margin-top: 26px; padding: 18px 22px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow-1);
+}
 .toc-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 650; color: var(--dim); letter-spacing: .04em; }
 .toc-title .i { width: 16px; height: 16px; }
 .toc ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; margin-top: 12px; }
@@ -383,34 +406,60 @@ html.dark .article-content img[src*="/diagrams/"] {
   border-color: rgba(255, 255, 255, .14);
 }
 /* 构建时统计表（page.extra.guide 开关控制，必须保留） */
-.guide-stats { margin: 26px 0 10px; }
+.guide-stats {
+  margin: 26px 0 10px; padding: 6px 20px 16px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow-1);
+}
 .guide-stats table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
 .guide-stats th, .guide-stats td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line); }
 .guide-stats th { font-size: 12.5px; font-weight: 650; color: var(--dim); }
 .guide-note { margin-top: 10px; font-size: 12.5px; color: var(--dim); }
-.article-card > h2.title { display: flex; align-items: center; gap: 9px; margin: 2em 0 .8em; font-size: 20px; }
-.article-card > h2.title .i { width: 19px; height: 19px; color: var(--brand-text); }
-/* 上下篇 */
-.article-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
-.article-nav a, .article-nav .disabled { display: inline-flex; align-items: center; min-height: 34px; max-width: 48%; }
-.article-nav a { color: var(--brand-text); }
-.article-nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
-/* 占位文本不是控件，必须满足正文 4.5:1；用斜体保持「不是链接」的区分 */
-.article-nav .disabled { color: var(--dim); font-style: italic; }
-/* 推荐阅读 */
+.article-card > h2.title { display: flex; align-items: center; gap: 9px; margin: 2em 0 .8em; font-size: 22px; font-weight: 750; letter-spacing: -.02em; }
+.article-card > h2.title .i { width: 20px; height: 20px; color: var(--brand-text); }
+/* 上下篇：改成主页同一套「线框胶囊按钮」的语言（原来是纯文字下划线链接） */
+.article-nav { display: flex; gap: 12px; margin-top: 42px; padding-top: 20px; border-top: 1px solid var(--line); }
+.article-nav a, .article-nav .disabled {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 46px; max-width: 48%; padding: 9px 18px;
+  border: 1px solid var(--line-2); border-radius: var(--pill);
+  background: var(--surface); color: var(--ink);
+  font-size: 13.5px; line-height: 1.5;
+  transition: color .18s, border-color .18s, background .18s, transform .18s;
+}
+.article-nav .next { margin-left: auto; text-align: right; }
+.article-nav a:hover { color: var(--brand-text); border-color: var(--p1); background: var(--brand-soft); transform: translateY(-1px); }
+/* 占位文本不是控件：虚线边框 + 次级文字色（--dim 白底 5.94:1），既达 AA 又不像可点链接 */
+.article-nav .disabled { color: var(--dim); border-style: dashed; }
+/* 推荐阅读：与主页 .post-card 同一套卡片 —— 同圆角、同边框、同阴影、同上浮位移，
+   并复用同一套「按分类色相生成」的封面（.rel-cover 与 .post-cover 共用一个图形定义）。 */
 .related { margin-top: 44px; }
-.related-title { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 18px; font-weight: 750; }
-.related-title .i { width: 18px; height: 18px; color: var(--brand-text); }
-.related-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.related-item { display: flex; flex-direction: column; gap: 5px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); transition: border-color .2s, transform .2s, box-shadow .2s; }
-.related-item:hover { border-color: var(--p1); transform: translateY(-2px); box-shadow: var(--shadow-1); }
-.related-item .rel-cat { font-size: 12px; font-weight: 650; color: var(--brand-text); }
-.related-item .rel-title { font-size: 14px; color: var(--ink); }
+.related-title { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; font-size: 22px; font-weight: 750; letter-spacing: -.02em; }
+.related-title .i { width: 20px; height: 20px; color: var(--brand-text); }
+.related-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.related-item {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow-1);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.related-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-2); border-color: transparent; }
+.rel-cover { display: block; aspect-ratio: 16 / 6; }
+.rel-body { display: flex; flex-direction: column; gap: 7px; padding: 14px 16px 16px; }
+.related-item .rel-title {
+  font-size: 14.5px; font-weight: 650; line-height: 1.5; color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
 /* 只展示前 4 条（模板多渲染候选、由 CSS 裁到 4 条；重复项由 site.js 去重） */
 .related-grid > .related-item:nth-child(n+5) { display: none; }
-.article-footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; }
-.article-footer a { display: inline-flex; align-items: center; min-height: 34px; color: var(--brand-text); }
-.article-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.article-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); }
+.article-footer a {
+  display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px;
+  border: 1px solid var(--line-2); border-radius: var(--pill);
+  background: var(--surface); color: var(--ink); font-size: 13.5px;
+  transition: color .18s, border-color .18s, background .18s;
+}
+.article-footer a:hover { color: var(--brand-text); border-color: var(--p1); background: var(--brand-soft); }
 
 /* ---------- 9. 页脚 ---------- */
 .footer { margin-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--line); background: var(--soft); }
@@ -509,9 +558,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
     background: #fff !important; box-shadow: none !important; border: none !important;
     margin: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100% !important;
   }
-  .hero h1 { background: none !important; -webkit-background-clip: initial !important; background-clip: initial !important; color: #000 !important; }
+  .hero h1, .article-card h1, .page-head h1 { background: none !important; -webkit-background-clip: initial !important; background-clip: initial !important; color: #000 !important; }
+  .article-footer a, .article-meta kbd { border: 0 !important; padding: 0 !important; background: none !important; color: #000 !important; }
   .lede, .post-desc, .post-meta, .article-meta, .footer-copy, .stat span, .page-head .sub { color: #333 !important; }
-  .chip, .cloud a { border: 1px solid #bbb !important; color: #000 !important; background: #fff !important; }
+  .chip, .cloud a, .article-meta kbd { border: 1px solid #bbb !important; color: #000 !important; background: #fff !important; }
   .cloud a em { color: #555 !important; }
   .stats { display: block !important; }
   .stat, .post-card, .article-card { page-break-inside: avoid; }
