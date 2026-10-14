@@ -7,10 +7,7 @@
 {% block og_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
 {% block tw_title %}{{ page.title }}{% endblock %}
 {% block tw_desc %}{{ page.description | default(value=config.description) }}{% endblock %}
-{# og:image / twitter:image 必须是绝对 URL（社交爬虫不解析相对路径）。
-   文章自己的封面在 front matter 里是站内相对路径，这里直接拼 base_url：
-   base_url 带结尾斜杠、图片值以 / 开头 —— 会拼出双斜杠，
-   所以干脆在 config 里另存一份绝对地址用于社交卡片（见 config.toml 的说明）。 #}
+{# og:image / twitter:image 必须是绝对 URL（社交爬虫不解析相对路径）。 #}
 {% block og_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
 {% block tw_image %}{% if page.extra.image %}https://xfengyin.github.io{{ page.extra.image }}{% else %}{{ config.extra.og_image_abs | default(value=config.extra.og_image) }}{% endif %}{% endblock %}
 {% block ld_extra %}
@@ -22,8 +19,6 @@
     "description": {{ page.description | default(value=config.description) | json_encode() | safe }},
     "url": {{ page.permalink | json_encode() | safe }},
     "datePublished": {{ page.date | date(format="%Y-%m-%dT%H:%M:%S%:z") | json_encode() | safe }},
-    {# Schema.org 的 image 同样要求绝对 URL —— 与 og:image 是同一类问题。
-       第 13 轮只修了 og:image，漏了这个，扫描"声明值有效性"时才查出来。 #}
     {% if page.extra.image %}"image": {{ ("https://xfengyin.github.io" ~ page.extra.image) | json_encode() | safe }},{% endif %}
     "inLanguage": "zh-CN",
     "author": {
@@ -41,49 +36,34 @@
 
 {% block content %}
   {# 本页既有的「构建时统计」与「按引用次数排序的标签云」需要 get_section/get_taxonomy ——
-     Zola 0.23 的内容渲染阶段不能调用这两个函数，只能在模板里算。
-     原来为此单开了一份 templates/blog-guide.html，代价是那一页没有继承本模板的：
-     阅读进度条、日期/字数、分类标签、本文目录、上下篇、推荐阅读 ——
-     全站 17 篇文章里唯一一个六样全缺的页面（其余 16 篇都齐）。
-     现改为一个 extra 开关复用本模板：特殊内容保留，通用家具一个不少。 #}
+     Zola 0.23 的内容渲染阶段不能调用这两个函数，只能在模板里算。用 extra 开关复用本模板。 #}
   {% set guide_posts = get_section(path="posts/_index.md") %}
   {% set guide_cats = get_taxonomy(kind="categories") %}
   {% set guide_tags = get_taxonomy(kind="tags") %}
 
   <div class="progress-bar" id="progressBar"></div>
 
-  {# 这一块是页头装饰横幅，不是正文标题 —— 正文标题是下面 article-card 里的那个 h1。
-     原来两处都是 <h1> 且文字相同：一个页面出现两个 h1 是语义/SEO 问题（16 篇文章页全部如此）。
-     视觉完全不变：把类名从元素选择器改为显式类，样式规则同步加到 .hero-title 上。 #}
-  {# 页头横幅：紧凑到约 150px，标题字号压到 24px 以内 ——
-     它现在读起来是「章节眉」而不是与正文 h1 争主次的第二个大标题。
-     （保留这个深色带还有一层原因：顶栏在未滚动时是透明底白字，
-       每个页面顶部都必须有一块深色，否则白字压在白底上不可读。） #}
-  <section class="hero hero--running" aria-label="页头">
-    <div class="hero-inner">
-      <p class="hero-title">{{ page.title }}</p>
-    </div>
-  </section>
-
-  {# 用 <main> 而不是 <div>：文章正文是页面的主体内容，需要一个 landmark，
-     否则 axe 报「内容不在任何 landmark 内」。CSS 按类选，标签改了视觉不变。 #}
-  <main class="page-wrap page-wrap--article">
+  {# 页头装饰横幅（旧版的深色 hero）已去掉：换成面包屑 + 正文 h1。
+     旧横幅是**同一标题的第二遍**（视觉重复），而且它存在的理由是「顶栏透明时需要深色垫底」；
+     现在顶栏是白色粘性条，这个理由不再成立。标题本身仍在（h1），没有丢内容。 #}
+  <main class="wrap">
     <article class="article-card">
-      {# 封面：只在文章**真有配图**时才输出（17 篇里有 3 篇是照片）。
-         没有配图的文章不再拿那张「大标题卡」SVG 充当封面 —— 图里的标题与正下方的 h1 重复，
-         而且 12/17 已经与 front matter 不符（会静默撒谎）。页头那条深色 brand 带
-         已经承担了版面的「起手」作用，不必再叠一张装饰图。 #}
+      <p class="crumb"><a href="/posts/">文章</a> / <span>{% if page.taxonomies.categories %}{{ page.taxonomies.categories[0] }}{% else %}随笔{% endif %}</span></p>
+      <h1>{{ page.title }}</h1>
+
+      <div class="author">
+        <img class="av" src="{{ config.extra.avatar }}" alt="" width="42" height="42" />
+        <span class="who"><b>{{ page.extra.author | default(value=config.extra.author) }}</b><span>{{ page.date | date(format="%Y-%m-%d") }} · {{ page.reading_time }} 分钟 · {{ page.word_count }} 字</span></span>
+      </div>
+
+      {# 封面：只在文章**真有配图**时输出（17 篇里 3 篇是照片），16:9 与源图一致 ⇒ 图表不裁。
+         没有配图就不再拿那张烤字 SVG 充当封面（图内标题 12/17 与 front matter 不符）。 #}
       {% if page.extra.image %}
       <div class="article-cover">
         {% set base = page.extra.image | replace(from="/assets/img/posts/", to="") | replace(from=".jpg", to="") %}<picture><source type="image/webp" srcset="/assets/img/resp/{{ base }}-400.webp 400w, /assets/img/resp/{{ base }}-800.webp 800w, /assets/img/resp/{{ base }}-1200.webp 1200w" sizes="(max-width: 980px) 100vw, 720px" /><img src="{{ page.extra.image }}" alt="" width="800" height="480" decoding="async" /></picture>
       </div>
       {% endif %}
 
-      <h1>{{ page.title }}</h1>
-      <div class="article-meta">
-        <span>{{ page.date | date(format="%Y-%m-%d") }}</span>
-        <span>{{ page.reading_time }} 分钟 · {{ page.word_count }} 字</span>
-      </div>
       {% if page.taxonomies.categories or page.taxonomies.tags %}
       <div class="article-meta">
         {% for c in page.taxonomies.categories %}<a href="{{ get_taxonomy_url(kind="categories", name=c) }}"><kbd>{{ c }}</kbd></a>{% endfor %}
@@ -92,9 +72,7 @@
       {% endif %}
 
       {% if page.toc %}
-      {# 目录是一个导航区块，用 <nav> 给出语义（原来是无语义的 <div>）。
-         CSS 按 .toc 类选择，换标签视觉不变；aria-label 让读屏能区分
-         「页头导航」与「本文目录」两个 navigation landmark。 #}
+      {# 目录是导航区块，用 <nav> 给出语义；aria-label 让读屏能区分它与页脚导航。 #}
       <nav class="toc" aria-label="本文目录">
         <div class="toc-title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 7h11M8.5 12h11M8.5 17h11"/><circle cx="4.6" cy="7" r="1.1"/><circle cx="4.6" cy="12" r="1.1"/><circle cx="4.6" cy="17" r="1.1"/></svg>目录</div>
         <ul>
@@ -126,18 +104,12 @@
       {% if page.extra.guide %}
       <h2 class="title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11.2 3.2H5.4a2.2 2.2 0 0 0-2.2 2.2v5.8l9.4 9.4a2.2 2.2 0 0 0 3.1 0l5.1-5.1a2.2 2.2 0 0 0 0-3.1z"/><circle cx="7.6" cy="7.6" r="1.3"/></svg>标签云（按实际引用次数）</h2>
       <div class="cloud">
-        {% for t in guide_tags.items %}{% if loop.index0 < 20 %}<a href="{{ t.permalink }}">{{ t.name }}（{{ t.pages | length }}）</a>
+        {% for t in guide_tags.items %}{% if loop.index0 < 20 %}<a href="{{ t.permalink }}"><span>{{ t.name }}</span><em>{{ t.pages | length }}</em></a>
         {% endif %}{% endfor %}
       </div>
       {% endif %}
 
-      {# ⚠️ Zola 0.23 的 page 对象**没有 `earlier` / `later` 字段**
-         （可用字段是 higher / lower，见构建报错里的 "Available fields" 列表）。
-         原来写 `{% if page.earlier %}` 永远为假 ⇒ **17 篇文章全部**同时显示
-         「已经是第一篇」和「已经是最后一篇」，自相矛盾，而且上下篇导航
-         完全点不了 —— 这是一个静默失效：模板不报错，只是判断永远为假。
-         实测（探针验证）：higher = 按 sort_by 顺序的**上一篇**（较新），
-         lower = **下一篇**（较旧）；首末两端确实为 undefined，属正确。 #}
+      {# Zola 0.23 的 page 没有 earlier/later，只有 higher（较新）/ lower（较旧）。 #}
       <div class="article-nav">
         {% if page.higher %}
         <a class="prev" href="{{ page.higher.permalink }}">← {{ page.higher.title }}</a>
@@ -151,18 +123,8 @@
         {% endif %}
       </div>
 
-      {# 推荐阅读
-         旧实现两个实测缺陷：
-           ① `loop.index0 < 4` 限制的是「在整份列表里的位置」而不是「输出几条」——
-              当前文章若排进前 4，就只补到 3 条（17 篇里 4 篇中招）；
-           ② 与当前文章毫无关系，纯粹取最新的几篇。
-         相关性信号的选择（都有实测依据）：
-           · 64 个标签里只有 7 个被 2 篇以上共用 —— 纯按标签只有 9/17 篇能找到邻居；
-           · 分类复用度高得多（「硬件测试」覆盖 7 篇）；
-           · 标签+分类合起来覆盖 14/17。
-         本版 Tera 能力有限（无 filter / concat / namespace / slice，且 `{% set %}`
-         在嵌套循环里不带出累加值），因此无法计数去重 —— 改为多渲染候选、
-         由 CSS 只显示前 4 条；同时限制候选数量，避免把 HTML 撑大。 #}
+      {# 推荐阅读：同分类 → 同标签 → 最新兜底；模板多渲染候选、CSS 裁到 4 条，
+         重复项由 site.js 去重（HTMLCollection 是活的，它已按快照处理）。 #}
       {% set sec = get_section(path="posts/_index.md") %}
       {% set all = sec.pages %}
       {% set my_cats = page.taxonomies.categories | default(value=[]) %}
@@ -170,7 +132,6 @@
       <div class="related">
         <div class="related-title"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.6 13.9 9l5.5 1.9-5.5 1.9L12 18.3l-1.9-5.5L4.6 10.9 10.1 9z"/><path d="M18.6 3.4v2.6M17.3 4.7h2.6"/></svg>推荐阅读</div>
         <div class="related-grid">
-          {# 1) 同分类（最多 2 个分类 × 3 篇） #}
           {% for c in my_cats %}
             {% if true %}
               {% set cterm = get_taxonomy_term(kind="categories", term=c) %}
@@ -181,7 +142,6 @@
               {% endfor %}
             {% endif %}
           {% endfor %}
-          {# 2) 同标签（最多 2 个标签 × 3 篇） #}
           {% for t in my_tags %}
             {% if true %}
               {% set term = get_taxonomy_term(kind="tags", term=t) %}
@@ -192,7 +152,6 @@
               {% endfor %}
             {% endif %}
           {% endfor %}
-          {# 3) 兜底：最新 5 篇（CSS 只显示前 4 条） #}
           {% for rel in all %}
             {% if loop.index <= 5 and rel.permalink != page.permalink %}
             <a class="related-item related-item--fallback" href="{{ rel.permalink }}"><span class="rel-cat">{% if rel.taxonomies.categories %}{{ rel.taxonomies.categories[0] }}{% else %}文章{% endif %}</span><span class="rel-title">{{ rel.title }}</span></a>

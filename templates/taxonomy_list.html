@@ -6,16 +6,14 @@
 {% block tw_title %}{% if taxonomy.name == 'categories' %}全部分类{% else %}全部标签{% endif %} · {{ config.title }}{% endblock %}
 {% block tw_desc %}{% if taxonomy.name == 'categories' %}全部分类{% else %}全部标签{% endif %}，共 {{ terms | length }} 个。{% endblock %}
 {% block content %}
-  <section class="hero hero--compact" aria-label="{% if taxonomy.name == 'categories' %}全部分类{% else %}全部标签{% endif %}">
-    <div class="hero-inner">
-      <h1 class="hero-title">{% if taxonomy.name == 'categories' %}全部分类{% else %}全部标签{% endif %}</h1>
-      {# Bug B（Lead 报的）：taxonomy.name 是 Zola 的机器名（categories / tags，英文），
-         直接插值会渲染成「共 25 个categories」。按同文件其余各处一贯的写法分支成中文。 #}
-      <p class="hero-role">共 {{ terms | length }} 个{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}</p>
+  <main>
+    <div class="page-head">
+      <h1>{% if taxonomy.name == 'categories' %}全部分类{% else %}全部标签{% endif %}</h1>
+      {# Bug B 修复（勿退回）：taxonomy.name 是机器名（categories / tags），
+         直接插值会渲染成「共 25 个categories」。 #}
+      <p class="sub">共 {{ terms | length }} 个{% if taxonomy.name == 'categories' %}分类{% else %}标签{% endif %}</p>
     </div>
-  </section>
-  <main class="page-wrap page-wrap--full">
-    <div class="main main--full">
+    <div class="wrap find">
       <div class="cloud">
         {% for term in terms %}<a href="{{ term.permalink }}"><span>{{ term.name }}</span><em>{{ term.pages | length }}</em></a>
         {% endfor %}

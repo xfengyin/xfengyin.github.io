@@ -2,18 +2,14 @@
 
 {% block title %}404 | {{ config.title }}{% endblock %}
 
-{% block toolbar %}{% endblock %}
-
 {% block content %}
-  {# 404 页没有正文容器，axe 会报 landmark-one-main（页面缺少 main landmark）。
-     用 <main> 包住唯一的区块。 #}
+  {# 404 页需要 main landmark（axe: landmark-one-main）。
+     顶栏与页脚这次**保留**：旧的 404 把两者都去掉了，于是这一页没有任何导航出口；
+     保留后 html.js 与 site.js 都正常加载，不会出现「显示了但点了没反应」的深浅色按钮。 #}
   <main>
-    {# 类名统一到新的 hero 体系（旧 signature-wall 系列已随视觉层重写一起废弃）。
-       打印时 .hero--full 是**唯一**保留的 hero 变体 —— 它是这一页唯一的内容容器，
-       一起隐藏会让整页打印成空白（第 20 轮踩过一次）。 #}
     <section class="hero hero--full" aria-label="页面未找到">
       <div class="hero-inner">
-        <div class="seal" aria-hidden="true">失</div>
+        <span class="sig" aria-hidden="true">失</span>
         <h1 class="hero-title">页面未寻得</h1>
         <p class="hero-role">「只在此山中，云深不知处。」</p>
         <p class="hero-back"><a class="back-home" href="/">← 回到首页</a></p>
@@ -21,7 +17,3 @@
     </section>
   </main>
 {% endblock %}
-
-{% block footer %}{% endblock %}
-
-{% block scripts %}{% endblock %}

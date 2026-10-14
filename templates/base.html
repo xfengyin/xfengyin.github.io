@@ -10,8 +10,8 @@
   {# 描述：文章页覆盖成文章自己的 description，其余用站点描述 #}
   <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}" />
   <meta name="author" content="{{ config.extra.author }}" />
-  <meta name="theme-color" content="#12333d" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0f1013" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)" />
 
   {# canonical：避免同一个页面因带不带尾斜杠被当成两份内容。
      必须判空：404 页没有 current_url，原来会输出 <link href rel=canonical>
@@ -22,7 +22,9 @@
   {# 订阅源自动发现：浏览器/阅读器能直接发现 /atom.xml #}
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml') | safe }}" />
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>" />
+  {# favicon 从 🏮 emoji 换成品牌标记（靛紫圆角方块 + 白点）：
+     原做法依赖系统 emoji 字体，本机就是缺字体的环境 —— 会显示成空框。 #}
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%229%22 fill=%22%234f46e5%22/><circle cx=%2216%22 cy=%2216%22 r=%226%22 fill=%22%23fff%22/></svg>" />
   <link rel="stylesheet" href="{{ get_url(path='css/chinese.css', trailing_slash=false, cachebust=true) }}" />
 
   {# 防闪白（FOUC）：深色模式的类必须在**首屏绘制之前**挂上 <html>。
@@ -88,26 +90,17 @@
 </head>
 <body>
   {% block toolbar %}
-  {# 顶部导航：品牌 + 一组「内联 SVG 图标 + 文字」的导航。
-     图标全部内联（Tera 2.2 起没有 macro/import，只能内联），
-     不用 emoji —— 没有 color-emoji 字体的系统上 emoji 是空框，且彩色与品牌色冲突。
-     文字标签一律保留：可访问名必须来自文字（interactive-all-pages.cjs 逐个查）。
-     桌面版：品牌在左、图标+导航+深浅色开关**成组**在右
-     （旧版 space-between 把 dark-toggle 甩到页面正中，与右侧导航割裂）。 #}
-  <header class="toolbar" id="toolbar">
-    <a class="toolbar-title" href="/">{{ config.extra.author }}<span>.</span></a>
-    <div class="toolbar-actions">
-      {# 无 JS 时这个按钮点了没反应（死控件），所以默认不显示，由 site.js 挂上 html.js 后 CSS 才放出来。
-         按钮里的 emoji 是给 site.js 看的（它用 textContent 切 🌙/☀️）；
-         CSS 把按钮字号压成 0、再用 mask 画矢量图标 —— 于是实际看到的是图标，
-         不受系统有没有 emoji 字体影响，且**不需要改 static/js/site.js**。 #}
-      {# 可访问名必须显式给：按钮内容是 emoji（site.js 切 🌙/☀️），
-         读屏软件只会念出那个字符，语义不明。aria-pressed 负责表达开关状态，
-         所以名字用静态的「深色模式」即可（这也是 aria-pressed 的标准用法）。
-         按钮内容仍留给 site.js 切换 —— 它的 textContent 写入是既有耦合，不动。 #}
-      <button class="dark-toggle" id="darkToggle" title="切换深浅色" aria-label="深色模式" aria-pressed="false">🌙</button>
+  {# 顶部导航（bright 方向）：粘性毛玻璃条 + 品牌标记 + 胶囊导航 + 订阅按钮 + 深浅色开关。
+     - 图标继续用**内联 SVG**（Tera 2.2 没有 macro/import；也不能回到 emoji：
+       本机缺 color-emoji 字体，emoji 会显示成空框，且可访问名要靠文字）。
+     - 用 position:sticky（in-flow）而不是 fixed：不参与绝对定位就不会产生布局偏移。
+     - ≤820px 时导航收进「菜单」开关：html.js 才显示开关（无 JS 时顶栏静态化 + 导航平铺），
+       js 类由 base.html 首屏内联脚本加 —— 这是防 390px 冷缓存 CLS 0.1765 的那条修复，别动。 #}
+  <header class="nav" id="toolbar">
+    <div class="wrap nav-in">
+      <a class="logo" href="/"><i aria-hidden="true"></i>{{ config.extra.author }}</a>
       <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="scrollMenu"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>菜单</span></button>
-      <ul class="scroll-menu" id="scrollMenu">
+      <ul class="links" id="scrollMenu">
         <li><a href="/"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.6 12 4.2l8 6.4V20a1 1 0 0 1-1 1h-4.6v-6H9.6v6H5a1 1 0 0 1-1-1z"/></svg><span class="my-menu">首页</span></a></li>
         <li><a href="/posts/"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 3.5h10.5a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2H7"/><path d="M7 3.5a2 2 0 0 0-2 2V19a2 2 0 0 0 2 2"/><path d="M9.5 8.5h7M9.5 12.5h7"/><path d="M9.5 16.5h4"/></svg><span class="my-menu">文章</span></a></li>
         <li><a href="/categories/"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3.4 8.4 4.6-8.4 4.6-8.4-4.6z"/><path d="m4.2 12.6 7.8 4.3 7.8-4.3"/><path d="m4.2 16.9 7.8 4.3 7.8-4.3"/></svg><span class="my-menu">分类</span></a></li>
@@ -115,6 +108,11 @@
         {% block nav_extra %}{% endblock %}
         <li><a href="{{ config.extra.github }}" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path fill="currentColor" stroke="none" d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.7c-2.72.59-3.3-1.31-3.3-1.31-.44-1.13-1.08-1.43-1.08-1.43-.89-.6.07-.59.07-.59.98.07 1.5 1 1.5 1 .87 1.5 2.29 1.07 2.85.82.09-.64.34-1.07.62-1.32-2.18-.25-4.47-1.09-4.47-4.85 0-1.07.38-1.94 1-2.63-.1-.24-.43-1.23.1-2.58 0 0 .82-.26 2.7 1a9.3 9.3 0 0 1 4.9 0c1.87-1.26 2.69-1 2.69-1 .53 1.35.2 2.34.1 2.58.63.69 1 1.56 1 2.63 0 3.77-2.3 4.6-4.49 4.84.35.31.66.9.66 1.82v2.7c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2z"/></svg><span class="my-menu">GitHub</span></a></li>
       </ul>
+      <a class="btn subscribe" href="{{ get_url(path='atom.xml') | safe }}">订阅更新</a>
+      {# 按钮里的 emoji 是给 site.js 看的（它用 textContent 切 🌙/☀️）；
+         CSS 把字号压成 0、再用 mask 画矢量图标 —— 所以看到的是图标而不是随字体碰运气的 emoji，
+         且**不需要改 static/js/site.js**。aria-label 提供稳定的可访问名。 #}
+      <button class="dark-toggle" id="darkToggle" title="切换深浅色" aria-label="深色模式" aria-pressed="false">🌙</button>
     </div>
   </header>
   {% endblock %}
@@ -122,19 +120,37 @@
   {% block content %}{% endblock %}
 
   {% block footer %}
-  {# 页脚：把站点里真实存在的入口收成一行。版权文案保持原样
-     ——「托管于 GitHub Pages」必须指向 repo_url 而不是个人主页（第 12 轮修过的）。 #}
+  {# 页脚（bright）：三栏。品牌栏用 config.description（真实站点描述），不新造文案。
+     「托管于 GitHub Pages」必须指向 repo_url 而不是个人主页 —— 第 12 轮修过的，别退回去。 #}
   <footer class="footer">
-    <nav class="footer-nav" aria-label="页脚导航">
-      <a href="/">首页</a>
-      <a href="/posts/">全部文章</a>
-      <a href="/categories/">分类</a>
-      <a href="/tags/">标签</a>
-      <a href="{{ get_url(path='atom.xml') | safe }}"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 11.4a7.6 7.6 0 0 1 7.6 7.6"/><path d="M5 5a14 14 0 0 1 14 14"/><circle cx="5.4" cy="18.6" r="1.5" fill="currentColor" stroke="none"/></svg><span>RSS</span></a>
-      <a href="{{ config.extra.github }}" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path fill="currentColor" stroke="none" d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.7c-2.72.59-3.3-1.31-3.3-1.31-.44-1.13-1.08-1.43-1.08-1.43-.89-.6.07-.59.07-.59.98.07 1.5 1 1.5 1 .87 1.5 2.29 1.07 2.85.82.09-.64.34-1.07.62-1.32-2.18-.25-4.47-1.09-4.47-4.85 0-1.07.38-1.94 1-2.63-.1-.24-.43-1.23.1-2.58 0 0 .82-.26 2.7 1a9.3 9.3 0 0 1 4.9 0c1.87-1.26 2.69-1 2.69-1 .53 1.35.2 2.34.1 2.58.63.69 1 1.56 1 2.63 0 3.77-2.3 4.6-4.49 4.84.35.31.66.9.66 1.82v2.7c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2z"/></svg><span>GitHub</span></a>
-    </nav>
-    <p class="footer-copy">© <span id="year">2026</span> {{ config.extra.author }} · 由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 ·
-    托管于 <a href="{{ config.extra.repo_url | default(value=config.extra.github) }}" target="_blank" rel="noopener">GitHub Pages</a></p>
+    <div class="wrap">
+      <div class="footer-in">
+        <div>
+          <span class="brandline"><i aria-hidden="true"></i>{{ config.extra.author }}</span>
+          <p class="about">{{ config.description }}</p>
+        </div>
+        <div>
+          <h2>导航</h2>
+          <nav class="footer-nav" aria-label="页脚导航">
+            <a href="/">首页</a>
+            <a href="/posts/">全部文章</a>
+            <a href="/categories/">分类</a>
+            <a href="/tags/">标签</a>
+          </nav>
+        </div>
+        <div>
+          <h2>订阅</h2>
+          <nav class="footer-nav" aria-label="订阅与源码">
+            <a href="{{ get_url(path='atom.xml') | safe }}"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 11.4a7.6 7.6 0 0 1 7.6 7.6"/><path d="M5 5a14 14 0 0 1 14 14"/><circle cx="5.4" cy="18.6" r="1.5" fill="currentColor" stroke="none"/></svg><span>RSS</span></a>
+            <a href="{{ config.extra.github }}" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path fill="currentColor" stroke="none" d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.7c-2.72.59-3.3-1.31-3.3-1.31-.44-1.13-1.08-1.43-1.08-1.43-.89-.6.07-.59.07-.59.98.07 1.5 1 1.5 1 .87 1.5 2.29 1.07 2.85.82.09-.64.34-1.07.62-1.32-2.18-.25-4.47-1.09-4.47-4.85 0-1.07.38-1.94 1-2.63-.1-.24-.43-1.23.1-2.58 0 0 .82-.26 2.7 1a9.3 9.3 0 0 1 4.9 0c1.87-1.26 2.69-1 2.69-1 .53 1.35.2 2.34.1 2.58.63.69 1 1.56 1 2.63 0 3.77-2.3 4.6-4.49 4.84.35.31.66.9.66 1.82v2.7c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2z"/></svg><span>GitHub</span></a>
+          </nav>
+        </div>
+      </div>
+      <div class="footer-copy">
+        <span>© <span id="year">2026</span> {{ config.extra.author }}</span>
+        <span>由 <a href="https://www.getzola.org" target="_blank" rel="noopener">Zola</a> 驱动 · 托管于 <a href="{{ config.extra.repo_url | default(value=config.extra.github) }}" target="_blank" rel="noopener">GitHub Pages</a></span>
+      </div>
+    </div>
   </footer>
   {% endblock %}
 
