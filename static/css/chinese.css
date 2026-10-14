@@ -369,6 +369,19 @@ html.dark .hero h1 { background-image: linear-gradient(115deg, #f2f4fb 0%, #d9dc
 .article-content th { background: var(--soft); font-size: 13px; color: var(--dim); font-weight: 650; }
 .article-content img { max-width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--line); }
 .article-content hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+
+/* 深色模式下的正文示意图。
+   问题：static/assets/diagrams/*.svg 这 17 张图**自己烤了浅底**（#faf8f4，外加 #f7f9fe / #f0faf9 / #fff7ed
+   几块浅色面板），于是深色文章里会突然出现一大块刺眼白光 —— 独立视觉复核把它列为唯一的「严重刺眼」项。
+   为什么不能在 SVG 内部适配：图是用 <img> 引入的，它内部的 prefers-color-scheme 跟的是**操作系统**，
+   而本站深色是 html.dark 这个 class（站点开关控制）—— 两者会不一致，靠不住。
+   为什么用 invert + hue-rotate(180deg)：这是处理「浅底线条图 / 代码截图」的标准手法 ——
+   先反相把明度翻过来（浅底变深、深字变浅），再转 180° 色相把颜色转回原处（朱红点缀不会变成青色）。
+   只作用于正文里的示意图，不碰真实照片、封面与卡片。 */
+html.dark .article-content img[src*="/diagrams/"] {
+  filter: invert(1) hue-rotate(180deg);
+  border-color: rgba(255, 255, 255, .14);
+}
 /* 构建时统计表（page.extra.guide 开关控制，必须保留） */
 .guide-stats { margin: 26px 0 10px; }
 .guide-stats table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
