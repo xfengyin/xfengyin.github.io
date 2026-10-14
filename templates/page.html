@@ -175,4 +175,52 @@
       </div>
     </article>
   </main>
+
+  {% if page.toc %}
+  {# 当前章节高亮：**内联在页面里**（site.js 不在写入范围，不动它）。
+     纯增强：没有 JS 时目录仍是一份可点的链接列表，不留死控件，也没有动画。
+     只给命中的链接加 class 与 aria-current="location"，不接管任何点击行为。 #}
+  <script>
+  (function () {
+    var toc = document.querySelector('.toc');
+    if (!toc || !window.requestAnimationFrame) return;
+    var entries = [];
+    var links = toc.querySelectorAll('a[href*="#"]');
+    for (var i = 0; i < links.length; i++) {
+      var raw = (links[i].hash || '').slice(1);
+      var id = raw;
+      try { id = decodeURIComponent(raw); } catch (e) { id = raw; }
+      var target = id ? document.getElementById(id) : null;
+      if (target) entries.push({ link: links[i], target: target });
+    }
+    if (!entries.length) return;
+    var active = null;
+    var ticking = false;
+    function highlight() {
+      ticking = false;
+      var line = 140;                       // 与粘性顶栏 66px + 一点余量对齐
+      var best = entries[0];
+      for (var n = 0; n < entries.length; n++) {
+        if (entries[n].target.getBoundingClientRect().top - line <= 0) best = entries[n];
+      }
+      if (best === active) return;
+      if (active) {
+        active.link.classList.remove('is-active');
+        active.link.removeAttribute('aria-current');
+      }
+      active = best;
+      active.link.classList.add('is-active');
+      active.link.setAttribute('aria-current', 'location');
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(highlight);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    highlight();
+  })();
+  </script>
+  {% endif %}
 {% endblock %}

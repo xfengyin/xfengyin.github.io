@@ -369,8 +369,41 @@ html.js .dark-toggle { display: grid; }
 .toc-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 650; color: var(--dim); letter-spacing: .04em; }
 .toc-title .i { width: 16px; height: 16px; }
 .toc ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; margin-top: 12px; }
-.toc ul li a { display: inline-flex; align-items: center; min-height: 28px; font-size: 14px; color: var(--ink); }
+.toc ul li a { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: var(--pill); font-size: 14px; color: var(--ink); }
 .toc ul li a:hover { color: var(--brand-text); }
+/* 当前章节高亮：class 由 page.html 内联的 scrollspy 加（无 JS 时只是没有高亮，目录照常可点） */
+.toc ul li a.is-active { color: var(--brand-text); background: var(--brand-soft); }
+
+/* ---------- 桌面宽屏：目录改成右侧粘性栏 ----------
+   文章页实测 14000px 以上，平铺在正文顶部的目录一滚就脱离上下文。
+   ≥1280px 时用**同一份 DOM** 排成「正文 820px + 目录 250px」两栏；<1280px 完全维持卡片形态。
+   为什么必须是 grid：目录作为 .article-card 的显式子项放在第 2 列、跨 1..40 行，
+   它的网格区域高度就等于整篇正文，position:sticky 才能贴着一路滚到底 ——
+   如果只占第 1 行，sticky 会被限制在那一行的高度里（这是 sticky 侧栏最常见的坑）。
+   正文列仍是 820px（minmax(0,1fr) + 固定的 250 + 48 间距），所以文字不重排、阅读宽度不变。 */
+@media (min-width: 1280px) {
+  .article-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    column-gap: 48px;
+    max-width: 1118px;          /* 820 + 48 + 250 */
+  }
+  .article-card > * { grid-column: 1; min-width: 0; }
+  .article-card > .toc {
+    grid-column: 2;
+    grid-row: 1 / span 40;      /* 正文的直接子元素只有十来个，40 行足够兜住 */
+    align-self: start;
+    position: sticky;
+    top: calc(var(--nav-h) + 20px);
+    margin-top: 0;
+    /* 章节多的文章（20+ 条）在吸顶栏里内部滚动，不把视口撑爆 */
+    max-height: calc(100vh - var(--nav-h) - 44px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* 窄栏里目录单列更好扫读（宽卡片时它是两列） */
+  .article-card > .toc ul { grid-template-columns: minmax(0, 1fr); }
+}
 /* 正文 */
 .article-content { margin-top: 26px; font-size: 16.5px; line-height: 1.85; }
 .article-content h1, .article-content h2, .article-content h3 { letter-spacing: -.02em; }
