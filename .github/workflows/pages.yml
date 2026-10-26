@@ -81,6 +81,13 @@ jobs:
         with:
           path: public
 
+      # ⚠️ 门禁探针：这个 PR 的唯一用途，就是让 build 变红，
+      # 证明「必需检查 = build」真的会挡住合并。合并前必须删掉这一步。
+      - name: 门禁探针（故意失败）
+        run: |
+          echo "这是门禁探针，build 必须红。"
+          exit 1
+
   deploy:
     needs: [preflight, build]
     # 三个条件缺一不可：平台是 github.com、事件是 push、ref 正好是 main。
