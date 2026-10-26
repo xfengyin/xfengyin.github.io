@@ -39,8 +39,7 @@ Codex 风格个人主页 + 技术博客，基于 **Zola**（Rust 静态站点生
 │           ├── posts/          # 位图配图（3）
 │           └── resp/           # 上述位图的响应式 webp（9 = 3 张 × 400/800/1200）
 ├── docs/                       # 检查与验收脚本（见「质量检查」）
-├── .gitea/workflows/           # ci.yml（PR 构建检查）、pages.yml（Gitea 侧占位）
-└── .github/workflows/pages.yml # GitHub 侧真正执行构建与发布的那一份
+└── .github/workflows/pages.yml # 唯一的工作流：构建 + 部署到 GitHub Pages
 ```
 
 ## 本地预览
@@ -54,15 +53,18 @@ zola serve
 
 ## 部署
 
-工作流分两处，**两处都需要存在**：
+部署只有一条路径,工作流只有一份:
 
-- `.gitea/workflows/ci.yml` —— PR 时在 Gitea 上跑 `zola build` 并校验 `public/index.html`。
-- `.gitea/workflows/pages.yml` —— Gitea 侧的占位（各 job 带 `if: github.server_url == 'https://github.com'`，在 Gitea 上只跑 `preflight`）。
-- `.github/workflows/pages.yml` —— **GitHub 侧真正执行构建与发布的那一份。**
+- `.github/workflows/pages.yml` —— `main` 推送或手动触发时,在 GitHub Actions 上跑 `zola build` 并部署到 Pages。
+
+> 历史提醒:这个文件里还留着 `preflight` job 和两处 `if: github.server_url == 'https://github.com'`
+> 守卫,那是 2026-10-09～10-13「workflow 同时挂在 Gitea 与 GitHub」时期的产物。
+> 现在仓库里**没有 `.gitea/` 目录**,这些守卫在 GitHub 上恒为真,只是无害的遗留;
+> 真要清理,得在一个能被 CI 验证的改动里做,别顺手改。
 
 > ⚠️ **为什么 `.github/workflows/pages.yml` 必须存在**（2026-10-13 实测的坑）
 >
-> 2026-10-09 的提交曾把 workflow 全部迁到 `.gitea/workflows/`，理由是「GitHub 侧不再跑 Actions」。
+> 2026-10-09 的提交曾把 workflow 全部迁到 `.gitea/workflows/`（该目录后来被删除，现已不存在），理由是「GitHub 侧不再跑 Actions」。
 > 但本仓库 GitHub Pages 的 `build_type` 是 **`workflow`** —— 它需要一个 GitHub Actions workflow
 > 来构建并发布。`.github/workflows/` 空掉之后，**站点就再没有任何部署路径**：
 > 推到 `main` 的提交不会出现在线上（当时线上仍是 2026-08-27 的构建）。
@@ -85,7 +87,7 @@ zola serve
 > 一般 10 分钟内自愈。若线上迟迟不更新，**先核对 GitHub 侧 main 的 SHA 是否已等于 Gitea 侧**，
 > 再怀疑构建本身。
 
-Zola 版本在两处 workflow 中固定为 0.23.4，与本地一致。
+Zola 版本在 workflow 中固定为 0.23.4，与本地一致。
 
 ## 质量检查（`docs/`）
 
