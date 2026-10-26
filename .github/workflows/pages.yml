@@ -17,6 +17,10 @@ name: Deploy Zola site to GitHub Pages
 on:
   push:
     branches: [main]
+  # PR 上也要跑，但要跑的是 build，不是 deploy —— 见 deploy 的 if 守卫。
+  # 没有这一步，PR 一次检查都不跑：本仓 54 次运行全部是 event=push。
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,8 +28,12 @@ permissions:
   pages: write
   id-token: write
 
+# 只把 pull_request 摘出去：PR 用「pr-<ref>」自己的组，其余（push 到 main、workflow_dispatch）
+# 一律留在 "pages" 组 —— 组名和行为一个字不变，手动部署与 push 部署之间仍然互斥、仍然互相取消。
+# 如果 PR 也进 "pages"，一次推 PR 分支就会把正在进行的线上部署取消掉
+# （历史实证：39260651862 就是两秒后被同组的下一次运行取消的）。
 concurrency:
-  group: "pages"
+  group: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.ref) || 'pages' }}
   cancel-in-progress: true
 
 jobs:
@@ -63,9 +71,11 @@ jobs:
       - name: Build site
         run: zola build
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
+      # Configure Pages 已挪到 deploy（见下方注释）：configure-pages 的 enablement 默认 false，
+      # 读不到 Pages 站点时是 core.error + throw（硬失败，不是警告），而「PR 的 token 能不能
+      # GET /repos/{owner}/{repo}/pages」从文档和源码都推不出来。build 是这个仓的必需检查，
+      # 不能让它依赖一个和构建无关的 Pages API 调用。
+      # 它在本仓 outputs 一处未被引用，deploy-pages@v4 的 inputs 也不要求同 job 先跑过它。
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -73,12 +83,17 @@ jobs:
 
   deploy:
     needs: [preflight, build]
-    if: github.server_url == 'https://github.com'
+    # 三个条件缺一不可：平台是 github.com、事件是 push、ref 正好是 main。
+    # 只靠 server_url 会把 PR 分支的内容部署到线上（本文件头注释记着上一次「站点静默不更新」的教训）。
+    if: github.server_url == 'https://github.com' && github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
