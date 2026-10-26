@@ -8,10 +8,11 @@ name: Deploy Zola site to GitHub Pages
 # 结果：.github/workflows/ 空了之后，**站点再没有任何部署路径** ——
 # 推上去的提交不会出现在线上（实测：main 已到 74d2189，线上仍是旧页面、/atom.xml 404）。
 #
-# 因此这里恢复一份 GitHub 侧的 pages workflow。与 .gitea/workflows/pages.yml 的分工：
-#   · GitHub 上：这个文件真正执行 build + deploy
-#   · Gitea 上：Gitea 读 .gitea/workflows/，本文件里的 job 因 job 级 if 不成立而跳过
-#     （Gitea 只对带 needs 的 job 求值 job 级 if，所以保留 preflight 占位）
+# 现状（2026-10-26）：.gitea/ 目录已不存在，本仓只有 .github/workflows/pages.yml 一份
+# workflow，它在 github.com 上执行 build + deploy —— 没有任何"与 Gitea 分工"这回事了。
+# 下面 preflight job 与两处 `if: github.server_url == 'https://github.com'` 是那个双 CI
+# 时期的遗留：在 GitHub 上恒为真，不改变行为。清理它们属于行为改动，要在能让 CI 跑一遍的
+# 改动里做，别在改注释时顺手改。
 
 on:
   push:
@@ -45,7 +46,7 @@ jobs:
       - name: Install Zola
         # 原来是一句 `curl ... | tar xz`：管道里 curl 失败时 tar 只会报
         # "unexpected end of file"，看不出根因，也没有任何重试
-        # （Gitea 侧的 ci.yml 已因同一个形状假红过一次，改法见那里的注释；这里补齐同样的加固）。
+        # （同一个形状在本仓曾因下载被截断而假红过一次，这里补上重试与完整性检查）。
         run: |
           set -euo pipefail
           VER=0.23.4
