@@ -13,6 +13,11 @@ image = "/assets/img/posts/kongming-architecture.jpg"
 
 +++
 
+> **编者注（2026-11-05）**：本文是 2026 年初的**架构设计草稿**——当时设想的「微服务版 Kongming」。
+> 实际交付并维护的实现是 [kongming-agent](https://github.com/xfengyin/kongming-agent)：
+> 一个轻量的 Go LLM agent CLI（4 个直接依赖，v0.7.0），**不是微服务框架**。
+> 保留本文作为设计思路记录；涉及实现细节时，请以仓库代码为准。
+
 ## 前言
 
 > 📌 导读：从单体到微服务，Kongming 架构设计的完整思路与实践。
