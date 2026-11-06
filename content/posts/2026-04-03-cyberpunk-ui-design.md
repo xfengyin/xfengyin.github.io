@@ -10,6 +10,9 @@ tags = ["cyberpunk", "ui", "design", "tailwind", "react"]
 author = "xfengyin"
 +++
 
+> **编者注（2026-11-07）**：XingJu（星聚）是**未开源**的个人项目，本文讨论的视觉方案没有可点开的代码。
+> 文中的 React / Tailwind 用法是当时的实现记录，不代表主页上列出的公开技术栈。
+
 ## 前言
 
 > 📌 导读：赛博朋克美学如何落地为 XingJu 的界面设计。
