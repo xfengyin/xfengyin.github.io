@@ -13,6 +13,9 @@ image = "/assets/img/posts/zen-workflow.jpg"
 
 +++
 
+> **编者注（2026-11-07）**：Zen 是一个**未发布**的内部设计，没有公开仓库，本文只保留设计思路。
+> 想看实际在维护的执行框架，见 [kongming-agent](https://github.com/xfengyin/kongming-agent)（Go，非 Python）。
+
 ## 引言
 
 > 📌 导读：Zen：一个 Python 模块化执行框架的设计哲学与实现。
